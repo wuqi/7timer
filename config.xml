@@ -36,6 +36,5 @@
           <icon src="icon.png"/>
     <!-- Define app splash screen for each platform. -->
 
-    <access origin="*"/>
 
 </widget>
