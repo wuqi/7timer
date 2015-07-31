@@ -35,6 +35,5 @@
         src in the following setting to "res/icon.png" -->
           <icon src="icon.png"/>
     <!-- Define app splash screen for each platform. -->
-    <access origin="https://api.tiles.mapbox.com" /> 
-    <access origin="http://202.127.24.18" /> 
+    <access origin=".*" /> 
 </widget>
