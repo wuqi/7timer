@@ -36,8 +36,6 @@
           <icon src="icon.png"/>
     <!-- Define app splash screen for each platform. -->
 
-  <access />
-  <allow-intent href="http://*/*"/>
-  <allow-intent href="https://*/*"/>
+    <access origin="*"/>
 
 </widget>
