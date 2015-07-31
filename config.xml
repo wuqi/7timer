@@ -9,6 +9,7 @@
         permission on your app, which PhoneGap requires.
     -->
     <preference name="permissions"                value="none"/>
+
     <!-- Customize your app and platform with the preference element. -->
     <preference name="orientation"                value="default" />        <!-- all: default means both landscape and portrait are enabled -->
     <preference name="target-device"              value="universal" />      <!-- all: possible values handset, tablet, or universal -->
@@ -35,5 +36,10 @@
         src in the following setting to "res/icon.png" -->
           <icon src="icon.png"/>
     <!-- Define app splash screen for each platform. -->
-    <access origin=".*" /> 
+
+
+
+    <access />
+
+
 </widget>
