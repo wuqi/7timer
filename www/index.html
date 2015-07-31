@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="leaflet.js"></script>
+    <script type="text/javascript" src="esri-leaflet.js"></script>
+    <script type="text/javascript" src="esri-leaflet-geocoder.js"></script>
+    <script type="text/javascript" src="suncalc.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <link rel="stylesheet" href="leaflet.css"/>
+    <link rel="stylesheet" href="esri-leaflet-geocoder.css"/>
+    <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
+      <style type="text/css" >
+    #pagemap>.ui-content {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 0 !important;
+}
+
+#map {
+    height: 100%;
+}
+      </style>
+  </head>
+  
+  <body>
+    <!--主页面-->
+    <div data-role="page" id="pagemain">
+      <div data-role="header" data-position="fixed">
+         <h1>晴天钟</h1>
+         <a href="#pagemap" data-role="button" data-icon="eye" data-transition="slide">地图</a>
+         <a href="#settings" data-role="button" data-icon="gear">设置</a>
+      </div>
+      <form style="padding: 30px">
+        <div data-role="fieldcontain">
+          <label for="address">地名：</label>
+          <select name="address" id="address" data-native-menu="false"  data-mini="true" >
+          </select>
+        </div>
+        <div data-role="fieldcontain">
+          <label for="longitude"  data-mini="true" >经度：</label>
+          <input type="text" name="longitude" id="longitude" value="114.3"  data-mini="true" >
+        </div>
+        <div data-role="fieldcontain">
+          <label for="latitude"  data-mini="true" >纬度：</label>
+          <input type="text" name="latitude" id="latitude" value="30.57"  data-mini="true" >
+        </div>
+        <div data-role="fieldcontain">
+          <label for="inputdate"  data-mini="true" >时间：</label>
+          <input type="datetime-local" name="inputdate" id="inputdate"  data-mini="true" >
+        </div>
+        <div data-role="controlgroup" data-type="horizontal"> 
+          <a href="#" data-role="button" id="clock"   data-icon="calendar"  data-mini="true" >晴天钟</a>
+           <a href="#pageresult" data-role="button" id="suncalc"  data-icon="star" data-rel="dialog"  data-mini="true" >晨昏蒙影</a>
+           <a href="#pagesearch" data-role="button" id="newLoc"   data-icon="plus" data-rel="dialog"  data-mini="true" >添加地点</a>
+        </div>
+      </form>
+    </div>
+    <!--地图-->
+    <div data-role="page" id="pagemap">
+      <div data-role="header" data-position="fixed">
+         <h1>地图</h1>
+         <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+         <a href="#" data-role="button" data-icon="cloud" id="headerClock">晴天钟</a>
+      </div>
+      <div data-role="content">
+          <div id="map" style="float:left height:100% min-height:100% width:100%"></div>
+      </div>
+    </div>
+    <!--suncalc结果-->
+    <div data-role="page" id="pageresult">
+      <div data-role="header">
+         <h1>晨昏蒙影</h1>
+      </div>
+      <div data-role="content">
+        <table>
+          <thead>
+       <tr>
+         <th align="left">晨昏蒙影</th>
+       </tr>
+     </thead>
+     <tbody>
+          <tr>
+            <td align="left">太阳高度角</td>
+            <td id = "sunAltitude"></td>
+          </tr>
+          <tr>
+            <td align="left">太阳方位角</td>
+            <td id = "sunAzimuth"></td>
+          </tr>
+          <tr>
+            <td align="left">日出起始时间</td>
+            <td id = "sunrise"></td>
+          </tr>
+          <tr>
+            <td align="left">日出结束时间</td>
+            <td id = "sunriseEnd"></td>
+          </tr>
+          <tr>
+            <td align="left">日出黄金时间</td>
+            <td id = "goldenHourEnd"></td>
+          </tr>
+          <tr>
+            <td align="left">日落黄金时间</td>
+            <td id = "goldenHour"></td>
+          </tr>
+          <tr>
+            <td align="left">太阳最高点时间</td>
+            <td id = "solarNoon"></td>
+          </tr>
+          <tr>
+            <td align="left">日落开始时间</td>
+            <td id = "sunsetStart"></td>
+          </tr>
+          <tr>
+            <td align="left">民用晨光始</td>
+            <td id = "dawn"></td>
+          </tr>
+          <tr>
+            <td align="left">民用昏影终</td>
+            <td id = "sunset"></td>
+          </tr>
+          <tr>
+            <td align="left">航海晨光始</td>
+            <td id = "nauticalDawn"></td>
+          </tr>
+          <tr>
+            <td align="left">航海昏影终</td>
+            <td id = "dusk"></td>
+          </tr>
+          <tr>
+            <td align="left">天文晨光始</td>
+            <td id = "nightEnd"></td>
+          </tr>
+          <tr>
+            <td align="left">天文昏影终</td>
+            <td id = "nauticalDusk"></td>
+          </tr>
+          <tr>
+            <td align="left">黑暗</td>
+            <td id = "night"></td>
+          </tr>
+          <tr>
+            <td align="left">最暗时刻</td>
+            <td id = "nadir"></td>
+          </tr>
+       </tbody>
+       <thead>
+       <tr>
+         <th align="left">月相</th>
+       </tr>
+     </thead>
+     <tbody>
+          <tr>
+            <td>月球高度角</td>
+            <td id = "moonAltitude"></td>
+          </tr>
+          <tr>
+            <td>月球方位角</td>
+            <td id = "moonAzimuth"></td>
+          </tr>
+          <tr>
+            <td>地月距离</td>
+            <td id = "moonDistance"></td>
+          </tr>
+          <tr>
+            <td>月出时间</td>
+            <td id = "moonrise"></td>
+          </tr>
+          <tr>
+            <td>月落时间</td>
+            <td id = "moonset"></td>
+          </tr>
+          <tr>
+            <td>月相</td>
+            <td id = "moonPhase"></td>
+          </tr>
+          <tr>
+            <td>亮度</td>
+            <td id = "light"></td>
+          </tr>
+          <tbody>
+        </table>
+      </div>
+    </div>
+    <!--添加新地点-->
+    <div data-role="page" id="pagesearch">
+      <div data-role="header">
+         <h1>添加新地点</h1>
+      </div>
+      <div data-role="content">
+        <div data-role="fieldcontain" >
+ 
+          <input type="text" name="sname" id="sname" placeholder = "地点">
+
+          <input type="text" name="slongitude" id="slongitude" placeholder = "经度">
+
+          <input type="text" name="slatitude" id="slatitude" placeholder = "纬度">
+        </div>
+
+        <div data-role="controlgroup"  data-type="horizontal"> 
+          <a href="#" data-role="button" id="slocate"   data-icon="location">定位</a>
+         <a href="#" data-role="button" id="ssearch"  data-icon="search">搜索</a>
+         <a href="#" data-role="button" id="sok"   data-icon="check">确定</a>
+        </div>
+      </div>
+    </div>
+    <!--settings-->
+    <div data-role="page" id="pagesettings"></div>
+    <!--settings-->
+    <div data-role="page" id="pageclock">
+      <div data-role="header">
+         <h1>晴天钟</h1>
+      </div>
+      <div data-role="content">
+          <img src=""  alt="晴天钟" id="imgClock" width="100%"/>
+      </div>
+    </div>
+  <script type="text/javascript">
+  Date.prototype.format = function(fmt) { //author: meizz   
+    var o = {   
+      "M+" : this.getMonth()+1,                 //月份   
+      "d+" : this.getDate(),                    //日   
+      "h+" : this.getHours(),                   //小时   
+      "m+" : this.getMinutes(),                 //分   
+      "s+" : this.getSeconds(),                 //秒   
+      "q+" : Math.floor((this.getMonth()+3)/3), //季度   
+      "S"  : this.getMilliseconds()             //毫秒   
+    };   
+    if(/(y+)/.test(fmt))   
+      fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));   
+    for(var k in o)   
+      if(new RegExp("("+ k +")").test(fmt))   
+    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
+    return fmt;   
+  };
+
+  var storage = window.localStorage;
+  var addresses;
+  if (!storage.getItem("addresses")) {
+    addresses =  {locations:[{name:"北京",lat:39.90,lng:116.40},{name:"武汉",lat:30.60,lng:114.3}]};
+    storage.setItem("addresses",JSON.stringify(addresses));
+    setSelector();
+  }else{
+    addresses = JSON.parse(storage.getItem("addresses"));
+    setSelector();
+  }
+  function setSelector() {
+    var locations = addresses.locations;
+    var selElement = document.getElementById("address");
+    for(var i=0;i<locations.length;i++){
+      var op = new Option(locations[i].name,locations[i].name,true,true);
+      selElement.options.add(op);  
+    }
+    return true;
+  }
+  var tempdate = new Date();
+  document.getElementById("inputdate").valueAsNumber = tempdate.getTime() - tempdate.getTimezoneOffset() * 60 * 1000;
+  var map;
+  var marker ;
+  $(document).on('pageinit', '#pagemap', function() {
+
+
+   map = L.map('map').setView([39.9021, 116.39328], 13);
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoid3VxaSIsImEiOiI5NDNhZGVlZjlhMDNhOTVmMjVjYTJiNzM2N2UxOGIwNSJ9.sWHdpguJCEjyBsVLPAXgYQ', {
+			maxZoom: 18,
+			attribution: 'wuqi',
+			id: 'wuqi.n1jl6fjd'
+		}).addTo(map);
+    marker= L.marker([39.9021, 116.39328]).addTo(map);
+    var searchControl = new L.esri.Geocoding.Controls.Geosearch().addTo(map);
+
+    searchControl.on('results', function(data) {
+      //
+      if (data.results.length > 0) {
+        marker.setLatLng(data.results[0].latlng).update();
+        map.setView(data.results[0].latlng,map.getZoom());
+      }
+    });
+    map.on('dblclick', onMapClick);
+  });
+
+  function onMapClick(e) {
+    //e.latlng
+      var lat = e.latlng.lat;
+      var lng = e.latlng.lng;
+      marker.setLatLng( e.latlng).update();
+      map.setView( e.latlng,map.getZoom());
+
+  }
+
+  document.addEventListener('deviceready', onDeviceReady, false);
+
+  function onDeviceReady() {
+      function disp(pos) {
+         $("#sname").val("新地点");
+         $('#slatitude').val(pos.coords.latitude);
+         $('#slongitude').val(pos.coords.longitude);
+      }
+
+      $('#slocate').click(function() {
+          navigator.geolocation.getCurrentPosition(disp);
+      });
+  }
+
+  $(document).ready(function(){ 
+    //切换地点
+    $('#address').change(function(){ 
+     //alert($(this).get(0).selectedIndex);
+     var index = $(this).get(0).selectedIndex;
+     var item = addresses.locations[index];
+     $('#latitude').val(item.lat);
+     $('#longitude').val(item.lng);
+    });
+    $('#newLoc').click(function () {
+      $("#sname").val("");
+      $('#slatitude').val("");
+      $('#slongitude').val("");
+    });
+    //添加地点
+    $('#sok').click(function(){
+      var item = new Object();
+      item.name = $("#sname").val();
+      item.lat = $('#slatitude').val();
+      item.lng = $('#slongitude').val();
+      addresses.locations.push(item);
+      storage.setItem("addresses",JSON.stringify(addresses));
+      $("#address").append("<option value='"+item.name+"'>"+item.name+"</option>");
+      $('#address').selectmenu('refresh');
+      $('.ui-dialog').dialog('close'); 
+    });
+
+    //search position
+    $('#ssearch').click(function(){
+      var address = $("#sname").val();
+      L.esri.Geocoding.Tasks.geocode().text(address).run(function(err, results, response){
+        if(results.results.length > 0){
+          $('#slatitude').val(results.results[0].latlng.lat);
+          $('#slongitude').val(results.results[0].latlng.lng);
+        }
+      });
+    });
+    //显示popup
+    $('#headerClock').click(function(){
+      //if(!marker){
+        var pos = marker.getLatLng();
+        var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
+        var content = "<div  style=\"width:500px\"><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:500px\"/></div>";
+        marker.bindPopup(content,{maxWidth:500}).openPopup();
+      //}
+      //var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ lng +"&lat="+ lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
+      //$('#imgClock').attr("src", imgpath);
+      //$.mobile.changePage( "#pageclock", { role: "dialog" } );
+    });
+    //晴天钟
+    $('#clock').click(function () {
+      var lat = $('#latitude').val();
+      var lng = $('#longitude').val();
+      var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ lng +"&lat="+ lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
+      $('#imgClock').attr("src", imgpath);
+      $.mobile.changePage( "#pageclock", { role: "dialog" } );
+    });
+    //晨昏蒙影
+    $('#suncalc').click(function(){
+      var lat = $('#latitude').val();
+      var lng = $('#longitude').val();
+      var inputdate = new Date(document.getElementById("inputdate").valueAsNumber);
+      inputdate = new Date(inputdate.getTime() + inputdate.getTimezoneOffset() * 60 * 1000);
+      var sunrisePos = SunCalc.getPosition(inputdate, lat , lng);
+      var sunTimes = SunCalc.getTimes(inputdate, lat , lng);
+      //alert(inputdate.format("yy/MM/dd hh:mm"));
+      var sunAltitude = sunrisePos.altitude*180/Math.PI;
+      var sunAzimuth = sunrisePos.azimuth*180/Math.PI;
+      $('#sunAltitude').html(sunAltitude.toPrecision(6));
+      $('#sunAzimuth').html(sunAzimuth.toPrecision(6));
+      $('#sunrise').html(sunTimes.sunrise.format("yy/MM/dd hh:mm"));
+      $('#sunriseEnd').html(sunTimes.sunriseEnd.format("yy/MM/dd hh:mm"));
+      $('#goldenHourEnd').html(sunTimes.goldenHourEnd.format("yy/MM/dd hh:mm"));
+      $('#solarNoon').html(sunTimes.solarNoon.format("yy/MM/dd hh:mm"));
+      $('#goldenHour').html(sunTimes.goldenHour.format("yy/MM/dd hh:mm"));
+      $('#sunsetStart').html(sunTimes.sunsetStart.format("yy/MM/dd hh:mm"));
+      $('#sunset').html(sunTimes.sunset.format("yy/MM/dd hh:mm"));
+      $('#dusk').html(sunTimes.dusk.format("yy/MM/dd hh:mm"));
+      $('#nauticalDusk').html(sunTimes.nauticalDusk.format("yy/MM/dd hh:mm"));
+      $('#night').html(sunTimes.night.format("yy/MM/dd hh:mm"));
+      $('#nadir').html(sunTimes.nadir.format("yy/MM/dd hh:mm"));
+      $('#nightEnd').html(sunTimes.nightEnd.format("yy/MM/dd hh:mm"));
+      $('#nauticalDawn').html(sunTimes.nauticalDawn.format("yy/MM/dd hh:mm"));
+      $('#dawn').html(sunTimes.dawn.format("yy/MM/dd hh:mm"));
+
+      var moonTimes = SunCalc.getMoonTimes(inputdate, lat , lng);
+      var moonPos = SunCalc.getMoonPosition(inputdate,lat,lng);
+      var moonIllumination =SunCalc.getMoonIllumination(inputdate);
+      var moonAltitude = moonPos.altitude*180/Math.PI;
+      var moonAzimuth = moonPos.azimuth*180/Math.PI;
+      var moonDist = moonPos.distance;
+      $('#moonAltitude').html(moonAltitude.toPrecision(6));
+      $('#moonAzimuth').html(moonAzimuth.toPrecision(6));
+      $('#moonDistance').html(moonDist);
+      //moon time
+      if(!moonTimes.rise){
+        var prevday = new Date(inputdate.getTime() - 24*60*60*1000);
+        var prevmoonTimes = SunCalc.getMoonTimes(prevday, lat , lng);
+        $('#moonrise').html(prevmoonTimes.rise.format("yy/MM/dd hh:mm"));
+        //alert(prevday);
+      }else{
+        $('#moonrise').html(moonTimes.rise.format("yy/MM/dd hh:mm"));
+      }
+      if(!moonTimes.set){
+        var nextday = new Date(inputdate.getTime() + 24*60*60*1000);
+        var nextmoonTimes = SunCalc.getMoonTimes(prevday, lat , lng);
+        $('#moonset').html(nextmoonTimes.set.format("yy/MM/dd hh:mm"));
+        //alert(prevday);
+      }else{
+        $('#moonset').html(moonTimes.set.format("yy/MM/dd hh:mm"));
+      }
+      //moon ill
+      $('#light').html(moonIllumination.fraction.toPrecision(6));
+      var smoonPhase = "";
+      var moonPhase = moonIllumination.phase;
+        if(moonPhase < 0.01){
+            smoonPhase = "新月";
+        }else if(moonPhase < 0.24){
+            smoonPhase = "娥眉月";
+        }else if(moonPhase < 0.26){
+            smoonPhase = "上弦月";
+        }else if(moonPhase < 0.49){
+            smoonPhase = "渐盈凸月";
+        }else if(moonPhase < 0.51){
+            smoonPhase = "满月";
+        }else if(moonPhase < 0.74){
+            smoonPhase = "渐亏凸月";
+        }else if(moonPhase < 0.76){
+            smoonPhase = "下弦月";
+        }else if(moonPhase < 1.01){
+            smoonPhase = "残月";
+        }
+      $('#moonPhase').html(smoonPhase);
+        
+    });
+
+  });
+</script>
+  </body>
+</html>
