@@ -214,10 +214,10 @@
           <input type="text" name="slatitude" id="slatitude" placeholder = "纬度">
         </div>
 
-        <div class="ui-grid-b"> 
-          <div class="ui-block-a"><a href="#" data-role="button" id="slocate"   data-icon="location">定位</a></div>
-          <div class="ui-block-b"><a href="#" data-role="button" id="ssearch"  data-icon="search">搜索</a></div>
-          <div class="ui-block-c"><a href="#" data-role="button" id="sok"   data-icon="check">确定</a></div>
+        <div > 
+          <a href="#" data-role="button" id="slocate"   data-icon="location">定位</a>
+         <a href="#" data-role="button" id="ssearch"  data-icon="search">搜索</a>
+         <a href="#" data-role="button" id="sok"   data-icon="check">确定</a>
         </div>
       </div>
     </div>
