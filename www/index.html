@@ -288,6 +288,7 @@
           <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
       </div>
       <div data-role="content" id="cloudcontent">
+        <label for="img"  data-mini="true" id="cloudLable"></label>
           <img src=""  alt="红外云图" id="imgCloud" width="100%"/>
       </div>
     </div>
@@ -418,7 +419,7 @@
     });
     //天气预报
     $('#weather').click(function(){
-      $('#weathercontent').html('<iframe name="weather_inc" src="http://i.tianqi.com/index.php?c=code&id=4" width="130px" height="330px" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" ></iframe>');
+      $('#weathercontent').html('<iframe name="weather_inc" src="http://i.tianqi.com/index.php?c=code&id=2&num=2" width="330px" height="70px" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>');
       $.mobile.changePage( "#pageweather", { role: "dialog" } );
     });
     //返回
@@ -459,10 +460,19 @@
     $('#nircloud').click(function(){
       var now = new Date();
       now = new Date(now.getTime());
-      var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
-      currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
-      var imgurl= 'http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_CLC_GRA_'+ currenttime.format('yyyyMMdd_hhmm') +'.jpg';
-      $('#imgCloud').attr("src", imgurl);
+      for(var i=1;i<4;i++){
+        var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-i);
+        currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
+        var imgurl= 'http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_CLC_GRA_'+ currenttime.format('yyyyMMdd_hhmm') +'.jpg';
+        var tmpImg = new Image();
+        tmpImg.src=imgurl; //or  document.images[i].src;
+        if (tmpImg.width > 0 && tmpImg.height > 0) {
+          $('#imgCloud').attr("src", imgurl);
+          $('#cloudLable').html(imgurl);
+          break;
+        }
+      }
+
       $("#cloudcontent").panzoom();
       $.mobile.changePage( "#pagecloud");
     });
