@@ -46,11 +46,11 @@
       </div>
       <div data-role="fieldcontain">
         <label for="longitude"  data-mini="true" >经度：</label>
-        <input type="text" name="longitude" id="longitude" value="114.3"  data-mini="true" >
+        <input type="text" name="longitude" id="longitude" value=""  data-mini="true" >
       </div>
       <div data-role="fieldcontain">
         <label for="latitude"  data-mini="true" >纬度：</label>
-        <input type="text" name="latitude" id="latitude" value="30.57"  data-mini="true" >
+        <input type="text" name="latitude" id="latitude" value=""  data-mini="true" >
       </div>
       <div data-role="fieldcontain">
         <label for="inputdate"  data-mini="true" >时间：</label>
@@ -268,8 +268,8 @@
     </div>
     <div data-role="content">
       <label for="img"  data-mini="true" id="cloudLable"></label>
-      <div  id="cloudcontent">
-        <img src=""  alt="红外云图" id="imgCloud" width="100%"/>
+      <div  id="cloudcontent" height="100%">
+        <img src=""  alt="红外云图" id="imgCloud" />
         </div>
     </div>
   </div>
@@ -328,12 +328,11 @@
     }
     return true;
   }
-  var tempdate = new Date();
-  document.getElementById("inputdate").value = tempdate.format('yyyy-MM-dd');
+
   var map;
   var marker ;
   $(document).on('pageinit', '#pagemap', function() {
-   map = L.map('map').setView([39.9021, 116.39328], 13);
+   map = L.map('map').setView([39.9021, 116.39328], 10);
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoid3VxaSIsImEiOiI5NDNhZGVlZjlhMDNhOTVmMjVjYTJiNzM2N2UxOGIwNSJ9.sWHdpguJCEjyBsVLPAXgYQ', {
 			maxZoom: 18,
 			attribution: 'wuqi',
@@ -343,7 +342,6 @@
     var searchControl = new L.esri.Geocoding.Controls.Geosearch().addTo(map);
 
     searchControl.on('results', function(data) {
-      //
       if (data.results.length > 0) {
         marker.setLatLng(data.results[0].latlng).update();
         map.setView(data.results[0].latlng,map.getZoom());
@@ -374,7 +372,14 @@
     });
   }
 
-  $(document).ready(function(){ 
+  $(document).ready(function(){
+    //initial
+    var tempdate = new Date();
+    $('#inputdate').val(tempdate.format('yyyy-MM-dd'));
+    var index = $('#address').get(0).selectedIndex;
+    var item = addresses.locations[index];
+    $('#latitude').val(item.lat);
+    $('#longitude').val(item.lng);
     //切换地点
     $('#address').change(function(){ 
      //alert($(this).get(0).selectedIndex);
