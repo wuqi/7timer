@@ -230,7 +230,6 @@
       <div data-role="content">
           <div>
             <h1>软件说明:</h1>
-<!--<a onclick="navigator.app.loadUrl('https://google.com/', { openExternal:true });">Link</a>-->
             <ul>
             <li>本软件使用 <a onclick="navigator.app.loadUrl('http://phonegap.com', { openExternal:true });">PhoneGap</a> 开发</li>
             <li>软件最新版本可在 <a onclick="navigator.app.loadUrl('https://build.phonegap.com/apps/1575380/builds', { openExternal:true });">PhoneGap App</a> 上下载</li>
@@ -293,9 +292,11 @@
          <h1>红外云图</h1>
           <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
       </div>
-      <div data-role="content" id="cloudcontent">
+      <div data-role="content">
         <label for="img"  data-mini="true" id="cloudLable"></label>
+        <div  id="cloudcontent">
           <img src=""  alt="红外云图" id="imgCloud" width="100%"/>
+          </div>
       </div>
     </div>
   <script type="text/javascript">
@@ -328,7 +329,12 @@
     var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
     return formatedDate;
   }
-
+  function imageExists(image_url) {
+    var http = new xmlHttpRequest();
+    http.open('HEAD',image_url,false);
+    http.send();
+    return http.status != 404;
+  }
   var storage = window.localStorage;
   var addresses;
   if (!storage.getItem("addresses")) {
@@ -470,11 +476,9 @@
         var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-i);
         currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
         var imgurl= 'http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_CLC_GRA_'+ currenttime.format('yyyyMMdd_hhmm') +'.jpg';
-        var tmpImg = new Image();
-        tmpImg.src=imgurl; //or  document.images[i].src;
-        if (tmpImg.width > 0 && tmpImg.height > 0) {
+        if ( imageExists(imgurl)) {
           $('#imgCloud').attr("src", imgurl);
-          $('#cloudLable').html(imgurl);
+          $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
           break;
         }
       }
