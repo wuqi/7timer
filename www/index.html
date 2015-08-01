@@ -470,7 +470,7 @@
         tmpImg.src=imgurl; //or  document.images[i].src;
         if (tmpImg.width > 0 && tmpImg.height > 0) {
           $('#imgCloud').attr("src", imgurl);
-          $('#cloudLable').html(imgurl);
+          $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
           break;
         }
       }
