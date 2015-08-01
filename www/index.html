@@ -230,33 +230,39 @@
       <div data-role="content">
           <div>
             <h1>软件说明:</h1>
-
+<!--<a onclick="navigator.app.loadUrl('https://google.com/', { openExternal:true });">Link</a>-->
             <ul>
-            <li>本软件使用 phonegap 开发</li>
-            <li>地图数据使用mapbox制作</li>
-            <li>地图显示使用 leaflet 库</li>
-            <li>软件源码: [<a href="https://github.com/wuqi/7timer.git]">https://github.com/wuqi/7timer.git]</a></li>
-            <li>晴天钟数据来源: <a href="7Timer">http://202.127.24.18</a></li>
-            <li>晨昏蒙影计算:   <a href="suncalc">https://github.com/mourner/suncalc</a></li>
-            <li>天气预报插件来源: <a href="天气网">http://i.tianqi.com/index.php</a></li>
-            <li>云图数据来源:   <a href="国家气象卫星中心">http://www.nsmc.cma.gov.cn/NSMC/Channels/100028.html</a></li>
+            <li>本软件使用 <a onclick="navigator.app.loadUrl('http://phonegap.com', { openExternal:true });">PhoneGap</a> 开发</li>
+            <li>软件最新版本可在 <a onclick="navigator.app.loadUrl('https://build.phonegap.com/apps/1575380/builds', { openExternal:true });">PhoneGap App</a> 上下载</li>
+            <li>软件源码在 <a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer', { openExternal:true });">Github</a> 上托管</li>
+            <li>晴天钟数据来源: <a onclick="navigator.app.loadUrl('http://202.127.24.18', { openExternal:true });">7Timer</a></li>
+            <li>地图数据使用 <a onclick="navigator.app.loadUrl('https://www.mapbox.com', { openExternal:true });">Mapbox</a>制作</li>
+            <li>地图显示使用 <a onclick="navigator.app.loadUrl('http://leafletjs.com/', { openExternal:true });">Leafletjs</a> 库</li>
+            <li>晨昏蒙影计算:   <a onclick="navigator.app.loadUrl('https://github.com/mourner/suncalc', { openExternal:true });">Suncalc</a></li>
+            <li>天气预报插件来源: <a onclick="navigator.app.loadUrl('http://i.tianqi.com/index.php', { openExternal:true });">天气网</a></li>
+            <li>云图数据来源:  <a onclick="navigator.app.loadUrl('http://www.nsmc.cma.gov.cn/NSMC/Channels/100028.html', { openExternal:true });">国家气象卫星中心</a></li>
             </ul>
 
             <h1>网络说明:</h1>
 
             <ul>
-            <li>晨昏蒙影计算不消耗流量</li>
-            <li>定位/查询/地图/云图/天气预报将消耗流量</li>
-            <li>云图下载可能会耗费较大流量(每次约300k),云图查询仅下载当前时间最近的云图</li>
-            <li>地图可能会消耗大量流量</li>
+              <li>晨昏蒙影计算不消耗流量</li>
+              <li>定位/查询/地图/云图/天气预报将消耗流量</li>
+              <li>云图下载可能会耗费较大流量(每次约300k),云图查询仅下载当前时间最近的云图</li>
+              <li>地图可能会消耗大量流量</li>
             </ul>
 
             <h1>已知问题</h1>
 
             <ul>
-            <li>天气预报无法选择地点,使用当前ip定位,如果定位错误,请手动查询</li>
-            <li>天气预报点击后进入其他页面,请使用返回键</li>
-            <li>晨昏蒙影可能无法计算或计算错误</li>
+              <li>天气预报无法选择地点,使用当前ip定位,如果定位错误,请手动查询</li>
+              <li>天气预报点击后进入其他页面,请使用返回键</li>
+              <li>云图第一次点击可能无效,返回后重新点击</li>
+            </ul>
+            <h1>反馈及建议</h1>
+
+            <ul>
+            <li>请使用<a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer/issues', { openExternal:true });">Github Issue</a> 反馈问题或提出建议(需要注册Github账号)</li>
             </ul>
           </div>
       </div>
@@ -287,11 +293,9 @@
          <h1>红外云图</h1>
           <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
       </div>
-      <div data-role="content">
+      <div data-role="content" id="cloudcontent">
         <label for="img"  data-mini="true" id="cloudLable"></label>
-        <div  id="cloudcontent">
           <img src=""  alt="红外云图" id="imgCloud" width="100%"/>
-        </div>
       </div>
     </div>
   <script type="text/javascript">
@@ -470,7 +474,7 @@
         tmpImg.src=imgurl; //or  document.images[i].src;
         if (tmpImg.width > 0 && tmpImg.height > 0) {
           $('#imgCloud').attr("src", imgurl);
-          $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+          $('#cloudLable').html(imgurl);
           break;
         }
       }
