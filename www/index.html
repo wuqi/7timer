@@ -1,321 +1,295 @@
 <!DOCTYPE html>
 <html>
-  
-  <head>
-    <meta charset="utf-8" />
-<!--<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=no; target-densityDpi=device-dpi"/>-->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <script type="text/javascript" src="jquery.min.js"></script>
-    <script type="text/javascript" src="jquery.mobile-1.4.5.min.js"></script>
-    <script type="text/javascript" src="leaflet.js"></script>
-    <script type="text/javascript" src="esri-leaflet.js"></script>
-    <script type="text/javascript" src="esri-leaflet-geocoder.js"></script>
-    <script type="text/javascript" src="suncalc.js"></script>
-    <script type="text/javascript" src="jqm-datebox.all.min.js"></script>
-    <script type="text/javascript" src="jquery.panzoom.min.js"></script>
-
-    <script type="text/javascript" src="cordova.js"></script>
-    <link rel="stylesheet" href="leaflet.css"/>
-    <link rel="stylesheet" href="esri-leaflet-geocoder.css"/>
-    <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
-    <link rel="stylesheet" href="jqm-datebox.min.css">
-      <style type="text/css" >
-    #pagemap>.ui-content {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 0 !important;
-}
-
-#map {
-    height: 100%;
-}
-      </style>
-  </head>
-  
-  <body>
-    <!--主页面-->
-    <div data-role="page" id="pagemain">
-      <div data-role="header" data-position="fixed">
-         <h1>晴天钟</h1>
-         <a href="#pagemap" data-role="button" data-icon="eye" data-transition="slide">地图</a>
-         <a href="#pageinfo" data-role="button" data-icon="info">说明</a>
-      </div>
-      <form style="padding: 30px">
-        <div data-role="fieldcontain">
-          <label for="address">地名：</label>
-          <select name="address" id="address" data-native-menu="false"  data-mini="true" >
-          </select>
-        </div>
-        <div data-role="fieldcontain">
-          <label for="longitude"  data-mini="true" >经度：</label>
-          <input type="text" name="longitude" id="longitude" value="114.3"  data-mini="true" >
-        </div>
-        <div data-role="fieldcontain">
-          <label for="latitude"  data-mini="true" >纬度：</label>
-          <input type="text" name="latitude" id="latitude" value="30.57"  data-mini="true" >
-        </div>
-        <div data-role="fieldcontain">
-          <label for="inputdate"  data-mini="true" >时间：</label>
-          <input type="text" name="inputdate" id="inputdate"  data-mini="true" data-role="datebox" data-options='{"mode":"calbox","useFocus":"true","overrideDateFormat":"%Y-%m-%d "}'/>
-        </div>
-        <div class="ui-grid-b"> 
-          <div class="ui-block-a"><a href="#" data-role="button" id="clock"   data-icon="clock"  data-mini="true" >晴天钟</a></div>
-          <div class="ui-block-b"><a href="#pageresult" data-role="button" id="suncalc"  data-icon="star" data-rel="dialog"  data-mini="true" >晨昏蒙影</a></div>
-          <div class="ui-block-c"><a href="#pagesearch" data-role="button" id="newLoc"   data-icon="plus" data-rel="dialog"  data-mini="true" >添加地点</a></div>
-        </div>
-        <div class="ui-grid-a"> 
-          <div class="ui-block-a"><a href="#" data-role="button" id="weather"   data-icon="calendar"  data-mini="true" data-rel="dialog" >天气预报</a></div>
-          <div class="ui-block-b"><a href="#" data-role="button" id="nircloud"  data-icon="cloud" data-mini="true" >红外云图</a></div>
-        </div>
-      </form>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <script type="text/javascript" src="jquery.min.js"></script>
+  <script type="text/javascript" src="jquery.mobile-1.4.5.min.js"></script>
+  <script type="text/javascript" src="leaflet.js"></script>
+  <script type="text/javascript" src="esri-leaflet.js"></script>
+  <script type="text/javascript" src="esri-leaflet-geocoder.js"></script>
+  <script type="text/javascript" src="suncalc.js"></script>
+  <script type="text/javascript" src="jqm-datebox.all.min.js"></script>
+  <script type="text/javascript" src="jquery.panzoom.min.js"></script>
+  <script type="text/javascript" src="cordova.js"></script>
+  <link rel="stylesheet" href="leaflet.css"/>
+  <link rel="stylesheet" href="esri-leaflet-geocoder.css"/>
+  <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
+  <link rel="stylesheet" href="jqm-datebox.min.css">
+  <style type="text/css" >
+  #pagemap>.ui-content {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 0 !important;
+  }
+  #map {
+      height: 100%;
+  }
+  </style>
+</head>
+<body>
+  <!--主页面-->
+  <div data-role="page" id="pagemain">
+    <div data-role="header" data-position="fixed">
+       <h1>晴天钟</h1>
+       <a href="#pagemap" data-role="button" data-icon="eye" data-transition="slide">地图</a>
+       <a href="#pageinfo" data-role="button" data-icon="info">说明</a>
     </div>
-    <!--地图-->
-    <div data-role="page" id="pagemap">
-      <div data-role="header" data-position="fixed">
-         <h1>地图</h1>
-         <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
-         <a href="#" data-role="button" data-icon="clock" id="headerClock">晴天钟</a>
+    <form style="padding: 10px">
+      <div data-role="fieldcontain">
+        <label for="address">地名：</label>
+        <select name="address" id="address" data-native-menu="false"  data-mini="true" >
+        </select>
       </div>
-      <div data-role="content">
-          <div id="map" style="float:left height:100% min-height:100% width:100%"></div>
+      <div data-role="fieldcontain">
+        <label for="longitude"  data-mini="true" >经度：</label>
+        <input type="text" name="longitude" id="longitude" value="114.3"  data-mini="true" >
       </div>
+      <div data-role="fieldcontain">
+        <label for="latitude"  data-mini="true" >纬度：</label>
+        <input type="text" name="latitude" id="latitude" value="30.57"  data-mini="true" >
+      </div>
+      <div data-role="fieldcontain">
+        <label for="inputdate"  data-mini="true" >时间：</label>
+        <input type="text" name="inputdate" id="inputdate"  data-mini="true" data-role="datebox" data-options='{"mode":"calbox","useFocus":"true","overrideDateFormat":"%Y-%m-%d "}'/>
+      </div>
+      <div class="ui-grid-b btngroup"> 
+        <div class="ui-block-a"><a href="#" data-role="button" id="clock"   data-icon="clock"  data-mini="true" >晴天钟</a></div>
+        <div class="ui-block-b"><a href="#pageresult" data-role="button" id="suncalc"  data-icon="star" data-rel="dialog"  data-mini="true" >晨昏蒙影</a></div>
+        <div class="ui-block-c"><a href="#pagesearch" data-role="button" id="newLoc"   data-icon="plus" data-rel="dialog"  data-mini="true" >添加地点</a></div>
+      </div>
+      <div class="ui-grid-a"> 
+        <div class="ui-block-a"><a href="#" data-role="button" id="weather"   data-icon="calendar"  data-mini="true" data-rel="dialog" >天气预报</a></div>
+        <div class="ui-block-b"><a href="#" data-role="button" id="nircloud"  data-icon="cloud" data-mini="true" >红外云图</a></div>
+      </div>
+    </form>
+  </div>
+  <!--地图-->
+  <div data-role="page" id="pagemap">
+    <div data-role="header" data-position="fixed">
+       <h1>地图</h1>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+       <a href="#" data-role="button" data-icon="clock" id="headerClock">晴天钟</a>
     </div>
-    <!--suncalc结果-->
-    <div data-role="page" id="pageresult">
-      <div data-role="header">
-         <h1>晨昏蒙影</h1>
+    <div data-role="content">
+        <div id="map" style="float:left height:100% min-height:100% width:100%"></div>
+    </div>
+  </div>
+  <!--suncalc结果-->
+  <div data-role="page" id="pageresult">
+    <div data-role="header">
+       <h1>晨昏蒙影</h1>
+    </div>
+    <div data-role="content">
+      <table>
+        <thead>
+     <tr>
+       <th align="left">晨昏蒙影</th>
+     </tr>
+   </thead>
+   <tbody>
+        <tr>
+          <td align="left">日出起始时间</td>
+          <td id = "sunrise" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">日出结束时间</td>
+          <td id = "sunriseEnd" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">日出黄金时间</td>
+          <td id = "goldenHourEnd" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">日落黄金时间</td>
+          <td id = "goldenHour" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">太阳最高点时间</td>
+          <td id = "solarNoon" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">日落开始时间</td>
+          <td id = "sunsetStart" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">民用晨光始</td>
+          <td id = "dawn" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">民用昏影终</td>
+          <td id = "sunset" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">航海晨光始</td>
+          <td id = "nauticalDawn" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">航海昏影终</td>
+          <td id = "dusk" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">天文晨光始</td>
+          <td id = "nightEnd" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">天文昏影终</td>
+          <td id = "nauticalDusk" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">黑暗</td>
+          <td id = "night" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">最暗时刻</td>
+          <td id = "nadir" align="right"></td>
+        </tr>
+     </tbody>
+     <thead>
+     <tr>
+       <th align="left">月相</th>
+     </tr>
+   </thead>
+   <tbody>
+        <tr>
+          <td align="left">月出时间</td>
+          <td id = "moonrise" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">月落时间</td>
+          <td id = "moonset" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">月相</td>
+          <td id = "moonPhase" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">亮度</td>
+          <td id = "light" align="right"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!--添加新地点-->
+  <div data-role="page" id="pagesearch">
+    <div data-role="header">
+       <h1>添加新地点</h1>
+    </div>
+    <div data-role="content">
+      <div data-role="fieldcontain" >
+
+        <input type="text" name="sname" id="sname" placeholder = "地点">
+
+        <input type="text" name="slongitude" id="slongitude" placeholder = "经度">
+
+        <input type="text" name="slatitude" id="slatitude" placeholder = "纬度">
       </div>
-      <div data-role="content">
-        <table>
-          <thead>
-       <tr>
-         <th align="left">晨昏蒙影</th>
-       </tr>
-     </thead>
-     <tbody>
-          <!--<tr>
-            <td align="left">太阳高度角</td>
-            <td id = "sunAltitude"></td>
-          </tr>
-          <tr>
-            <td align="left">太阳方位角</td>
-            <td id = "sunAzimuth"></td>
-          </tr>-->
-          <tr>
-            <td align="left">日出起始时间</td>
-            <td id = "sunrise" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">日出结束时间</td>
-            <td id = "sunriseEnd" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">日出黄金时间</td>
-            <td id = "goldenHourEnd" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">日落黄金时间</td>
-            <td id = "goldenHour" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">太阳最高点时间</td>
-            <td id = "solarNoon" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">日落开始时间</td>
-            <td id = "sunsetStart" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">民用晨光始</td>
-            <td id = "dawn" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">民用昏影终</td>
-            <td id = "sunset" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">航海晨光始</td>
-            <td id = "nauticalDawn" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">航海昏影终</td>
-            <td id = "dusk" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">天文晨光始</td>
-            <td id = "nightEnd" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">天文昏影终</td>
-            <td id = "nauticalDusk" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">黑暗</td>
-            <td id = "night" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">最暗时刻</td>
-            <td id = "nadir" align="right"></td>
-          </tr>
-       </tbody>
-       <thead>
-       <tr>
-         <th align="left">月相</th>
-       </tr>
-     </thead>
-     <tbody>
-          <!--<tr>
-            <td>月球高度角</td>
-            <td id = "moonAltitude"></td>
-          </tr>
-          <tr>
-            <td>月球方位角</td>
-            <td id = "moonAzimuth"></td>
-          </tr>
-          <tr>
-            <td>地月距离</td>
-            <td id = "moonDistance"></td>
-          </tr>-->
-          <tr>
-            <td align="left">月出时间</td>
-            <td id = "moonrise" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">月落时间</td>
-            <td id = "moonset" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">月相</td>
-            <td id = "moonPhase" align="right"></td>
-          </tr>
-          <tr>
-            <td align="left">亮度</td>
-            <td id = "light" align="right"></td>
-          </tr>
-          </tbody>
-        </table>
+
+      <div class="ui-grid-b"> 
+        <div class="ui-block-a"><a href="#" data-role="button" id="slocate"   data-icon="location">定位</a></div>
+        <div class="ui-block-b"><a href="#" data-role="button" id="ssearch"  data-icon="search">搜索</a></div>
+        <div class="ui-block-c"><a href="#" data-role="button" id="sok"   data-icon="check">确定</a></div>
       </div>
     </div>
-    <!--添加新地点-->
-    <div data-role="page" id="pagesearch">
-      <div data-role="header">
-         <h1>添加新地点</h1>
-      </div>
-      <div data-role="content">
-        <div data-role="fieldcontain" >
- 
-          <input type="text" name="sname" id="sname" placeholder = "地点">
+  </div>
+  <!--pageinfo-->
+  <div data-role="page" id="pageinfo">
+    <div data-role="header" data-position="fixed">
+       <h1>软件说明</h1>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+    </div>
+    <div data-role="content">
+        <div>
+          <h1>软件说明:</h1>
+          <ul>
+          <li>本软件使用 <a onclick="navigator.app.loadUrl('http://phonegap.com', { openExternal:true });">PhoneGap</a> 开发</li>
+          <li>软件最新版本可在 <a onclick="navigator.app.loadUrl('https://build.phonegap.com/apps/1575380/builds', { openExternal:true });">PhoneGap App</a> 上下载</li>
+          <li>软件源码在 <a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer', { openExternal:true });">Github</a> 上托管</li>
+          <li>晴天钟数据来源: <a onclick="navigator.app.loadUrl('http://202.127.24.18', { openExternal:true });">7Timer</a></li>
+          <li>地图数据使用 <a onclick="navigator.app.loadUrl('https://www.mapbox.com', { openExternal:true });">Mapbox</a>制作</li>
+          <li>地图显示使用 <a onclick="navigator.app.loadUrl('http://leafletjs.com/', { openExternal:true });">Leafletjs</a> 库</li>
+          <li>晨昏蒙影计算:   <a onclick="navigator.app.loadUrl('https://github.com/mourner/suncalc', { openExternal:true });">Suncalc</a></li>
+          <li>天气预报插件来源: <a onclick="navigator.app.loadUrl('http://i.tianqi.com/index.php', { openExternal:true });">天气网</a></li>
+          <li>云图数据来源:  <a onclick="navigator.app.loadUrl('http://www.nsmc.cma.gov.cn/NSMC/Channels/100028.html', { openExternal:true });">国家气象卫星中心</a></li>
+          </ul>
 
-          <input type="text" name="slongitude" id="slongitude" placeholder = "经度">
+          <h1>网络说明:</h1>
 
-          <input type="text" name="slatitude" id="slatitude" placeholder = "纬度">
+          <ul>
+            <li>晨昏蒙影计算不消耗流量</li>
+            <li>定位/查询/地图/云图/天气预报将消耗流量</li>
+            <li>云图下载可能会耗费较大流量(每次约300k),云图查询仅下载当前时间最近的云图</li>
+            <li>地图可能会消耗大量流量</li>
+          </ul>
+
+          <h1>已知问题</h1>
+
+          <ul>
+            <li>天气预报无法选择地点,使用当前ip定位,如果定位错误,请手动查询</li>
+            <li>天气预报点击后进入其他页面,请使用返回键</li>
+          </ul>
+          <h1>反馈及建议</h1>
+
+          <ul>
+          <li>请使用<a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer/issues', { openExternal:true });">Github Issue</a> 反馈问题或提出建议(需要注册Github账号)</li>
+          </ul>
         </div>
-
-        <div class="ui-grid-b"> 
-          <div class="ui-block-a"><a href="#" data-role="button" id="slocate"   data-icon="location">定位</a></div>
-          <div class="ui-block-b"><a href="#" data-role="button" id="ssearch"  data-icon="search">搜索</a></div>
-          <div class="ui-block-c"><a href="#" data-role="button" id="sok"   data-icon="check">确定</a></div>
+    </div>
+  </div>
+  <!--clock-->
+  <div data-role="page" id="pageclock">
+    <div data-role="header">
+       <h1>晴天钟</h1>
+    </div>
+    <div data-role="content">
+        <img src=""  alt="晴天钟" id="imgClock" width="100%"/>
+    </div>
+  </div>
+  <!--天气预报-->
+  <div data-role="page" id="pageweather">
+    <div data-role="header">
+       <h1>天气预报</h1>
+    </div>
+    <div data-role="content">
+      <div data-role="fieldcontain" id="weathercontent">
+      </div>
+       <a href="#" data-role="button" id="sreturn"   data-icon="check">返回</a>
+    </div>
+  </div>
+  <!--红外云图-->
+  <div data-role="page" id="pagecloud">
+    <div data-role="header">
+       <h1>红外云图</h1>
+        <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+    </div>
+    <div data-role="content">
+      <label for="img"  data-mini="true" id="cloudLable"></label>
+      <div  id="cloudcontent">
+        <img src=""  alt="红外云图" id="imgCloud" width="100%"/>
         </div>
-      </div>
     </div>
-    <!--pageinfo-->
-    <div data-role="page" id="pageinfo">
-      <div data-role="header" data-position="fixed">
-         <h1>软件说明</h1>
-         <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
-      </div>
-      <div data-role="content">
-          <div>
-            <h1>软件说明:</h1>
-            <ul>
-            <li>本软件使用 <a onclick="navigator.app.loadUrl('http://phonegap.com', { openExternal:true });">PhoneGap</a> 开发</li>
-            <li>软件最新版本可在 <a onclick="navigator.app.loadUrl('https://build.phonegap.com/apps/1575380/builds', { openExternal:true });">PhoneGap App</a> 上下载</li>
-            <li>软件源码在 <a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer', { openExternal:true });">Github</a> 上托管</li>
-            <li>晴天钟数据来源: <a onclick="navigator.app.loadUrl('http://202.127.24.18', { openExternal:true });">7Timer</a></li>
-            <li>地图数据使用 <a onclick="navigator.app.loadUrl('https://www.mapbox.com', { openExternal:true });">Mapbox</a>制作</li>
-            <li>地图显示使用 <a onclick="navigator.app.loadUrl('http://leafletjs.com/', { openExternal:true });">Leafletjs</a> 库</li>
-            <li>晨昏蒙影计算:   <a onclick="navigator.app.loadUrl('https://github.com/mourner/suncalc', { openExternal:true });">Suncalc</a></li>
-            <li>天气预报插件来源: <a onclick="navigator.app.loadUrl('http://i.tianqi.com/index.php', { openExternal:true });">天气网</a></li>
-            <li>云图数据来源:  <a onclick="navigator.app.loadUrl('http://www.nsmc.cma.gov.cn/NSMC/Channels/100028.html', { openExternal:true });">国家气象卫星中心</a></li>
-            </ul>
-
-            <h1>网络说明:</h1>
-
-            <ul>
-              <li>晨昏蒙影计算不消耗流量</li>
-              <li>定位/查询/地图/云图/天气预报将消耗流量</li>
-              <li>云图下载可能会耗费较大流量(每次约300k),云图查询仅下载当前时间最近的云图</li>
-              <li>地图可能会消耗大量流量</li>
-            </ul>
-
-            <h1>已知问题</h1>
-
-            <ul>
-              <li>天气预报无法选择地点,使用当前ip定位,如果定位错误,请手动查询</li>
-              <li>天气预报点击后进入其他页面,请使用返回键</li>
-              <li>云图第一次点击可能无效,返回后重新点击</li>
-            </ul>
-            <h1>反馈及建议</h1>
-
-            <ul>
-            <li>请使用<a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer/issues', { openExternal:true });">Github Issue</a> 反馈问题或提出建议(需要注册Github账号)</li>
-            </ul>
-          </div>
-      </div>
-    </div>
-    <!--clock-->
-    <div data-role="page" id="pageclock">
-      <div data-role="header">
-         <h1>晴天钟</h1>
-      </div>
-      <div data-role="content">
-          <img src=""  alt="晴天钟" id="imgClock" width="100%"/>
-      </div>
-    </div>
-    <!--天气预报-->
-    <div data-role="page" id="pageweather">
-      <div data-role="header">
-         <h1>天气预报</h1>
-      </div>
-      <div data-role="content">
-        <div data-role="fieldcontain" id="weathercontent">
-        </div>
-         <a href="#" data-role="button" id="sreturn"   data-icon="check">返回</a>
-      </div>
-    </div>
-    <!--红外云图-->
-    <div data-role="page" id="pagecloud">
-      <div data-role="header">
-         <h1>红外云图</h1>
-          <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
-      </div>
-      <div data-role="content">
-        <label for="img"  data-mini="true" id="cloudLable"></label>
-        <div  id="cloudcontent">
-          <img src=""  alt="红外云图" id="imgCloud" width="100%"/>
-          </div>
-      </div>
-    </div>
+  </div>
   <script type="text/javascript">
-  Date.prototype.format = function(fmt) { //author: meizz   
+  Date.prototype.format = function(fmt) { //author: meizz
     var o = {   
-      "M+" : this.getMonth()+1,                 //月份   
-      "d+" : this.getDate(),                    //日   
-      "h+" : this.getHours(),                   //小时   
-      "m+" : this.getMinutes(),                 //分   
-      "s+" : this.getSeconds(),                 //秒   
-      "q+" : Math.floor((this.getMonth()+3)/3), //季度   
-      "S"  : this.getMilliseconds()             //毫秒   
+      "M+" : this.getMonth()+1,                 //月份
+      "d+" : this.getDate(),                    //日
+      "h+" : this.getHours(),                   //小时
+      "m+" : this.getMinutes(),                 //分
+      "s+" : this.getSeconds(),                 //秒
+      "q+" : Math.floor((this.getMonth()+3)/3), //季度
+      "S"  : this.getMilliseconds()             //毫秒
     };   
-    if(/(y+)/.test(fmt))   
-      fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));   
-    for(var k in o)   
-      if(new RegExp("("+ k +")").test(fmt))   
-    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
-    return fmt;   
+    if(/(y+)/.test(fmt))
+      fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+    for(var k in o)
+      if(new RegExp("("+ k +")").test(fmt))
+    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+    return fmt;
   };
   function stringToDate(_date,_format,_delimiter)	{
     var formatLowerCase=_format.toLowerCase();
@@ -359,8 +333,6 @@
   var map;
   var marker ;
   $(document).on('pageinit', '#pagemap', function() {
-
-
    map = L.map('map').setView([39.9021, 116.39328], 13);
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoid3VxaSIsImEiOiI5NDNhZGVlZjlhMDNhOTVmMjVjYTJiNzM2N2UxOGIwNSJ9.sWHdpguJCEjyBsVLPAXgYQ', {
 			maxZoom: 18,
@@ -386,21 +358,20 @@
       var lng = e.latlng.lng;
       marker.setLatLng( e.latlng).update();
       map.setView( e.latlng,map.getZoom());
-
   }
 
   document.addEventListener('deviceready', onDeviceReady, false);
 
   function onDeviceReady() {
-      function disp(pos) {
-         $("#sname").val("新地点");
-         $('#slatitude').val(pos.coords.latitude);
-         $('#slongitude').val(pos.coords.longitude);
-      }
+    function disp(pos) {
+       $("#sname").val("新地点");
+       $('#slatitude').val(pos.coords.latitude);
+       $('#slongitude').val(pos.coords.longitude);
+    }
 
-      $('#slocate').click(function() {
-          navigator.geolocation.getCurrentPosition(disp);
-      });
+    $('#slocate').click(function() {
+        navigator.geolocation.getCurrentPosition(disp);
+    });
   }
 
   $(document).ready(function(){ 
@@ -455,10 +426,6 @@
         var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
         var content = "<div  style=\"width:500px\"><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:500px\"/></div>";
         marker.bindPopup(content,{maxWidth:500}).openPopup();
-      //}
-      //var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ lng +"&lat="+ lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
-      //$('#imgClock').attr("src", imgpath);
-      //$.mobile.changePage( "#pageclock", { role: "dialog" } );
     });
     //晴天钟
     $('#clock').click(function () {
@@ -494,11 +461,6 @@
       inputdate = new Date(inputdate.getTime() + 12*60*60*1000);
       var sunrisePos = SunCalc.getPosition(inputdate, lat , lng);
       var sunTimes = SunCalc.getTimes(inputdate, lat , lng);
-      //alert(inputdate.format("yy/MM/dd hh:mm"));
-      //var sunAltitude = sunrisePos.altitude*180/Math.PI;
-      //var sunAzimuth = sunrisePos.azimuth*180/Math.PI;
-      //$('#sunAltitude').html(sunAltitude.toPrecision(6));
-      //$('#sunAzimuth').html(sunAzimuth.toPrecision(6));
       $('#sunrise').html(sunTimes.sunrise.format("yyyy/MM/dd hh:mm"));
       $('#sunriseEnd').html(sunTimes.sunriseEnd.format("yyyy/MM/dd hh:mm"));
       $('#goldenHourEnd').html(sunTimes.goldenHourEnd.format("yyyy/MM/dd hh:mm"));
@@ -517,18 +479,11 @@
       var moonTimes = SunCalc.getMoonTimes(inputdate, lat , lng);
       var moonPos = SunCalc.getMoonPosition(inputdate,lat,lng);
       var moonIllumination =SunCalc.getMoonIllumination(inputdate);
-      //var moonAltitude = moonPos.altitude*180/Math.PI;
-      //var moonAzimuth = moonPos.azimuth*180/Math.PI;
-      //var moonDist = moonPos.distance;
-      //$('#moonAltitude').html(moonAltitude.toPrecision(6));
-      //$('#moonAzimuth').html(moonAzimuth.toPrecision(6));
-      //$('#moonDistance').html(moonDist);
       //moon time
       if(!moonTimes.rise){
         var prevday = new Date(inputdate.getTime() - 24*60*60*1000);
         var prevmoonTimes = SunCalc.getMoonTimes(prevday, lat , lng);
         $('#moonrise').html(prevmoonTimes.rise.format("yyyy/MM/dd hh:mm"));
-        //alert(prevday);
       }else{
         $('#moonrise').html(moonTimes.rise.format("yyyy/MM/dd hh:mm"));
       }
@@ -536,7 +491,6 @@
         var nextday = new Date(inputdate.getTime() + 24*60*60*1000);
         var nextmoonTimes = SunCalc.getMoonTimes(prevday, lat , lng);
         $('#moonset').html(nextmoonTimes.set.format("yyyy/MM/dd hh:mm"));
-        //alert(prevday);
       }else{
         $('#moonset').html(moonTimes.set.format("yyyy/MM/dd hh:mm"));
       }
@@ -563,10 +517,9 @@
             smoonPhase = "残月";
         }
       $('#moonPhase').html(smoonPhase);
-        
     });
 
   });
-</script>
-  </body>
+  </script>
+</body>
 </html>
