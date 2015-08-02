@@ -8,6 +8,7 @@
   <script type="text/javascript" src="leaflet.js"></script>
   <script type="text/javascript" src="esri-leaflet.js"></script>
   <script type="text/javascript" src="esri-leaflet-geocoder.js"></script>
+  <script type="text/javascript" src="leaflet.ChineseTmsProviders.js"></script>
   <script type="text/javascript" src="suncalc.js"></script>
   <script type="text/javascript" src="jqm-datebox.all.min.js"></script>
   <script type="text/javascript" src="jquery.panzoom.min.js"></script>
@@ -27,6 +28,7 @@
   }
   #map {
       height: 100%;
+      width:100%
   }
   </style>
 </head>
@@ -35,10 +37,15 @@
   <div data-role="page" id="pagemain">
     <div data-role="header" data-position="fixed">
        <h1>晴天钟</h1>
-       <a href="#pagemap" data-role="button" data-icon="eye" data-transition="slide">地图</a>
-       <a href="#pageinfo" data-role="button" data-icon="info">说明</a>
+      <div data-role="navbar" data-iconpos="left">
+        <ul>
+          <li><a href="#pagemap" data-icon="eye" data-transition="slide">地图</a></li>
+          <li><a href="#pagesettings" data-icon="gear" data-transition="slide">设置</a></li>
+          <li><a href="#pageinfo" data-icon="info"  data-transition="slide">说明</a></li>
+        </ul>
+      </div>
     </div>
-    <form style="padding: 10px">
+    <div data-role="content" style="padding: 10px">
       <div data-role="fieldcontain">
         <label for="address">地名：</label>
         <select name="address" id="address" data-native-menu="false"  data-mini="true" >
@@ -65,7 +72,7 @@
         <div class="ui-block-a"><a href="#" data-role="button" id="weather"   data-icon="calendar"  data-mini="true" data-rel="dialog" >天气预报</a></div>
         <div class="ui-block-b"><a href="#" data-role="button" id="nircloud"  data-icon="cloud" data-mini="true" >红外云图</a></div>
       </div>
-    </form>
+    </div>
   </div>
   <!--地图-->
   <div data-role="page" id="pagemap">
@@ -181,14 +188,10 @@
     </div>
     <div data-role="content">
       <div data-role="fieldcontain" >
-
         <input type="text" name="sname" id="sname" placeholder = "地点">
-
         <input type="text" name="slongitude" id="slongitude" placeholder = "经度">
-
         <input type="text" name="slatitude" id="slatitude" placeholder = "纬度">
       </div>
-
       <div class="ui-grid-b"> 
         <div class="ui-block-a"><a href="#" data-role="button" id="slocate"   data-icon="location">定位</a></div>
         <div class="ui-block-b"><a href="#" data-role="button" id="ssearch"  data-icon="search">搜索</a></div>
@@ -210,7 +213,7 @@
           <li>软件最新版本可在 <a onclick="navigator.app.loadUrl('https://build.phonegap.com/apps/1575380/builds', { openExternal:true });">PhoneGap App</a> 上下载</li>
           <li>软件源码在 <a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer', { openExternal:true });">Github</a> 上托管</li>
           <li>晴天钟数据来源: <a onclick="navigator.app.loadUrl('http://202.127.24.18', { openExternal:true });">7Timer</a></li>
-          <li>地图数据使用 <a onclick="navigator.app.loadUrl('https://www.mapbox.com', { openExternal:true });">Mapbox</a>制作</li>
+          <li>默认地图数据使用 <a onclick="navigator.app.loadUrl('https://www.mapbox.com', { openExternal:true });">Mapbox</a>制作</li>
           <li>地图显示使用 <a onclick="navigator.app.loadUrl('http://leafletjs.com/', { openExternal:true });">Leafletjs</a> 库</li>
           <li>晨昏蒙影计算:   <a onclick="navigator.app.loadUrl('https://github.com/mourner/suncalc', { openExternal:true });">Suncalc</a></li>
           <li>天气预报插件来源: <a onclick="navigator.app.loadUrl('http://i.tianqi.com/index.php', { openExternal:true });">天气网</a></li>
@@ -273,6 +276,38 @@
         </div>
     </div>
   </div>
+  <!--pagesettings-->
+  <div data-role="page" id="pagesettings">
+    <div data-role="header">
+       <h1>设置</h1>
+        <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+    </div>
+    <div data-role="content">
+        <label for="mapsource">地图来源：</label>
+        <select name="mapsource" id="mapsource" data-native-menu="false"  data-mini="true" >
+          <option value="mapbox">Mapbox</option>
+          <option value="esri">Esri Map</option>
+          <option value="mapabc">MapABC</option>
+          <option value="gaode">高德</option>
+          <option value="tianditu">天地图</option>
+        </select>
+        <label for="cloudtype">红外云图类型：</label>
+        <select name="cloudtype" id="cloudtype" data-native-menu="false"  data-mini="true" >
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_CLC_GRA_">中国区域红外一彩色</option>
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_IR1_COL_">中国区域红外一增强</option>
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_IR2_COL_">中国区域红外二增强</option>
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2/F2DE/FY2X_ANI_CLC_ECN_">双星红外一彩色</option>
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_CLC_GRA_">圆盘图红外一彩色</option>
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR1_COL_">圆盘图红外一增强</option>
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR2_COL_">圆盘图红外二增强</option>
+        </select>
+        <div class="ui-grid-b"> 
+        <div class="ui-block-a"></div>
+        <div class="ui-block-b"><a href="#" data-role="button" id="settingset"  data-icon="check" data-mini="true" >确定</a></div>
+        <div class="ui-block-c"><a href="#pagemain" data-role="button" id="settingcancel" data-icon="back" data-mini="true" >取消</a></div>
+      </div>
+    </div>
+  </div>
   <script type="text/javascript">
   Date.prototype.format = function(fmt) { //author: meizz
     var o = {   
@@ -311,6 +346,7 @@
   }
   var storage = window.localStorage;
   var addresses;
+  //address
   if (!storage.getItem("addresses")) {
     addresses =  {locations:[{name:"北京",lat:39.90,lng:116.40},{name:"武汉",lat:30.60,lng:114.3}]};
     storage.setItem("addresses",JSON.stringify(addresses));
@@ -318,6 +354,20 @@
   }else{
     addresses = JSON.parse(storage.getItem("addresses"));
     setSelector();
+  }
+  //mapsource
+  if(!storage.getItem("mapsource")){
+    storage.setItem("mapsource",0);
+    $('#mapsource').get(0).selectedIndex = 0;
+  }else{
+    $('#mapsource').get(0).selectedIndex = storage.getItem("mapsource");
+  }
+  //cloudtype
+  if(!storage.getItem("cloudtype")){
+    storage.setItem("cloudtype",0);
+    $('#cloudtype').get(0).selectedIndex = 0;
+  }else{
+    $('#cloudtype').get(0).selectedIndex = storage.getItem("cloudtype");
   }
   function setSelector() {
     var locations = addresses.locations;
@@ -332,12 +382,38 @@
   var map;
   var marker ;
   $(document).on('pageinit', '#pagemap', function() {
-   map = L.map('map').setView([39.9021, 116.39328], 10);
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoid3VxaSIsImEiOiI5NDNhZGVlZjlhMDNhOTVmMjVjYTJiNzM2N2UxOGIwNSJ9.sWHdpguJCEjyBsVLPAXgYQ', {
-			maxZoom: 18,
-			attribution: 'wuqi',
-			id: 'wuqi.n1jl6fjd'
-		}).addTo(map);
+    map = L.map('map').setView([39.9021, 116.39328], 10);
+    var mapsource = $('#mapsource').get(0).selectedIndex;
+    switch(mapsource){
+      case 0:  {//mapbox
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoid3VxaSIsImEiOiI5NDNhZGVlZjlhMDNhOTVmMjVjYTJiNzM2N2UxOGIwNSJ9.sWHdpguJCEjyBsVLPAXgYQ', {
+        maxZoom: 10,
+        attribution: 'wuqi',
+        id: 'wuqi.n1jl6fjd'
+        }).addTo(map);
+        break;
+      }
+      case 1: {//esri
+        L.esri.basemapLayer('Streets').addTo(map);
+        break;
+      }
+      case 2: {//mapabc
+        L.tileLayer.chinaProvider('MapABC.Normal.Map',{maxZoom:18,minZoom:5}).addTo(map);
+        break;
+        }
+      case 3: {//gaode
+        L.tileLayer.chinaProvider('GaoDe.Normal.Map',{maxZoom:18,minZoom:5}).addTo(map);
+        break;
+        }
+      case 4: {//tianditu
+        L.tileLayer.chinaProvider('TianDiTu.Normal.Map',{maxZoom:18,minZoom:5}).addTo(map);
+        L.tileLayer.chinaProvider('TianDiTu.Normal.Annotion',{maxZoom:18,minZoom:5}).addTo(map);
+        break;
+      }
+      default:
+        break;
+    }
+
     marker= L.marker([39.9021, 116.39328]).addTo(map);
     var searchControl = new L.esri.Geocoding.Controls.Geosearch().addTo(map);
 
@@ -351,11 +427,7 @@
   });
 
   function onMapClick(e) {
-    //e.latlng
-      var lat = e.latlng.lat;
-      var lng = e.latlng.lng;
       marker.setLatLng( e.latlng).update();
-      map.setView( e.latlng,map.getZoom());
   }
 
   document.addEventListener('deviceready', onDeviceReady, false);
@@ -392,6 +464,12 @@
       $("#sname").val("");
       $('#slatitude').val("");
       $('#slongitude').val("");
+    });
+    //设置
+    $('#settingset').click(function () {
+      storage.setItem("mapsource",$('#mapsource').get(0).selectedIndex);
+      storage.setItem("cloudtype",$('#cloudtype').get(0).selectedIndex);
+      $.mobile.changePage( "#pagemain");
     });
     //添加地点
     $('#sok').click(function(){
@@ -447,7 +525,7 @@
       for(var i=1;i<4;i++){
         var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-i);
         currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
-        var imgurl= 'http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_CLC_GRA_'+ currenttime.format('yyyyMMdd_hhmm') +'.jpg';
+        var imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
         if ( imageExists(imgurl)) {
           $('#imgCloud').attr("src", imgurl);
           $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
