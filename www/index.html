@@ -28,7 +28,6 @@
   }
   #map {
       height: 100%;
-      width:100%
   }
   </style>
 </head>
@@ -381,7 +380,9 @@
 
   var map;
   var marker ;
-  $(document).on('pageinit', '#pagemap', function() {
+  //$(document).on('pageinit', '#pagemap', function() {
+  window.onload = function(){InitMap();};
+  function InitMap(){
     map = L.map('map').setView([39.9021, 116.39328], 10);
     var mapsource = $('#mapsource').get(0).selectedIndex;
     switch(mapsource){
@@ -424,7 +425,7 @@
       }
     });
     map.on('dblclick', onMapClick);
-  });
+  }
 
   function onMapClick(e) {
       marker.setLatLng( e.latlng).update();
