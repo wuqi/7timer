@@ -206,7 +206,7 @@
     </div>
     <div data-role="content">
         <div>
-          <h1>软件说明:</h1>
+          <h4>软件说明:</h4>
           <ul>
           <li>本软件使用 <a onclick="navigator.app.loadUrl('http://phonegap.com', { openExternal:true });">PhoneGap</a> 开发</li>
           <li>软件最新版本可在 <a onclick="navigator.app.loadUrl('https://build.phonegap.com/apps/1575380/builds', { openExternal:true });">PhoneGap App</a> 上下载</li>
@@ -218,24 +218,27 @@
           <li>天气预报插件来源: <a onclick="navigator.app.loadUrl('http://i.tianqi.com/index.php', { openExternal:true });">天气网</a></li>
           <li>云图数据来源:  <a onclick="navigator.app.loadUrl('http://www.nsmc.cma.gov.cn/NSMC/Channels/100028.html', { openExternal:true });">国家气象卫星中心</a></li>
           </ul>
-
-          <h1>网络说明:</h1>
-
+          <h4>使用说明:</h4>
+          <ul>
+            <li>地图模式下，双击选择位置，点击晴天钟按钮显示天气</li>
+            <li>地图模式或者添加新地点中搜索框中，可以使用空格，中文，英文搜索，例如：“湖北 武汉 武汉大学”</li>
+            <li>如果地图无法加载，可以尝试在设置中更换地图，更换后，地图将自动重置到起点</li>
+            <li>设置中可以更换红外云图模式，如果需要其他模式，请参考《反馈及建议》部分提出建议</li>
+            <li>地图默认起始位置为所选地点</li>
+          </ul>
+          <h4>网络说明:</h4>
           <ul>
             <li>晨昏蒙影计算不消耗流量</li>
             <li>定位/查询/地图/云图/天气预报将消耗流量</li>
             <li>云图下载可能会耗费较大流量(每次约300k),云图查询仅下载当前时间最近的云图</li>
             <li>地图可能会消耗大量流量</li>
           </ul>
-
-          <h1>已知问题</h1>
-
+          <h4>已知问题</h4>
           <ul>
             <li>天气预报无法选择地点,使用当前ip定位,如果定位错误,请手动查询</li>
             <li>天气预报点击后进入其他页面,请使用返回键</li>
           </ul>
-          <h1>反馈及建议</h1>
-
+          <h4>反馈及建议</h4>
           <ul>
           <li>请使用<a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer/issues', { openExternal:true });">Github Issue</a> 反馈问题或提出建议(需要注册Github账号)</li>
           </ul>
@@ -378,12 +381,17 @@
     return true;
   }
 
-  var map;
+  var map = null;
   var marker ;
-  //$(document).on('pageinit', '#pagemap', function() {
-  window.onload = function(){InitMap();};
+  $(document).on('pageshow', '#pagemap', function() {InitMap();});
+
   function InitMap(){
-    map = L.map('map').setView([39.9021, 116.39328], 10);
+    if(map !== null){
+      return;
+    }
+    var olat = $('#latitude').val();
+    var olng = $('#longitude').val();
+    map = L.map('map').setView([olat, olng], 10);
     var mapsource = $('#mapsource').get(0).selectedIndex;
     switch(mapsource){
       case 0:  {//mapbox
@@ -415,7 +423,7 @@
         break;
     }
 
-    marker= L.marker([39.9021, 116.39328]).addTo(map);
+    marker= L.marker([olat, olng]).addTo(map);
     var searchControl = new L.esri.Geocoding.Controls.Geosearch().addTo(map);
 
     searchControl.on('results', function(data) {
@@ -425,6 +433,7 @@
       }
     });
     map.on('dblclick', onMapClick);
+    map.doubleClickZoom.disable();
   }
 
   function onMapClick(e) {
@@ -439,7 +448,6 @@
        $('#slatitude').val(pos.coords.latitude);
        $('#slongitude').val(pos.coords.longitude);
     }
-
     $('#slocate').click(function() {
         navigator.geolocation.getCurrentPosition(disp);
     });
@@ -471,6 +479,7 @@
       storage.setItem("mapsource",$('#mapsource').get(0).selectedIndex);
       storage.setItem("cloudtype",$('#cloudtype').get(0).selectedIndex);
       $.mobile.changePage( "#pagemain");
+      if(map){map.remove();map = null;}
     });
     //添加地点
     $('#sok').click(function(){
