@@ -8,6 +8,7 @@
   <script type="text/javascript" src="leaflet.js"></script>
   <script type="text/javascript" src="esri-leaflet.js"></script>
   <script type="text/javascript" src="esri-leaflet-geocoder.js"></script>
+  <script type="text/javascript" src="leaflet-providers.js"></script>
   <script type="text/javascript" src="leaflet.ChineseTmsProviders.js"></script>
   <script type="text/javascript" src="suncalc.js"></script>
   <script type="text/javascript" src="jqm-datebox.all.min.js"></script>
@@ -292,6 +293,10 @@
           <option value="mapabc">MapABC</option>
           <option value="gaode">高德</option>
           <option value="tianditu">天地图</option>
+          <option value="Stamen">Stamen</option>
+          <option value="OpenWeatherMap">OpenWeatherMap</option>
+          <option value="HERE">HERE</option>
+          <option value="HERE_night">HERE夜间模式</option>
         </select>
         <label for="cloudtype">红外云图类型：</label>
         <select name="cloudtype" id="cloudtype" data-native-menu="false"  data-mini="true" >
@@ -417,6 +422,36 @@
       case 4: {//tianditu
         L.tileLayer.chinaProvider('TianDiTu.Normal.Map',{maxZoom:18,minZoom:5}).addTo(map);
         L.tileLayer.chinaProvider('TianDiTu.Normal.Annotion',{maxZoom:18,minZoom:5}).addTo(map);
+        break;
+      }
+      case 5:{//Stamen
+        L.tileLayer.provider('Stamen.Watercolor').addTo(map);
+        L.tileLayer.provider('Stamen.TonerLabels').addTo(map);
+        break;
+      }
+      case 6:{//OpenWeatherMap
+        //L.tileLayer.provider('HERE.normalNight').addTo(map);
+        //L.tileLayer.provider('OpenWeatherMap.CloudsClassic').addTo(map);
+        var layers = new L.LayerGroup();
+        var nightlayer = L.tileLayer.provider('HERE.normalNight');
+        var daylayer = L.tileLayer.provider('HERE.normalDay');
+        var cloudlayer = L.tileLayer.provider('OpenWeatherMap.CloudsClassic');
+        var precipitationlayer = L.tileLayer.provider('OpenWeatherMap.PrecipitationClassic');
+        var rainlayer = L.tileLayer.provider('OpenWeatherMap.RainClassic');
+        var temperaturelayer = L.tileLayer.provider('OpenWeatherMap.Temperature');
+        var pressurelayer = L.tileLayer.provider('OpenWeatherMap.Pressure');
+        var precipitationlayer = L.tileLayer.provider('OpenWeatherMap.Precipitation');
+        var windlayer = L.tileLayer.provider('OpenWeatherMap.Wind');
+        nightlayer.addTo(map);
+        L.control.layers({"night":nightlayer,"day":daylayer},{"Cloud":cloudlayer,"Rain":rainlayer,"Temperature":temperaturelayer,"Precipitation":precipitationlayer,"Pressure":pressurelayer,"Wind":windlayer}).addTo(map);
+        break;
+      }
+      case 7:{//HERE
+        L.tileLayer.provider('HERE.normalDay').addTo(map);
+        break;
+      }      
+      case 8:{//HERE Mode
+        L.tileLayer.provider('HERE.normalNight').addTo(map);
         break;
       }
       default:
