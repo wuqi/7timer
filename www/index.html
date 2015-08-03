@@ -34,7 +34,7 @@
 </head>
 <body>
   <!--主页面-->
-  <div data-role="page" id="pagemain">
+  <div data-role="page" id="pagemain" class="page">
     <div data-role="header" data-position="fixed">
        <h1>晴天钟</h1>
       <div data-role="navbar" data-iconpos="left">
@@ -75,7 +75,7 @@
     </div>
   </div>
   <!--地图-->
-  <div data-role="page" id="pagemap">
+  <div data-role="page" id="pagemap" class="page">
     <div data-role="header" data-position="fixed">
        <h1>地图</h1>
        <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
@@ -86,7 +86,7 @@
     </div>
   </div>
   <!--suncalc结果-->
-  <div data-role="page" id="pageresult">
+  <div data-role="page" id="pageresult" class="page">
     <div data-role="header">
        <h1>晨昏蒙影</h1>
     </div>
@@ -182,7 +182,7 @@
     </div>
   </div>
   <!--添加新地点-->
-  <div data-role="page" id="pagesearch">
+  <div data-role="page" id="pagesearch" class="page">
     <div data-role="header">
        <h1>添加新地点</h1>
     </div>
@@ -200,7 +200,7 @@
     </div>
   </div>
   <!--pageinfo-->
-  <div data-role="page" id="pageinfo">
+  <div data-role="page" id="pageinfo" class="page">
     <div data-role="header" data-position="fixed">
        <h1>软件说明</h1>
        <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
@@ -213,7 +213,6 @@
           <li>软件最新版本可在 <a onclick="navigator.app.loadUrl('https://build.phonegap.com/apps/1575380/builds', { openExternal:true });">PhoneGap App</a> 上下载</li>
           <li>软件源码在 <a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer', { openExternal:true });">Github</a> 上托管</li>
           <li>晴天钟数据来源: <a onclick="navigator.app.loadUrl('http://202.127.24.18', { openExternal:true });">7Timer</a></li>
-          <li>默认地图数据使用 <a onclick="navigator.app.loadUrl('https://www.mapbox.com', { openExternal:true });">Mapbox</a>制作</li>
           <li>地图显示使用 <a onclick="navigator.app.loadUrl('http://leafletjs.com/', { openExternal:true });">Leafletjs</a> 库</li>
           <li>晨昏蒙影计算:   <a onclick="navigator.app.loadUrl('https://github.com/mourner/suncalc', { openExternal:true });">Suncalc</a></li>
           <li>天气预报插件来源: <a onclick="navigator.app.loadUrl('http://i.tianqi.com/index.php', { openExternal:true });">天气网</a></li>
@@ -239,6 +238,13 @@
             <li>天气预报无法选择地点,使用当前ip定位,如果定位错误,请手动查询</li>
             <li>天气预报点击后进入其他页面,请使用返回键</li>
           </ul>
+          <h4>地图说明</h4>
+          <ul>
+            <li>推荐使用OpenWeatherMap，可以显示当天天气等情况，可以自选底图</li>
+            <li>天地图、高德地图仅有少量国外数据，请谨慎使用</li>
+            <li>Mapbox、高德、天地图为本地语言,Stamen放大后为本地语言，其余都为英文</li>
+            <li>OpenWeatherMap中底图只能勾选一种，如果需要看云，建议勾选‘夜间’，显示比较清晰</li>
+          </ul>
           <h4>反馈及建议</h4>
           <ul>
           <li>请使用<a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer/issues', { openExternal:true });">Github Issue</a> 反馈问题或提出建议(需要注册Github账号)</li>
@@ -247,7 +253,7 @@
     </div>
   </div>
   <!--clock-->
-  <div data-role="page" id="pageclock">
+  <div data-role="page" id="pageclock" class="page">
     <div data-role="header">
        <h1>晴天钟</h1>
     </div>
@@ -256,7 +262,7 @@
     </div>
   </div>
   <!--天气预报-->
-  <div data-role="page" id="pageweather">
+  <div data-role="page" id="pageweather" class="page">
     <div data-role="header">
        <h1>天气预报</h1>
     </div>
@@ -267,7 +273,7 @@
     </div>
   </div>
   <!--红外云图-->
-  <div data-role="page" id="pagecloud">
+  <div data-role="page" id="pagecloud" class="page">
     <div data-role="header">
        <h1>红外云图</h1>
         <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
@@ -280,7 +286,7 @@
     </div>
   </div>
   <!--pagesettings-->
-  <div data-role="page" id="pagesettings">
+  <div data-role="page" id="pagesettings" class="page">
     <div data-role="header">
        <h1>设置</h1>
         <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
@@ -290,7 +296,6 @@
         <select name="mapsource" id="mapsource" data-native-menu="false"  data-mini="true" >
           <option value="mapbox">Mapbox</option>
           <option value="esri">Esri Map</option>
-          <option value="mapabc">MapABC</option>
           <option value="gaode">高德</option>
           <option value="tianditu">天地图</option>
           <option value="Stamen">Stamen</option>
@@ -299,7 +304,7 @@
           <option value="HERE_night">HERE夜间模式</option>
         </select>
         <label for="cloudtype">红外云图类型：</label>
-        <select name="cloudtype" id="cloudtype" data-native-menu="false"  data-mini="true" >
+        <select name="cloudtype" id="cloudtype" data-native-menu="false" data-mini="true" >
           <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_CLC_GRA_">中国区域红外一彩色</option>
           <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_IR1_COL_">中国区域红外一增强</option>
           <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_IR2_COL_">中国区域红外二增强</option>
@@ -307,6 +312,12 @@
           <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_CLC_GRA_">圆盘图红外一彩色</option>
           <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR1_COL_">圆盘图红外一增强</option>
           <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR2_COL_">圆盘图红外二增强</option>
+        </select>
+        <label for="switchtheme">切换主题：</label>
+        <select name="switchtheme" id="switchtheme" data-native-menu="false" data-mini="true" >
+          <option value="a">白色</option>
+          <option value="b">黑色</option>
+          <option value="c">简单</option>
         </select>
         <div class="ui-grid-b"> 
         <div class="ui-block-a"></div>
@@ -353,6 +364,28 @@
   }
   var storage = window.localStorage;
   var addresses;
+  // Dynamically changes the theme of all UI elements on all pages,
+  // also pages not yet rendered (enhanced) by jQuery Mobile.
+  $.fn.changeColorSwatch = function(theme, type) {
+    if (!type) {
+      type = 'theme';
+    }
+    var currentTheme = this.attr('data-' + type);
+    if (!currentTheme) {
+      currentTheme = 'a';
+    }
+    this.attr('data-' + type, theme);
+    var regex = new RegExp('^ui-(.*)-' + currentTheme + '$');
+    var classes = $.extend({}, this[0].classList);
+    var i = classes.length;
+    while (i--) {
+      var match = classes[i].match(regex);
+      if (match) {
+        this.removeClass(match[0]);
+        this.addClass('ui-' + match[1] + '-' + theme);
+      }
+    }
+  };
   //address
   if (!storage.getItem("addresses")) {
     addresses =  {locations:[{name:"北京",lat:39.90,lng:116.40},{name:"武汉",lat:30.60,lng:114.3}]};
@@ -400,39 +433,31 @@
     var mapsource = $('#mapsource').get(0).selectedIndex;
     switch(mapsource){
       case 0:  {//mapbox
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoid3VxaSIsImEiOiI5NDNhZGVlZjlhMDNhOTVmMjVjYTJiNzM2N2UxOGIwNSJ9.sWHdpguJCEjyBsVLPAXgYQ', {
-        maxZoom: 10,
-        attribution: 'wuqi',
-        id: 'wuqi.n1jl6fjd'
-        }).addTo(map);
+        L.tileLayer.provider('MapBox').addTo(map);
         break;
       }
       case 1: {//esri
         L.esri.basemapLayer('Streets').addTo(map);
         break;
       }
-      case 2: {//mapabc
-        L.tileLayer.chinaProvider('MapABC.Normal.Map',{maxZoom:18,minZoom:5}).addTo(map);
-        break;
-        }
-      case 3: {//gaode
+      case 2: {//gaode
         L.tileLayer.chinaProvider('GaoDe.Normal.Map',{maxZoom:18,minZoom:5}).addTo(map);
         break;
         }
-      case 4: {//tianditu
+      case 3: {//tianditu
         L.tileLayer.chinaProvider('TianDiTu.Normal.Map',{maxZoom:18,minZoom:5}).addTo(map);
         L.tileLayer.chinaProvider('TianDiTu.Normal.Annotion',{maxZoom:18,minZoom:5}).addTo(map);
         break;
       }
-      case 5:{//Stamen
+      case 4:{//Stamen
         L.tileLayer.provider('Stamen.Watercolor').addTo(map);
         L.tileLayer.provider('Stamen.TonerLabels').addTo(map);
         break;
       }
-      case 6:{//OpenWeatherMap
-        //L.tileLayer.provider('HERE.normalNight').addTo(map);
-        //L.tileLayer.provider('OpenWeatherMap.CloudsClassic').addTo(map);
+      case 5:{//OpenWeatherMap
         var layers = new L.LayerGroup();
+        var hybridDaylayer = new L.tileLayer.provider('HERE.hybridDay');
+        var mapboxlayer = L.tileLayer.provider('MapBox')
         var nightlayer = L.tileLayer.provider('HERE.normalNight');
         var daylayer = L.tileLayer.provider('HERE.normalDay');
         var cloudlayer = L.tileLayer.provider('OpenWeatherMap.CloudsClassic');
@@ -443,14 +468,14 @@
         var precipitationlayer = L.tileLayer.provider('OpenWeatherMap.Precipitation');
         var windlayer = L.tileLayer.provider('OpenWeatherMap.Wind');
         nightlayer.addTo(map);
-        L.control.layers({"night":nightlayer,"day":daylayer},{"Cloud":cloudlayer,"Rain":rainlayer,"Temperature":temperaturelayer,"Precipitation":precipitationlayer,"Pressure":pressurelayer,"Wind":windlayer}).addTo(map);
+        L.control.layers({"夜间":nightlayer,"白天":daylayer,'卫星影像':hybridDaylayer,'Mapbox':mapboxlayer},{"Cloud":cloudlayer,"Rain":rainlayer,"Temperature":temperaturelayer,"Precipitation":precipitationlayer,"Pressure":pressurelayer,"Wind":windlayer}).addTo(map);
         break;
       }
-      case 7:{//HERE
+      case 6:{//HERE
         L.tileLayer.provider('HERE.normalDay').addTo(map);
         break;
       }      
-      case 8:{//HERE Mode
+      case 7:{//HERE Mode
         L.tileLayer.provider('HERE.normalNight').addTo(map);
         break;
       }
@@ -489,6 +514,14 @@
   }
 
   $(document).ready(function(){
+    //theme
+    if(!storage.getItem("theme")){
+      storage.setItem("theme","a");
+      $('.page').changeColorSwatch("a");
+    }else{
+      var theme = storage.getItem('theme');
+      $('.page').changeColorSwatch(theme);
+    }
     //initial
     var tempdate = new Date();
     $('#inputdate').val(tempdate.format('yyyy-MM-dd'));
@@ -513,6 +546,10 @@
     $('#settingset').click(function () {
       storage.setItem("mapsource",$('#mapsource').get(0).selectedIndex);
       storage.setItem("cloudtype",$('#cloudtype').get(0).selectedIndex);
+      storage.setItem("theme",$('#switchtheme').val());
+      var oldtheme = $( "pagemain" ).page( "option", "theme" );
+      var theme = $('#switchtheme').val();
+      $('.page').changeColorSwatch(theme);
       $.mobile.changePage( "#pagemain");
       if(map){map.remove();map = null;}
     });

@@ -1,32 +1,26 @@
 (function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['leaflet'], factory);
-    } else {
-        // Assume leaflet is loaded into global object L already
-        factory(L);
-    }
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['leaflet'], factory);
+	} else {
+		// Assume leaflet is loaded into global object L already
+		factory(L);
+	}
 }(this, function (L) {
 	'use strict';
-
 	L.TileLayer.Provider = L.TileLayer.extend({
 		initialize: function (arg, options) {
 			var providers = L.TileLayer.Provider.providers;
-
 			var parts = arg.split('.');
-
 			var providerName = parts[0];
 			var variantName = parts[1];
-
 			if (!providers[providerName]) {
 				throw 'No such provider (' + providerName + ')';
 			}
-
 			var provider = {
 				url: providers[providerName].url,
 				options: providers[providerName].options
 			};
-
 			// overwrite values in provider from variant.
 			if (variantName && 'variants' in providers[providerName]) {
 				if (!(variantName in providers[providerName].variants)) {
@@ -48,12 +42,10 @@
 			} else if (typeof provider.url === 'function') {
 				provider.url = provider.url(parts.splice(1, parts.length - 1).join('.'));
 			}
-
 			var forceHTTP = window.location.protocol === 'file:' || provider.options.forceHTTP;
 			if (provider.url.indexOf('//') === 0 && forceHTTP) {
 				provider.url = 'http:' + provider.url;
 			}
-
 			// replace attribution placeholders with their values from toplevel provider attribution,
 			// recursively
 			var attributionReplacer = function (attr) {
@@ -67,18 +59,15 @@
 				);
 			};
 			provider.options.attribution = attributionReplacer(provider.options.attribution);
-
 			// Compute final options combining provider options with any user overrides
 			var layerOpts = L.Util.extend({}, provider.options, options);
 			L.TileLayer.prototype.initialize.call(this, provider.url, layerOpts);
 		}
 	});
-
 	/**
 	 * Definition of providers.
 	 * see http://leafletjs.com/reference.html#tilelayer for options in the options map.
 	 */
-
 	L.TileLayer.Provider.providers = {
 		OpenStreetMap: {
 			url: '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -113,6 +102,14 @@
 						attribution: '{attribution.OpenStreetMap}, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
 					}
 				}
+			}
+		},
+		MapBox: {
+			url: '//api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoid3VxaSIsImEiOiI5NDNhZGVlZjlhMDNhOTVmMjVjYTJiNzM2N2UxOGIwNSJ9.sWHdpguJCEjyBsVLPAXgYQ',
+			options: {
+				attribution:'wuqi',
+				id: 'wuqi.n1jl6fjd',
+				subdomains: 'abcd'
 			}
 		},
 		Stamen: {
@@ -232,7 +229,6 @@
 				normalNightMobile: 'normal.night.mobile',
 				normalNightGrey: 'normal.night.grey',
 				normalNightGreyMobile: 'normal.night.grey.mobile',
-
 				carnavDayGrey: 'carnav.day.grey',
 				hybridDay: {
 					options: {
@@ -269,10 +265,8 @@
 			}
 		}
 	};
-
 	L.tileLayer.provider = function (provider, options) {
 		return new L.TileLayer.Provider(provider, options);
 	};
-
 	return L;
 }));
