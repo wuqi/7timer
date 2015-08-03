@@ -414,6 +414,15 @@
   }else{
     $('#cloudtype').get(0).selectedIndex = storage.getItem("cloudtype");
   }
+  //theme
+  if(!storage.getItem("theme")){
+    storage.setItem("theme","a");
+    $('.page').changeColorSwatch("a");
+  }else{
+    var theme = storage.getItem('theme');
+    $('#switchtheme').val(theme);
+    $('.page').changeColorSwatch(theme);
+  }
   function setSelector() {
     var locations = addresses.locations;
     var selElement = document.getElementById("address");
@@ -519,14 +528,6 @@
   }
 
   $(document).ready(function(){
-    //theme
-    if(!storage.getItem("theme")){
-      storage.setItem("theme","a");
-      $('.page').changeColorSwatch("a");
-    }else{
-      var theme = storage.getItem('theme');
-      $('.page').changeColorSwatch(theme);
-    }
     //initial
     var tempdate = new Date();
     $('#inputdate').val(tempdate.format('yyyy-MM-dd'));
