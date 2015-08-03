@@ -267,7 +267,12 @@
        <h1>天气预报</h1>
     </div>
     <div data-role="content">
-      <div data-role="fieldcontain" id="weathercontent">
+      <!--<div data-role="fieldcontain" id="weathercontent">
+      </div>-->
+      <div class="ui-grid-b"> 
+        <div class="ui-block-a"> <p>今天</p><img src="" alt="Today" id="today"/><p id="fweather"></p></div>
+        <div class="ui-block-b"> <p>明天</p><img src="" alt="Tomorrow" id="tomorrow"/><p id="sweather"></p></div>
+        <div class="ui-block-c"> <p>后天</p><img src="" alt="After tomorrow " id="afttmr"/><p id="tweather"></p></div>
       </div>
        <a href="#" data-role="button" id="sreturn"   data-icon="check">返回</a>
     </div>
@@ -567,7 +572,24 @@
     });
     //天气预报
     $('#weather').click(function(){
-      $('#weathercontent').html('<iframe name="weather_inc" src="http://i.tianqi.com/index.php?c=code&id=2&num=2" width="330px" height="70px" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>');
+      var lat = $('#latitude').val();
+      var lng = $('#longitude').val();
+      var requesturl = "http://api.openweathermap.org/data/2.5/forecast/daily?lat="+ lat+"&lon="+lng+"&cnt=3&units=metric&lang=zh_cn&callback=?";
+      //alert(requesturl);
+      $.getJSON(requesturl, null, function(result) {
+        var todayhtml = result.list[0].temp.min +"-"+result.list[0].temp.max+"℃<br/>"+result.list[0].weather[0].description+"<br/>云量:"+result.list[0].clouds+"%";
+        var todayicon = "weather/"+result.list[0].weather[0].icon+'.png';
+        var tmrhtml = result.list[1].temp.min +"-"+result.list[0].temp.max+"℃<br/>"+result.list[1].weather[0].description+"<br/>云量:"+result.list[1].clouds+"%";
+        var tmricon = "weather/"+result.list[1].weather[0].icon+'.png';
+        var afthtml = result.list[2].temp.min +"-"+result.list[2].temp.max+"℃<br/>"+result.list[2].weather[0].description+"<br/>云量:"+result.list[2].clouds+"%";
+        var afticon = "weather/"+result.list[2].weather[0].icon+'.png';
+        $('#fweather').html(todayhtml);
+        $('#today').attr("src", todayicon);
+        $('#sweather').html(tmrhtml);
+        $('#tomorrow').attr("src",tmricon);
+        $('#tweather').html(afthtml);
+        $('#afttmr').attr("src",afticon);
+      });
       $.mobile.changePage( "#pageweather", { role: "dialog" } );
     });
     //返回
