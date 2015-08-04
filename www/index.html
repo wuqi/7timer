@@ -218,7 +218,7 @@
           <li>晴天钟数据来源: <a onclick="navigator.app.loadUrl('http://202.127.24.18', { openExternal:true });">7Timer</a></li>
           <li>地图显示使用 <a onclick="navigator.app.loadUrl('http://leafletjs.com/', { openExternal:true });">Leafletjs</a> 库</li>
           <li>晨昏蒙影计算:   <a onclick="navigator.app.loadUrl('https://github.com/mourner/suncalc', { openExternal:true });">Suncalc</a></li>
-          <li>天气预报插件来源: <a onclick="navigator.app.loadUrl('http://i.tianqi.com/index.php', { openExternal:true });">天气网</a></li>
+          <li>天气预报来源: <a onclick="navigator.app.loadUrl('http://openweathermap.org/forecast16', { openExternal:true });">OpenWeatherMap</a></li>
           <li>云图数据来源:  <a onclick="navigator.app.loadUrl('http://www.nsmc.cma.gov.cn/NSMC/Channels/100028.html', { openExternal:true });">国家气象卫星中心</a></li>
           </ul>
           <h4>使用说明:</h4>
@@ -236,17 +236,12 @@
             <li>云图下载可能会耗费较大流量(每次约300k),云图查询仅下载当前时间最近的云图</li>
             <li>地图可能会消耗大量流量</li>
           </ul>
-          <h4>已知问题</h4>
-          <ul>
-            <li>天气预报无法选择地点,使用当前ip定位,如果定位错误,请手动查询</li>
-            <li>天气预报点击后进入其他页面,请使用返回键</li>
-          </ul>
           <h4>地图说明</h4>
           <ul>
             <li>推荐使用OpenWeatherMap，可以显示当天天气等情况，可以自选底图</li>
             <li>天地图、高德地图仅有少量国外数据，请谨慎使用</li>
             <li>Mapbox、高德、天地图为本地语言,Stamen放大后为本地语言，其余都为英文</li>
-            <li>OpenWeatherMap中底图只能勾选一种，如果需要看云，建议勾选‘夜间’，显示比较清晰</li>
+            <li>OpenWeatherMap中底图只能勾选一种，如果需要看云图，建议勾选‘夜间’，显示比较清晰</li>
           </ul>
           <h4>反馈及建议</h4>
           <ul>
@@ -261,11 +256,9 @@
        <h1>晴天钟</h1>
        <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
     </div>
-
-      <div  id="clockcontent" height="100%">
-        <img src=""  alt="晴天钟" id="imgClock" width="100%"/>
-      </div>
-
+    <div  id="clockcontent" height="100%">
+      <img src=""  alt="晴天钟" id="imgClock" width="100%"/>
+    </div>
   </div>
   <!--天气预报-->
   <div data-role="page" id="pageweather" class="page">
@@ -274,6 +267,7 @@
        <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
     </div>
     <div data-role="content">
+      <label for="img"  data-mini="true" id="cityname"></label>
       <div class="ui-grid-b"> 
         <div class="ui-block-a"> <p id="fday"></p><img src="" alt="Today" id="fimg"/><p id="fweather"></p></div>
         <div class="ui-block-b"> <p id="sday"></p><img src="" alt="2st Day" id="simg"/><p id="sweather"></p></div>
@@ -293,11 +287,9 @@
        <h1>红外云图</h1>
         <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
     </div>
-    <div data-role="content">
-      <label for="img"  data-mini="true" id="cloudLable"></label>
-      <div  id="cloudcontent" height="100%">
-        <img src=""  alt="红外云图" id="imgCloud" width="100%"/>
-        </div>
+    <label for="img"  data-mini="true" id="cloudLable"></label>
+    <div  id="cloudcontent" height="100%">
+      <img src="" alt="红外云图" id="imgCloud" width="100%"/>
     </div>
   </div>
   <!--pagesettings-->
@@ -470,7 +462,8 @@
       case 5:{//OpenWeatherMap
         var layers = new L.LayerGroup();
         var hybridDaylayer = new L.tileLayer.provider('HERE.hybridDay');
-        var mapboxlayer = L.tileLayer.provider('MapBox')
+        var mapboxlayer = L.tileLayer.provider('MapBox');
+        var gaodeLayer = L.tileLayer.chinaProvider('GaoDe.Normal.Map',{maxZoom:18,minZoom:5});
         var nightlayer = L.tileLayer.provider('HERE.normalNight');
         var daylayer = L.tileLayer.provider('HERE.normalDay');
         var cloudlayer = L.tileLayer.provider('OpenWeatherMap.CloudsClassic');
@@ -481,7 +474,7 @@
         var precipitationlayer = L.tileLayer.provider('OpenWeatherMap.Precipitation');
         var windlayer = L.tileLayer.provider('OpenWeatherMap.Wind');
         nightlayer.addTo(map);
-        L.control.layers({"夜间":nightlayer,"白天":daylayer,'卫星影像':hybridDaylayer,'Mapbox':mapboxlayer},{"Cloud":cloudlayer,"Rain":rainlayer,"Temperature":temperaturelayer,"Precipitation":precipitationlayer,"Pressure":pressurelayer,"Wind":windlayer}).addTo(map);
+        L.control.layers({"夜间":nightlayer,"白天":daylayer,'卫星影像':hybridDaylayer,'Mapbox':mapboxlayer,"高德":gaodeLayer},{"Cloud":cloudlayer,"Rain":rainlayer,"Temperature":temperaturelayer,"Precipitation":precipitationlayer,"Pressure":pressurelayer,"Wind":windlayer}).addTo(map);
         break;
       }
       case 6:{//HERE
@@ -525,206 +518,223 @@
         navigator.geolocation.getCurrentPosition(disp);
     });
   }
-  $(document).ready(function(){
-    //initial
-    var tempdate = new Date();
-    $('#inputdate').val(tempdate.format('yyyy-MM-dd'));
-    var index = $('#address').get(0).selectedIndex;
-    var item = addresses.locations[index];
-    $('#latitude').val(item.lat);
-    $('#longitude').val(item.lng);
-    //切换地点
-    $('#address').change(function(){ 
-     //alert($(this).get(0).selectedIndex);
-     var index = $(this).get(0).selectedIndex;
-     var item = addresses.locations[index];
-     $('#latitude').val(item.lat);
-     $('#longitude').val(item.lng);
-    });
-    $('#newLoc').click(function () {
-      $("#sname").val("");
-      $('#slatitude').val("");
-      $('#slongitude').val("");
-    });
-    //设置
-    $('#settingset').click(function () {
-      storage.setItem("mapsource",$('#mapsource').get(0).selectedIndex);
-      storage.setItem("cloudtype",$('#cloudtype').get(0).selectedIndex);
-      storage.setItem("theme",$('#switchtheme').val());
-      var oldtheme = $( "pagemain" ).page( "option", "theme" );
-      var theme = $('#switchtheme').val();
-      $.mobile.changeGlobalTheme(theme);
-      $.mobile.changePage( "#pagemain",{transition:'slide',reverse:true});
-      if(map){map.remove();map = null;}
-    });
-    //添加地点
-    $('#sok').click(function(){
-      var item = new Object();
-      item.name = $("#sname").val();
-      item.lat = $('#slatitude').val();
-      item.lng = $('#slongitude').val();
-      addresses.locations.push(item);
-      storage.setItem("addresses",JSON.stringify(addresses));
-      $("#address").append("<option value='"+item.name+"'>"+item.name+"</option>");
-      $('#address').selectmenu('refresh');
-      $("#pagesearch" ).popup( "close" );
-    });
-    //天气预报
-    $('#weather').click(function(){
-      var lat = $('#latitude').val();
-      var lng = $('#longitude').val();
-      var requesturl = "http://api.openweathermap.org/data/2.5/forecast/daily?lat="+ lat+"&lon="+lng+"&cnt=6&units=metric&lang=zh_cn&callback=?";
-      var curdate = new Date();
-      $.getJSON(requesturl, null, function(result) {
-        var weatherinfos = new Array();
-        var icons = new Array();
-        var days = new Array();
-        for(var i=0;i<6;i++){
-          var weatherinfo = result.list[i].temp.min +"-"+result.list[i].temp.max+"℃<br/>"+result.list[i].weather[0].description+"<br/>云量:"+result.list[i].clouds+"%";
-          var icon = "weather/"+result.list[i].weather[0].icon+'.png';
-          var day = curdate.format('MM-dd');
-          weatherinfos.push(weatherinfo);
-          icons.push(icon);
-          days.push(day);
-          curdate = new Date(curdate.getTime() + 1*24*60*60*1000);
-        }
-        $('#fday').html(days[0])
-        $('#fweather').html(weatherinfos[0]);
-        $('#fimg').attr("src", icons[0]);
-        $('#sday').html(days[1]);
-        $('#sweather').html(weatherinfos[1]);
-        $('#simg').attr("src", icons[1]);
-        $('#tday').html(days[2]);
-        $('#tweather').html(weatherinfos[2]);
-        $('#timg').attr("src", icons[2]);
-        $('#frday').html(days[3]);
-        $('#frweather').html(weatherinfos[3]);
-        $('#frimg').attr("src", icons[3]);
-        $('#fvday').html(days[4]);
-        $('#fvweather').html(weatherinfos[4]);
-        $('#fvimg').attr("src", icons[4]);
-        $('#sxday').html(days[5])
-        $('#sxweather').html(weatherinfos[5]);
-        $('#sximg').attr("src", icons[5]);
-      });
-      $.mobile.changePage( "#pageweather",{transition:'slide'});
-    });
-    //返回
-    $('#sreturn').click(function(){
-      $.mobile.changePage( "#pagemain",{transition:'slide',reverse:true});
-    });
-    //search position
-    $('#ssearch').click(function(){
-      var address = $("#sname").val();
-      L.esri.Geocoding.Tasks.geocode().text(address).run(function(err, results, response){
-        if(results.results.length > 0){
-          $('#slatitude').val(results.results[0].latlng.lat);
-          $('#slongitude').val(results.results[0].latlng.lng);
-        }
-      });
-    });
-    //显示popup
-    $('#headerClock').click(function(){
-      //if(!marker){
-        var pos = marker.getLatLng();
-        var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
-        var content = "<div  style=\"width:500px\"><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:500px\"/></div>";
-        marker.bindPopup(content,{maxWidth:500}).openPopup();
-    });
-    //晴天钟
-    $('#clock').click(function () {
-      var lat = $('#latitude').val();
-      var lng = $('#longitude').val();
-      var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ lng +"&lat="+ lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
-      $('#imgClock').attr("src", imgpath);
-      $('#clockcontent').panzoom();
-      $.mobile.changePage("#pageclock",{transition:'slide'});
-    });
-    //红外云图
-    $('#nircloud').click(function(){
-      var now = new Date();
-      now = new Date(now.getTime());
-      for(var i=1;i<4;i++){
-        var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-i);
-        currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
-        var imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
-        if ( imageExists(imgurl)) {
-          $('#imgCloud').attr("src", imgurl);
-          $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
-          break;
-        }
-      }
-
-      $("#cloudcontent").panzoom();
-      $.mobile.changePage( "#pagecloud",{transition:'slide'});
-    });
-    //晨昏蒙影
-    $('#suncalc').click(function(){
-      var lat = $('#latitude').val();
-      var lng = $('#longitude').val();
-      var inputdate = stringToDate($('#inputdate').val(),"yyyy-mm-dd","-");//new Date($('#inputdate').val());
-      inputdate = new Date(inputdate.getTime() + 12*60*60*1000);
-      var sunrisePos = SunCalc.getPosition(inputdate, lat , lng);
-      var sunTimes = SunCalc.getTimes(inputdate, lat , lng);
-      $('#sunrise').html(sunTimes.sunrise.format("yyyy/MM/dd hh:mm"));
-      $('#sunriseEnd').html(sunTimes.sunriseEnd.format("yyyy/MM/dd hh:mm"));
-      $('#goldenHourEnd').html(sunTimes.goldenHourEnd.format("yyyy/MM/dd hh:mm"));
-      $('#solarNoon').html(sunTimes.solarNoon.format("yyyy/MM/dd hh:mm"));
-      $('#goldenHour').html(sunTimes.goldenHour.format("yyyy/MM/dd hh:mm"));
-      $('#sunsetStart').html(sunTimes.sunsetStart.format("yyyy/MM/dd hh:mm"));
-      $('#sunset').html(sunTimes.sunset.format("yyyy/MM/dd hh:mm"));
-      $('#dusk').html(sunTimes.dusk.format("yyyy/MM/dd hh:mm"));
-      $('#nauticalDusk').html(sunTimes.nauticalDusk.format("yyyy/MM/dd hh:mm"));
-      $('#night').html(sunTimes.night.format("yyyy/MM/dd hh:mm"));
-      $('#nadir').html(sunTimes.nadir.format("yyyy/MM/dd hh:mm"));
-      $('#nightEnd').html(sunTimes.nightEnd.format("yyyy/MM/dd hh:mm"));
-      $('#nauticalDawn').html(sunTimes.nauticalDawn.format("yyyy/MM/dd hh:mm"));
-      $('#dawn').html(sunTimes.dawn.format("yyyy/MM/dd hh:mm"));
-
-      var moonTimes = SunCalc.getMoonTimes(inputdate, lat , lng);
-      var moonPos = SunCalc.getMoonPosition(inputdate,lat,lng);
-      var moonIllumination =SunCalc.getMoonIllumination(inputdate);
-      //moon time
-      if(!moonTimes.rise){
-        var prevday = new Date(inputdate.getTime() - 24*60*60*1000);
-        var prevmoonTimes = SunCalc.getMoonTimes(prevday, lat , lng);
-        $('#moonrise').html(prevmoonTimes.rise.format("yyyy/MM/dd hh:mm"));
-      }else{
-        $('#moonrise').html(moonTimes.rise.format("yyyy/MM/dd hh:mm"));
-      }
-      if(!moonTimes.set){
-        var nextday = new Date(inputdate.getTime() + 24*60*60*1000);
-        var nextmoonTimes = SunCalc.getMoonTimes(prevday, lat , lng);
-        $('#moonset').html(nextmoonTimes.set.format("yyyy/MM/dd hh:mm"));
-      }else{
-        $('#moonset').html(moonTimes.set.format("yyyy/MM/dd hh:mm"));
-      }
-      //moon ill
-      $('#light').html(moonIllumination.fraction.toPrecision(6));
-
-      var smoonPhase = "";
-      var moonPhase = moonIllumination.phase;
-        if(moonPhase < 0.01){
-            smoonPhase = "新月";
-        }else if(moonPhase < 0.24){
-            smoonPhase = "娥眉月";
-        }else if(moonPhase < 0.26){
-            smoonPhase = "上弦月";
-        }else if(moonPhase < 0.49){
-            smoonPhase = "渐盈凸月";
-        }else if(moonPhase < 0.51){
-            smoonPhase = "满月";
-        }else if(moonPhase < 0.74){
-            smoonPhase = "渐亏凸月";
-        }else if(moonPhase < 0.76){
-            smoonPhase = "下弦月";
-        }else if(moonPhase < 1.01){
-            smoonPhase = "残月";
-        }
-      $('#moonPhase').html(smoonPhase);
-    });
-
+  //initial
+  var tempdate = new Date();
+  $('#inputdate').val(tempdate.format('yyyy-MM-dd'));
+  var index = $('#address').get(0).selectedIndex;
+  var item = addresses.locations[index];
+  $('#latitude').val(item.lat);
+  $('#longitude').val(item.lng);
+  //切换地点
+  $('#address').change(function(){ 
+   //alert($(this).get(0).selectedIndex);
+   var index = $(this).get(0).selectedIndex;
+   var item = addresses.locations[index];
+   $('#latitude').val(item.lat);
+   $('#longitude').val(item.lng);
   });
+  $('#newLoc').click(function () {
+    $("#sname").val("");
+    $('#slatitude').val("");
+    $('#slongitude').val("");
+  });
+  //设置
+  $('#settingset').click(function () {
+    storage.setItem("mapsource",$('#mapsource').get(0).selectedIndex);
+    storage.setItem("cloudtype",$('#cloudtype').get(0).selectedIndex);
+    storage.setItem("theme",$('#switchtheme').val());
+    var oldtheme = $( "pagemain" ).page( "option", "theme" );
+    var theme = $('#switchtheme').val();
+    $.mobile.changeGlobalTheme(theme);
+    $.mobile.changePage( "#pagemain",{transition:'slide',reverse:true});
+    if(map){map.remove();map = null;}
+  });
+  //添加地点
+  $('#sok').click(function(){
+    var item = new Object();
+    item.name = $("#sname").val();
+    item.lat = $('#slatitude').val();
+    item.lng = $('#slongitude').val();
+    addresses.locations.push(item);
+    storage.setItem("addresses",JSON.stringify(addresses));
+    $("#address").append("<option value='"+item.name+"'>"+item.name+"</option>");
+    $('#address').selectmenu('refresh');
+    $("#pagesearch" ).popup( "close" );
+  });
+  //天气预报
+  $('#weather').click(function(){
+    var lat = $('#latitude').val();
+    var lng = $('#longitude').val();
+    var requesturl = "http://api.openweathermap.org/data/2.5/forecast/daily?lat="+ lat+"&lon="+lng+"&cnt=6&units=metric&lang=zh_cn&callback=?";
+    var curdate = new Date();
+    $.getJSON(requesturl, null, function(result) {
+      var weatherinfos = new Array();
+      var icons = new Array();
+      var days = new Array();
+      for(var i=0;i<6;i++){
+        var weatherinfo = result.list[i].temp.min +"-"+result.list[i].temp.max+"℃<br/>"+result.list[i].weather[0].description+"<br/>云量:"+result.list[i].clouds+"%";
+        var icon = "weather/"+result.list[i].weather[0].icon+'.png';
+        var day = curdate.format('MM-dd');
+        weatherinfos.push(weatherinfo);
+        icons.push(icon);
+        days.push(day);
+        curdate = new Date(curdate.getTime() + 1*24*60*60*1000);
+      }
+      //cityname
+      $('#cityname').html("站点名称："+result.city.name);
+      $('#fday').html(days[0]);
+      $('#fweather').html(weatherinfos[0]);
+      $('#fimg').attr("src", icons[0]);
+      $('#sday').html(days[1]);
+      $('#sweather').html(weatherinfos[1]);
+      $('#simg').attr("src", icons[1]);
+      $('#tday').html(days[2]);
+      $('#tweather').html(weatherinfos[2]);
+      $('#timg').attr("src", icons[2]);
+      $('#frday').html(days[3]);
+      $('#frweather').html(weatherinfos[3]);
+      $('#frimg').attr("src", icons[3]);
+      $('#fvday').html(days[4]);
+      $('#fvweather').html(weatherinfos[4]);
+      $('#fvimg').attr("src", icons[4]);
+      $('#sxday').html(days[5])
+      $('#sxweather').html(weatherinfos[5]);
+      $('#sximg').attr("src", icons[5]);
+    });
+    $.mobile.changePage( "#pageweather",{transition:'slide'});
+  });
+  //返回
+  $('#sreturn').click(function(){
+    $.mobile.changePage( "#pagemain",{transition:'slide',reverse:true});
+  });
+  //search position
+  $('#ssearch').click(function(){
+    var address = $("#sname").val();
+    L.esri.Geocoding.Tasks.geocode().text(address).run(function(err, results, response){
+      if(results.results.length > 0){
+        $('#slatitude').val(results.results[0].latlng.lat);
+        $('#slongitude').val(results.results[0].latlng.lng);
+      }
+    });
+  });
+  //显示popup
+  $('#headerClock').click(function(){
+    //if(!marker){
+      var pos = marker.getLatLng();
+      var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
+      var content = "<div  style=\"width:500px\"><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:500px\"/></div>";
+      marker.bindPopup(content,{maxWidth:500}).openPopup();
+  });
+  //晴天钟
+  $('#clock').click(function () {
+    var lat = $('#latitude').val();
+    var lng = $('#longitude').val();
+    var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ lng +"&lat="+ lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
+    $('#imgClock').attr("src", imgpath);
+    $('#clockcontent').panzoom();
+    $.mobile.changePage("#pageclock",{transition:'slide'});
+  });
+  //红外云图
+  $('#nircloud').click(function(){
+    var now = new Date();
+    now = new Date(now.getTime());
+    $("#cloudcontent").panzoom();
+    $.mobile.changePage( "#pagecloud",{transition:'slide'});
+
+    var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
+    currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
+    var imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
+
+    $("#imgCloud").attr("src", imgurl).error(function() {
+      currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-2);
+      currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
+      imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
+      $("#imgCloud").attr("src", imgurl).error(function() {
+        currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-3);
+        currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
+        imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
+        $("#imgCloud").attr("src", imgurl).error(function(){
+          currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-4);
+          currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
+          imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
+          $("#imgCloud").attr("src", imgurl).error(function(){
+            $('#cloudLable').html("Load Image Failed");
+          });
+          $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+        });
+        $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+      });
+      $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+    });
+    $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+  });
+
+  //晨昏蒙影
+  $('#suncalc').click(function(){
+    var lat = $('#latitude').val();
+    var lng = $('#longitude').val();
+    var inputdate = stringToDate($('#inputdate').val(),"yyyy-mm-dd","-");//new Date($('#inputdate').val());
+    inputdate = new Date(inputdate.getTime() + 12*60*60*1000);
+    var sunrisePos = SunCalc.getPosition(inputdate, lat , lng);
+    var sunTimes = SunCalc.getTimes(inputdate, lat , lng);
+    $('#sunrise').html(sunTimes.sunrise.format("yyyy/MM/dd hh:mm"));
+    $('#sunriseEnd').html(sunTimes.sunriseEnd.format("yyyy/MM/dd hh:mm"));
+    $('#goldenHourEnd').html(sunTimes.goldenHourEnd.format("yyyy/MM/dd hh:mm"));
+    $('#solarNoon').html(sunTimes.solarNoon.format("yyyy/MM/dd hh:mm"));
+    $('#goldenHour').html(sunTimes.goldenHour.format("yyyy/MM/dd hh:mm"));
+    $('#sunsetStart').html(sunTimes.sunsetStart.format("yyyy/MM/dd hh:mm"));
+    $('#sunset').html(sunTimes.sunset.format("yyyy/MM/dd hh:mm"));
+    $('#dusk').html(sunTimes.dusk.format("yyyy/MM/dd hh:mm"));
+    $('#nauticalDusk').html(sunTimes.nauticalDusk.format("yyyy/MM/dd hh:mm"));
+    $('#night').html(sunTimes.night.format("yyyy/MM/dd hh:mm"));
+    $('#nadir').html(sunTimes.nadir.format("yyyy/MM/dd hh:mm"));
+    $('#nightEnd').html(sunTimes.nightEnd.format("yyyy/MM/dd hh:mm"));
+    $('#nauticalDawn').html(sunTimes.nauticalDawn.format("yyyy/MM/dd hh:mm"));
+    $('#dawn').html(sunTimes.dawn.format("yyyy/MM/dd hh:mm"));
+
+    var moonTimes = SunCalc.getMoonTimes(inputdate, lat , lng);
+    var moonPos = SunCalc.getMoonPosition(inputdate,lat,lng);
+    var moonIllumination =SunCalc.getMoonIllumination(inputdate);
+    //moon time
+    if(!moonTimes.rise){
+      var prevday = new Date(inputdate.getTime() - 24*60*60*1000);
+      var prevmoonTimes = SunCalc.getMoonTimes(prevday, lat , lng);
+      $('#moonrise').html(prevmoonTimes.rise.format("yyyy/MM/dd hh:mm"));
+    }else{
+      $('#moonrise').html(moonTimes.rise.format("yyyy/MM/dd hh:mm"));
+    }
+    if(!moonTimes.set){
+      var nextday = new Date(inputdate.getTime() + 24*60*60*1000);
+      var nextmoonTimes = SunCalc.getMoonTimes(prevday, lat , lng);
+      $('#moonset').html(nextmoonTimes.set.format("yyyy/MM/dd hh:mm"));
+    }else{
+      $('#moonset').html(moonTimes.set.format("yyyy/MM/dd hh:mm"));
+    }
+    //moon ill
+    $('#light').html(moonIllumination.fraction.toPrecision(6));
+
+    var smoonPhase = "";
+    var moonPhase = moonIllumination.phase;
+      if(moonPhase < 0.01){
+          smoonPhase = "新月";
+      }else if(moonPhase < 0.24){
+          smoonPhase = "娥眉月";
+      }else if(moonPhase < 0.26){
+          smoonPhase = "上弦月";
+      }else if(moonPhase < 0.49){
+          smoonPhase = "渐盈凸月";
+      }else if(moonPhase < 0.51){
+          smoonPhase = "满月";
+      }else if(moonPhase < 0.74){
+          smoonPhase = "渐亏凸月";
+      }else if(moonPhase < 0.76){
+          smoonPhase = "下弦月";
+      }else if(moonPhase < 1.01){
+          smoonPhase = "残月";
+      }
+    $('#moonPhase').html(smoonPhase);
+  });
+
   </script>
 </body>
 </html>
