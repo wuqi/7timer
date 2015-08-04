@@ -64,14 +64,14 @@
         <input type="text" name="inputdate" id="inputdate"  data-mini="true" data-role="datebox" data-options='{"mode":"calbox","useFocus":"true","overrideDateFormat":"%Y-%m-%d "}'/>
       </div>
       <div class="ui-grid-b btngroup"> 
-        <div class="ui-block-a"><a href="#" data-role="button" id="clock"   data-icon="clock"  data-mini="true" >晴天钟</a></div>
-        <div class="ui-block-b"><a href="#pageresult" data-role="button" id="suncalc"  data-icon="star" data-mini="true" >晨昏蒙影</a></div>
+        <div class="ui-block-a"><a href="#" data-role="button" id="clock" data-transition="slide" data-icon="clock"  data-mini="true" >晴天钟</a></div>
+        <div class="ui-block-b"><a href="#pageresult" data-role="button" id="suncalc" data-transition="slide" data-icon="star" data-mini="true" >晨昏蒙影</a></div>
         <div class="ui-block-c">
-          <a href="#pagesearch" data-role="button" id="newLoc"   data-icon="plus" data-rel="popup" data-mini="true" >添加地点</a></div>
+          <a href="#pagesearch" data-role="button" id="newLoc" data-transition="slide" data-icon="plus" data-rel="popup" data-mini="true" >添加地点</a></div>
       </div>
       <div class="ui-grid-a"> 
-        <div class="ui-block-a"><a href="#" data-role="button" id="weather"   data-icon="calendar"  data-mini="true">天气预报</a></div>
-        <div class="ui-block-b"><a href="#" data-role="button" id="nircloud"  data-icon="cloud" data-mini="true" >红外云图</a></div>
+        <div class="ui-block-a"><a href="#" data-role="button" id="weather" data-transition="slide" data-icon="calendar"  data-mini="true">天气预报</a></div>
+        <div class="ui-block-b"><a href="#" data-role="button" id="nircloud" data-transition="slide" data-icon="cloud" data-mini="true" >红外云图</a></div>
       </div>
     </div>
     <!--添加新地点-->
@@ -296,7 +296,7 @@
     <div data-role="content">
       <label for="img"  data-mini="true" id="cloudLable"></label>
       <div  id="cloudcontent" height="100%">
-        <img src=""  alt="红外云图" id="imgCloud" />
+        <img src=""  alt="红外云图" id="imgCloud" width="100%"/>
         </div>
     </div>
   </div>
@@ -554,7 +554,7 @@
       var oldtheme = $( "pagemain" ).page( "option", "theme" );
       var theme = $('#switchtheme').val();
       $.mobile.changeGlobalTheme(theme);
-      $.mobile.changePage( "#pagemain");
+      $.mobile.changePage( "#pagemain",{transition:'slide',reverse:true});
       if(map){map.remove();map = null;}
     });
     //添加地点
@@ -607,11 +607,11 @@
         $('#sxweather').html(weatherinfos[5]);
         $('#sximg').attr("src", icons[5]);
       });
-      $.mobile.changePage( "#pageweather");
+      $.mobile.changePage( "#pageweather",{transition:'slide'});
     });
     //返回
     $('#sreturn').click(function(){
-      $.mobile.changePage( "#pagemain");
+      $.mobile.changePage( "#pagemain",{transition:'slide',reverse:true});
     });
     //search position
     $('#ssearch').click(function(){
@@ -638,7 +638,7 @@
       var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ lng +"&lat="+ lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
       $('#imgClock').attr("src", imgpath);
       $('#clockcontent').panzoom();
-      $.mobile.changePage( "#pageclock", { role: "dialog" } );
+      $.mobile.changePage("#pageclock",{transition:'slide'});
     });
     //红外云图
     $('#nircloud').click(function(){
@@ -656,7 +656,7 @@
       }
 
       $("#cloudcontent").panzoom();
-      $.mobile.changePage( "#pagecloud");
+      $.mobile.changePage( "#pagecloud",{transition:'slide'});
     });
     //晨昏蒙影
     $('#suncalc').click(function(){
