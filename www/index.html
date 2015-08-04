@@ -65,12 +65,32 @@
       </div>
       <div class="ui-grid-b btngroup"> 
         <div class="ui-block-a"><a href="#" data-role="button" id="clock"   data-icon="clock"  data-mini="true" >晴天钟</a></div>
-        <div class="ui-block-b"><a href="#pageresult" data-role="button" id="suncalc"  data-icon="star" data-rel="dialog"  data-mini="true" >晨昏蒙影</a></div>
-        <div class="ui-block-c"><a href="#pagesearch" data-role="button" id="newLoc"   data-icon="plus" data-rel="dialog"  data-mini="true" >添加地点</a></div>
+        <div class="ui-block-b"><a href="#pageresult" data-role="button" id="suncalc"  data-icon="star" data-mini="true" >晨昏蒙影</a></div>
+        <div class="ui-block-c">
+          <a href="#pagesearch" data-role="button" id="newLoc"   data-icon="plus" data-rel="popup" data-mini="true" >添加地点</a></div>
       </div>
       <div class="ui-grid-a"> 
-        <div class="ui-block-a"><a href="#" data-role="button" id="weather"   data-icon="calendar"  data-mini="true" data-rel="dialog" >天气预报</a></div>
+        <div class="ui-block-a"><a href="#" data-role="button" id="weather"   data-icon="calendar"  data-mini="true">天气预报</a></div>
         <div class="ui-block-b"><a href="#" data-role="button" id="nircloud"  data-icon="cloud" data-mini="true" >红外云图</a></div>
+      </div>
+    </div>
+    <!--添加新地点-->
+    <div data-role="popup" id="pagesearch" data-position-to="window" style="width:100%"  data-dismissible="false">
+      <div data-role="header">
+         <h1>添加新地点</h1>
+         <a href="#" data-rel="back" data-icon="delete" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all">Close</a>
+      </div>
+      <div data-role="content">
+        <div data-role="fieldcontain" >
+          <input type="text" name="sname" id="sname" placeholder = "地点">
+          <input type="text" name="slongitude" id="slongitude" placeholder = "经度">
+          <input type="text" name="slatitude" id="slatitude" placeholder = "纬度">
+        </div>
+        <div class="ui-grid-b"> 
+          <div class="ui-block-a"><a href="#" data-role="button" id="slocate"  data-mini="true" data-icon="location">定位</a></div>
+          <div class="ui-block-b"><a href="#" data-role="button" id="ssearch"  data-mini="true" data-icon="search">搜索</a></div>
+          <div class="ui-block-c"><a href="#" data-role="button" id="sok"  data-mini="true" data-icon="check">确定</a></div>
+        </div>
       </div>
     </div>
   </div>
@@ -89,6 +109,7 @@
   <div data-role="page" id="pageresult" class="page">
     <div data-role="header">
        <h1>晨昏蒙影</h1>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
     </div>
     <div data-role="content">
       <table>
@@ -181,24 +202,6 @@
       </table>
     </div>
   </div>
-  <!--添加新地点-->
-  <div data-role="page" id="pagesearch" class="page">
-    <div data-role="header">
-       <h1>添加新地点</h1>
-    </div>
-    <div data-role="content">
-      <div data-role="fieldcontain" >
-        <input type="text" name="sname" id="sname" placeholder = "地点">
-        <input type="text" name="slongitude" id="slongitude" placeholder = "经度">
-        <input type="text" name="slatitude" id="slatitude" placeholder = "纬度">
-      </div>
-      <div class="ui-grid-b"> 
-        <div class="ui-block-a"><a href="#" data-role="button" id="slocate"   data-icon="location">定位</a></div>
-        <div class="ui-block-b"><a href="#" data-role="button" id="ssearch"  data-icon="search">搜索</a></div>
-        <div class="ui-block-c"><a href="#" data-role="button" id="sok"   data-icon="check">确定</a></div>
-      </div>
-    </div>
-  </div>
   <!--pageinfo-->
   <div data-role="page" id="pageinfo" class="page">
     <div data-role="header" data-position="fixed">
@@ -256,23 +259,30 @@
   <div data-role="page" id="pageclock" class="page">
     <div data-role="header">
        <h1>晴天钟</h1>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
     </div>
-    <div data-role="content">
+
+      <div  id="clockcontent" height="100%">
         <img src=""  alt="晴天钟" id="imgClock" width="100%"/>
-    </div>
+      </div>
+
   </div>
   <!--天气预报-->
   <div data-role="page" id="pageweather" class="page">
     <div data-role="header">
        <h1>天气预报</h1>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
     </div>
     <div data-role="content">
-      <!--<div data-role="fieldcontain" id="weathercontent">
-      </div>-->
       <div class="ui-grid-b"> 
-        <div class="ui-block-a"> <p>今天</p><img src="" alt="Today" id="today"/><p id="fweather"></p></div>
-        <div class="ui-block-b"> <p>明天</p><img src="" alt="Tomorrow" id="tomorrow"/><p id="sweather"></p></div>
-        <div class="ui-block-c"> <p>后天</p><img src="" alt="After tomorrow " id="afttmr"/><p id="tweather"></p></div>
+        <div class="ui-block-a"> <p id="fday"></p><img src="" alt="Today" id="fimg"/><p id="fweather"></p></div>
+        <div class="ui-block-b"> <p id="sday"></p><img src="" alt="2st Day" id="simg"/><p id="sweather"></p></div>
+        <div class="ui-block-c"> <p id="tday"></p><img src="" alt="3rd Day " id="timg"/><p id="tweather"></p></div>
+      </div>
+      <div class="ui-grid-b"> 
+        <div class="ui-block-a"> <p id="frday"></p><img src="" alt="4th Day" id="frimg"/><p id="frweather"></p></div>
+        <div class="ui-block-b"> <p id="fvday"></p><img src="" alt="5th Day" id="fvimg"/><p id="fvweather"></p></div>
+        <div class="ui-block-c"> <p id="sxday"></p><img src="" alt="6th Day " id="sximg"/><p id="sxweather"></p></div>
       </div>
        <a href="#" data-role="button" id="sreturn"   data-icon="check">返回</a>
     </div>
@@ -371,25 +381,13 @@
   var addresses;
   // Dynamically changes the theme of all UI elements on all pages,
   // also pages not yet rendered (enhanced) by jQuery Mobile.
-  $.fn.changeColorSwatch = function(theme, type) {
-    if (!type) {
-      type = 'theme';
-    }
-    var currentTheme = this.attr('data-' + type);
-    if (!currentTheme) {
-      currentTheme = 'a';
-    }
-    this.attr('data-' + type, theme);
-    var regex = new RegExp('^ui-(.*)-' + currentTheme + '$');
-    var classes = $.extend({}, this[0].classList);
-    var i = classes.length;
-    while (i--) {
-      var match = classes[i].match(regex);
-      if (match) {
-        this.removeClass(match[0]);
-        this.addClass('ui-' + match[1] + '-' + theme);
+  $.mobile.changeGlobalTheme = function(theme)
+  {
+      if($( ".page" ).page.option){
+        $( ".page" ).page( "option", "theme", theme );
+      }else{
+        $( ".page" ).page({"theme": theme});
       }
-    }
   };
   //address
   if (!storage.getItem("addresses")) {
@@ -417,11 +415,12 @@
   //theme
   if(!storage.getItem("theme")){
     storage.setItem("theme","a");
-    $('.page').changeColorSwatch("a");
+    $.mobile.changeGlobalTheme(theme);
   }else{
     var theme = storage.getItem('theme');
     $('#switchtheme').val(theme);
-    $('.page').changeColorSwatch(theme);
+    $.mobile.changeGlobalTheme(theme);
+    $.mobile.dialog.prototype.options.overlayTheme = theme;
   }
   function setSelector() {
     var locations = addresses.locations;
@@ -526,7 +525,6 @@
         navigator.geolocation.getCurrentPosition(disp);
     });
   }
-
   $(document).ready(function(){
     //initial
     var tempdate = new Date();
@@ -555,7 +553,7 @@
       storage.setItem("theme",$('#switchtheme').val());
       var oldtheme = $( "pagemain" ).page( "option", "theme" );
       var theme = $('#switchtheme').val();
-      $('.page').changeColorSwatch(theme);
+      $.mobile.changeGlobalTheme(theme);
       $.mobile.changePage( "#pagemain");
       if(map){map.remove();map = null;}
     });
@@ -569,29 +567,47 @@
       storage.setItem("addresses",JSON.stringify(addresses));
       $("#address").append("<option value='"+item.name+"'>"+item.name+"</option>");
       $('#address').selectmenu('refresh');
-      $('.ui-dialog').dialog('close'); 
+      $("#pagesearch" ).popup( "close" );
     });
     //天气预报
     $('#weather').click(function(){
       var lat = $('#latitude').val();
       var lng = $('#longitude').val();
-      var requesturl = "http://api.openweathermap.org/data/2.5/forecast/daily?lat="+ lat+"&lon="+lng+"&cnt=3&units=metric&lang=zh_cn&callback=?";
-      //alert(requesturl);
+      var requesturl = "http://api.openweathermap.org/data/2.5/forecast/daily?lat="+ lat+"&lon="+lng+"&cnt=6&units=metric&lang=zh_cn&callback=?";
+      var curdate = new Date();
       $.getJSON(requesturl, null, function(result) {
-        var todayhtml = result.list[0].temp.min +"-"+result.list[0].temp.max+"℃<br/>"+result.list[0].weather[0].description+"<br/>云量:"+result.list[0].clouds+"%";
-        var todayicon = "weather/"+result.list[0].weather[0].icon+'.png';
-        var tmrhtml = result.list[1].temp.min +"-"+result.list[0].temp.max+"℃<br/>"+result.list[1].weather[0].description+"<br/>云量:"+result.list[1].clouds+"%";
-        var tmricon = "weather/"+result.list[1].weather[0].icon+'.png';
-        var afthtml = result.list[2].temp.min +"-"+result.list[2].temp.max+"℃<br/>"+result.list[2].weather[0].description+"<br/>云量:"+result.list[2].clouds+"%";
-        var afticon = "weather/"+result.list[2].weather[0].icon+'.png';
-        $('#fweather').html(todayhtml);
-        $('#today').attr("src", todayicon);
-        $('#sweather').html(tmrhtml);
-        $('#tomorrow').attr("src",tmricon);
-        $('#tweather').html(afthtml);
-        $('#afttmr').attr("src",afticon);
+        var weatherinfos = new Array();
+        var icons = new Array();
+        var days = new Array();
+        for(var i=0;i<6;i++){
+          var weatherinfo = result.list[i].temp.min +"-"+result.list[i].temp.max+"℃<br/>"+result.list[i].weather[0].description+"<br/>云量:"+result.list[i].clouds+"%";
+          var icon = "weather/"+result.list[i].weather[0].icon+'.png';
+          var day = curdate.format('MM-dd');
+          weatherinfos.push(weatherinfo);
+          icons.push(icon);
+          days.push(day);
+          curdate = new Date(curdate.getTime() + 1*24*60*60*1000);
+        }
+        $('#fday').html(days[0])
+        $('#fweather').html(weatherinfos[0]);
+        $('#fimg').attr("src", icons[0]);
+        $('#sday').html(days[1]);
+        $('#sweather').html(weatherinfos[1]);
+        $('#simg').attr("src", icons[1]);
+        $('#tday').html(days[2]);
+        $('#tweather').html(weatherinfos[2]);
+        $('#timg').attr("src", icons[2]);
+        $('#frday').html(days[3]);
+        $('#frweather').html(weatherinfos[3]);
+        $('#frimg').attr("src", icons[3]);
+        $('#fvday').html(days[4]);
+        $('#fvweather').html(weatherinfos[4]);
+        $('#fvimg').attr("src", icons[4]);
+        $('#sxday').html(days[5])
+        $('#sxweather').html(weatherinfos[5]);
+        $('#sximg').attr("src", icons[5]);
       });
-      $.mobile.changePage( "#pageweather", { role: "dialog" } );
+      $.mobile.changePage( "#pageweather");
     });
     //返回
     $('#sreturn').click(function(){
@@ -621,6 +637,7 @@
       var lng = $('#longitude').val();
       var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ lng +"&lat="+ lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
       $('#imgClock').attr("src", imgpath);
+      $('#clockcontent').panzoom();
       $.mobile.changePage( "#pageclock", { role: "dialog" } );
     });
     //红外云图
