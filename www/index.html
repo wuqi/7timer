@@ -278,7 +278,7 @@
         <div class="ui-block-b"> <p id="fvday"></p><img src="" alt="5th Day" id="fvimg"/><p id="fvweather"></p></div>
         <div class="ui-block-c"> <p id="sxday"></p><img src="" alt="6th Day " id="sximg"/><p id="sxweather"></p></div>
       </div>
-       <a href="#" data-role="button" id="sreturn" data-mini="true" data-icon="check">返回</a>
+      <a href="#pagemain" data-role="button" data-mini="true" data-icon="back" data-transition="slide" data-direction="reverse">返回</a>
     </div>
   </div>
   <!--红外云图-->
@@ -375,8 +375,7 @@
   }
   var storage = window.localStorage;
   var addresses;
-  // Dynamically changes the theme of all UI elements on all pages,
-  // also pages not yet rendered (enhanced) by jQuery Mobile.
+  //changes theme
   $.mobile.changeGlobalTheme = function(theme)
   {
       if($( ".page" ).page.option){
@@ -420,7 +419,6 @@
   function setSelector() {
     var locations = addresses.locations;
     for(var i=0;i<locations.length;i++){
-      //var op = new Option(locations[i].name,locations[i].name,true,true);
       var name = locations[i].name;
      	$('#address').append(new Option(name,name,false,false));
      	$('#deleteLocs').append(new Option(name,name,false,false));
@@ -530,8 +528,7 @@
   $('#latitude').val(item.lat);
   $('#longitude').val(item.lng);
   //切换地点
-  $('#address').change(function(){ 
-   //alert($(this).get(0).selectedIndex);
+  $('#address').change(function(){
    var index = $(this).get(0).selectedIndex;
    var item = addresses.locations[index];
    $('#latitude').val(item.lat);
@@ -620,10 +617,6 @@
       $('#sximg').attr("src", icons[5]);
     });
     $.mobile.changePage( "#pageweather",{transition:'slide'});
-  });
-  //返回
-  $('#sreturn').click(function(){
-    $.mobile.changePage( "#pagemain",{transition:'slide',reverse:true});
   });
   //search position
   $('#ssearch').click(function(){
@@ -747,7 +740,7 @@
           smoonPhase = "渐亏凸月";
       }else if(moonPhase < 0.76){
           smoonPhase = "下弦月";
-      }else if(moonPhase < 1.01){
+      }else{
           smoonPhase = "残月";
       }
     $('#moonPhase').html(smoonPhase);
