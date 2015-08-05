@@ -549,9 +549,9 @@
     $.mobile.changeGlobalTheme(theme);
     if(map){map.remove();map = null;}
     var sels = [];
-    $('#deleteLocs :selected').each(function(i, selected){sels.push(selected.index-1);});
+    sels = $('#deleteLocs').val();
     var newlocs=[];
-    for(var i=0;i<addresses.locations.length;i++){if($.inArray(i,sels) == -1){newlocs.push(addresses.locations[i]);}}
+    for(var i=0;i<addresses.locations.length;i++){if($.inArray(addresses.locations[i].name,sels) == -1){newlocs.push(addresses.locations[i]);}}
     addresses.locations = [];
     addresses.locations = newlocs;
     $('#address').empty();
