@@ -278,7 +278,7 @@
         <div class="ui-block-b"> <p id="fvday"></p><img src="" alt="5th Day" id="fvimg"/><p id="fvweather"></p></div>
         <div class="ui-block-c"> <p id="sxday"></p><img src="" alt="6th Day " id="sximg"/><p id="sxweather"></p></div>
       </div>
-       <a href="#" data-role="button" id="sreturn"   data-icon="check">返回</a>
+       <a href="#" data-role="button" id="sreturn" data-mini="true" data-icon="check">返回</a>
     </div>
   </div>
   <!--红外云图-->
@@ -326,10 +326,14 @@
           <option value="b">黑色</option>
           <option value="c">简单</option>
         </select>
+        <label for="deleteLocs">删除地点:</label>
+        <select name="deleteLocs" id="deleteLocs" multiple="multiple" data-native-menu="false" data-mini="true">
+          <option>选择</option>
+        </select>
         <div class="ui-grid-b"> 
         <div class="ui-block-a"></div>
         <div class="ui-block-b"><a href="#" data-role="button" id="settingset"  data-icon="check" data-mini="true" >确定</a></div>
-        <div class="ui-block-c"><a href="#pagemain" data-role="button" id="settingcancel" data-icon="back" data-mini="true" >取消</a></div>
+        <div class="ui-block-c"><a href="#pagemain" data-role="button" id="settingcancel" data-icon="back" data-mini="true"  data-transition="slide" data-direction="reverse">取消</a></div>
       </div>
     </div>
   </div>
@@ -415,10 +419,11 @@
   }
   function setSelector() {
     var locations = addresses.locations;
-    var selElement = document.getElementById("address");
     for(var i=0;i<locations.length;i++){
-      var op = new Option(locations[i].name,locations[i].name,true,true);
-      selElement.options.add(op);  
+      //var op = new Option(locations[i].name,locations[i].name,true,true);
+      var name = locations[i].name;
+     	$('#address').append(new Option(name,name,false,false));
+     	$('#deleteLocs').append(new Option(name,name,false,false));
     }
     return true;
   }
@@ -545,8 +550,20 @@
     var oldtheme = $( "pagemain" ).page( "option", "theme" );
     var theme = $('#switchtheme').val();
     $.mobile.changeGlobalTheme(theme);
-    $.mobile.changePage( "#pagemain",{transition:'slide',reverse:true});
     if(map){map.remove();map = null;}
+    var sels = [];
+    $('#deleteLocs :selected').each(function(i, selected){sels.push(selected.index-1);});
+    var newlocs=[];
+    for(var i=0;i<addresses.locations.length;i++){if($.inArray(i,sels) == -1){newlocs.push(addresses.locations[i]);}}
+    addresses.locations = [];
+    addresses.locations = newlocs;
+    $('#address').empty();
+    $('#deleteLocs').empty();
+    setSelector();
+    $('#address').selectmenu('refresh');
+    $('#deleteLocs').selectmenu('refresh');
+    storage.setItem("addresses",JSON.stringify(addresses));
+    $.mobile.changePage( "#pagemain",{transition:'slide',reverse:true});
   });
   //添加地点
   $('#sok').click(function(){
@@ -557,7 +574,9 @@
     addresses.locations.push(item);
     storage.setItem("addresses",JSON.stringify(addresses));
     $("#address").append("<option value='"+item.name+"'>"+item.name+"</option>");
+    $("#deleteLocs").append("<option value='"+item.name+"'>"+item.name+"</option>");
     $('#address').selectmenu('refresh');
+    $('#deleteLocs').selectmenu('refresh');
     $("#pagesearch" ).popup( "close" );
   });
   //天气预报

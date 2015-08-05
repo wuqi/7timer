@@ -1,7 +1,7 @@
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="info.diphda.seventimer" version="1.3.1">
   <name>SevenTimer</name>
-  <description>7Timer Mobile App.</description>
-  <author href="http://diphda.info" email="wuqi198772@gmail.com">PhoneGap Team</author>
+  <description>7Timer Mobile App</description>
+  <author href="http://diphda.info" email="wuqi198772@gmail.com">Wu Qi</author>
   <content src="index.html"/>
   <preference name="permissions"                value="none"/>
   <preference name="orientation"                value="default" />
@@ -20,6 +20,7 @@
   <preference name="android-installLocation"    value="auto" />
 
   <gap:plugin name="org.apache.cordova.geolocation" />
+  <gap:splash src="icon.png" />
 
   <icon src="icon.png"/>
   <feature name="http://api.phonegap.com/1.0/network" />
