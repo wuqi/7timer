@@ -412,7 +412,6 @@
     var theme = storage.getItem('theme');
     $('#switchtheme').val(theme);
     $.mobile.changeGlobalTheme(theme);
-    $.mobile.dialog.prototype.options.overlayTheme = theme;
   }
   function setSelector() {
     var locations = addresses.locations;
