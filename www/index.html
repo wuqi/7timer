@@ -75,7 +75,7 @@
       </div>
     </div>
     <!--添加新地点-->
-    <div data-role="popup" id="pagesearch" data-position-to="window" style="width:100%"  data-dismissible="false">
+    <div data-role="popup" id="pagesearch" style="width:100%"  data-dismissible="false">
       <div data-role="header">
          <h1>添加新地点</h1>
          <a href="#" data-rel="back" data-icon="delete" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all">Close</a>
@@ -538,6 +538,7 @@
     $("#sname").val("");
     $('#slatitude').val("");
     $('#slongitude').val("");
+    $('#pagesearch').popup('open',{y:0});
   });
   //设置
   $('#settingset').click(function () {
