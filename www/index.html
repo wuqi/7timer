@@ -429,7 +429,7 @@
   var map = null;
   var marker ;
   $(document).on('pageshow', '#pagemap', function() {InitMap();});
-
+  $(window).on("orientationchange",function(){if(map){map.remove();map = null;}InitMap();});
   function InitMap(){
     if(map !== null){
       return;
