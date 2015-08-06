@@ -631,7 +631,7 @@
   //显示popup
   $('#headerClock').click(function(){
     //if(!marker){
-      var pos = marker.getLatLng();
+      var pos = marker.getLatLng().wrap();
       var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
       var content = "<div  style=\"width:500px\"><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:500px\"/></div>";
       marker.bindPopup(content,{maxWidth:500}).openPopup();
