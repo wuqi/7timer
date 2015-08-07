@@ -237,10 +237,12 @@
           </ul>
           <h4>地图说明</h4>
           <ul>
-            <li>推荐使用OpenWeatherMap，可以显示当天天气等情况，可以自选底图</li>
-            <li>天地图、高德地图仅有少量国外数据，请谨慎使用</li>
-            <li>Mapbox、高德、天地图为本地语言,Stamen放大后为本地语言，其余都为英文</li>
-            <li>OpenWeatherMap中底图只能勾选一种，如果需要看云图，建议勾选‘夜间’，显示比较清晰</li>
+            <li>地图设置中分为底图设置和可选图层设置，底图只能显示一个，可以切换，可选图层都为透明，可以叠加显示</li>
+            <li>水彩地图和天地图需要单独添加注释图层</li>
+            <li>底图中带Mobile的图层注释较大</li>
+            <li>天地图、高德地图、MapABC仅有少量国外数据，但加载速度快，请酌情使用</li>
+            <li>Mapbox、高德、天地图、OpenStreatMap、MapABC为本地语言,Stamen放大后为本地语言，其余都为英文</li>
+            <li>如果需要显示云图等可选图层，建议勾选‘HERE Night’，显示比较清晰</li>
           </ul>
           <h4>反馈及建议</h4>
           <ul>
@@ -312,12 +314,13 @@
           <label><input type="checkbox" id="Esri.WorldTopoMap"/>Esri地形图</label>
           <label><input type="checkbox" id="OpenStreetMap.Mapnik"/>OpenStreetMap</label>
           <label><input type="checkbox" id="MapBox"/>Mapbox</label>
-          <label><input type="checkbox" id="HERE.normalDay"/>Here Day</label>
-          <label><input type="checkbox" id="HERE.normalDayMobile"/>Here Day Mobile</label>
+          <label><input type="checkbox" id="HERE.normalDay"/>Here</label>
+          <label><input type="checkbox" id="HERE.normalDayMobile"/>Here Mobile</label>
           <label><input type="checkbox" id="HERE.normalNight"/>Here Night</label>
           <label><input type="checkbox" id="HERE.normalNightMobile"/>Here Night Mobile</label>
-          <label><input type="checkbox" id="HERE.normalNightMobile"/>Here Night Mobile</label>
-          <label><input type="checkbox" id="HERE.terrainDayMobile"/>Here Terrain Mobile</label>
+          <label><input type="checkbox" id="HERE.terrainDayMobile"/>Here地形图</label>
+          <label><input type="checkbox" id="HERE.hybridDay"/>Here卫星图</label>
+          <label><input type="checkbox" id="HERE.hybridDayMobile"/>Here Satellite Mobile</label>
           <label><input type="checkbox" id="NASAGIBS.ModisTerraTrueColorCR"/>Modis Terra</label>
           </div>
         </fieldset>
@@ -327,7 +330,9 @@
           <label><input type="checkbox" id="Stamen.TonerLabels">水彩地图注记</label>
           <label><input type="checkbox" id="TianDiTu.Annotion">天地图注记</label>
           <label><input type="checkbox" id="OpenWeatherMap.Clouds">Clouds</label>
+          <label><input type="checkbox" id="OpenWeatherMap.CloudsClassic">Clouds Classic</label>
           <label><input type="checkbox" id="OpenWeatherMap.Precipitation">Precipitation</label>
+          <label><input type="checkbox" id="OpenWeatherMap.PrecipitationClassic">Precipitation Classic</label>
           <label><input type="checkbox" id="OpenWeatherMap.Rain">Rain</label>
           <label><input type="checkbox" id="OpenWeatherMap.Wind">Wind</label>
           <label><input type="checkbox" id="OpenWeatherMap.Snow">Snow</label>
