@@ -9,7 +9,6 @@
   <script type="text/javascript" src="esri-leaflet.js"></script>
   <script type="text/javascript" src="esri-leaflet-geocoder.js"></script>
   <script type="text/javascript" src="leaflet-providers.js"></script>
-  <script type="text/javascript" src="leaflet.ChineseTmsProviders.js"></script>
   <script type="text/javascript" src="suncalc.js"></script>
   <script type="text/javascript" src="jqm-datebox.all.min.js"></script>
   <script type="text/javascript" src="jquery.panzoom.min.js"></script>
@@ -299,17 +298,45 @@
         <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
     </div>
     <div data-role="content">
-        <label for="mapsource">地图来源：</label>
-        <select name="mapsource" id="mapsource" data-native-menu="false"  data-mini="true" >
-          <option value="mapbox">Mapbox</option>
-          <option value="esri">Esri Map</option>
-          <option value="gaode">高德</option>
-          <option value="tianditu">天地图</option>
-          <option value="Stamen">Stamen</option>
-          <option value="OpenWeatherMap">OpenWeatherMap</option>
-          <option value="HERE">HERE</option>
-          <option value="HERE_night">HERE夜间模式</option>
-        </select>
+        <label for="baseMaps">地图设置：</label>
+        <fieldset data-role="collapsible" data-mini="true" id="baseMaps">
+          <legend>底图：</legend>
+          <div data-role="controlgroup">
+          <label><input type="checkbox" id="Stamen.Toner"/>黑白地图</label>
+          <label><input type="checkbox" id="Stamen.TonerLite"/>灰白地图</label>
+          <label><input type="checkbox" id="Stamen.Watercolor"/>水彩地图</label>
+          <label><input type="checkbox" id="TianDiTu.Map"/>天地图</label>
+          <label><input type="checkbox" id="MapABC"/>MapABC</label>
+          <label><input type="checkbox" id="GaoDe"/>高德</label>
+          <label><input type="checkbox" id="Esri.WorldStreetMap"/>Esri街道图</label>
+          <label><input type="checkbox" id="Esri.WorldTopoMap"/>Esri地形图</label>
+          <label><input type="checkbox" id="OpenStreetMap.Mapnik"/>OpenStreetMap</label>
+          <label><input type="checkbox" id="MapBox"/>Mapbox</label>
+          <label><input type="checkbox" id="HERE.normalDay"/>Here Day</label>
+          <label><input type="checkbox" id="HERE.normalDayMobile"/>Here Day Mobile</label>
+          <label><input type="checkbox" id="HERE.normalNight"/>Here Night</label>
+          <label><input type="checkbox" id="HERE.normalNightMobile"/>Here Night Mobile</label>
+          <label><input type="checkbox" id="HERE.normalNightMobile"/>Here Night Mobile</label>
+          <label><input type="checkbox" id="HERE.terrainDayMobile"/>Here Terrain Mobile</label>
+          <label><input type="checkbox" id="NASAGIBS.ModisTerraTrueColorCR"/>Modis Terra</label>
+          </div>
+        </fieldset>
+        <fieldset data-role="collapsible" data-mini="true" id="overlayMaps">
+          <legend>可选图层：</legend>
+          <div data-role="controlgroup">
+          <label><input type="checkbox" id="Stamen.TonerLabels">水彩地图注记</label>
+          <label><input type="checkbox" id="TianDiTu.Annotion">天地图注记</label>
+          <label><input type="checkbox" id="OpenWeatherMap.Clouds">Clouds</label>
+          <label><input type="checkbox" id="OpenWeatherMap.Precipitation">Precipitation</label>
+          <label><input type="checkbox" id="OpenWeatherMap.Rain">Rain</label>
+          <label><input type="checkbox" id="OpenWeatherMap.Wind">Wind</label>
+          <label><input type="checkbox" id="OpenWeatherMap.Snow">Snow</label>
+          <label><input type="checkbox" id="OpenWeatherMap.Temperature">Temperature</label>
+          <label><input type="checkbox" id="NASAGIBS.ViirsEarthAtNight2012">Earth At Night2012</label>
+          <label><input type="checkbox" id="NASAGIBS.ModisTerraLSTDay">Modis Terra LST Day</label>
+          <label><input type="checkbox" id="NASAGIBS.ModisTerraAOD">Modis Terra AOD</label>
+          </div>
+        </fieldset>
         <label for="cloudtype">红外云图类型：</label>
         <select name="cloudtype" id="cloudtype" data-native-menu="false" data-mini="true" >
           <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_CLC_GRA_">中国区域红外一彩色</option>
@@ -367,22 +394,16 @@
     var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
     return formatedDate;
   }
-  function imageExists(image_url) {
-    var http = new XMLHttpRequest();
-    http.open('HEAD',image_url,false);
-    http.send();
-    return http.status != 404;
-  }
+  function jq(myid){return "#"+myid.replace(/(\.)/g,"\\$1")}
   var storage = window.localStorage;
   var addresses;
   //changes theme
-  $.mobile.changeGlobalTheme = function(theme)
-  {
-      if($( ".page" ).page.option){
-        $( ".page" ).page( "option", "theme", theme );
-      }else{
-        $( ".page" ).page({"theme": theme});
-      }
+  $.mobile.changeGlobalTheme = function(theme){
+    if(document.readyState=="complete"){
+      $( ".page" ).page( "option", "theme", theme );
+    }else{
+      $( ".page" ).page({"theme": theme});
+    } 
   };
   //address
   if (!storage.getItem("addresses")) {
@@ -393,12 +414,25 @@
     addresses = JSON.parse(storage.getItem("addresses"));
     setSelector();
   }
-  //mapsource
-  if(!storage.getItem("mapsource")){
-    storage.setItem("mapsource",0);
-    $('#mapsource').get(0).selectedIndex = 0;
+  var baseMapNames=[],overlayMapNames=[];
+  //baseMaps
+  
+  if(!storage.getItem("baseMaps")){
+    baseMapNames.push("HERE.normalDay");
+    storage.setItem("baseMaps",JSON.stringify(baseMapNames));
+    $(jq('HERE.normalDay')).attr('checked',true);
   }else{
-    $('#mapsource').get(0).selectedIndex = storage.getItem("mapsource");
+    baseMapNames = JSON.parse(storage.getItem("baseMaps"));
+    $.each(baseMapNames,function(k,v){$(jq(v)).attr('checked',true)});
+  }
+  //overlayMaps
+  if(!storage.getItem("overlayMaps")){
+    overlayMapNames.push("OpenWeatherMap.Clouds");
+    storage.setItem("overlayMaps",JSON.stringify(overlayMapNames));
+    $(jq('OpenWeatherMap.Clouds')).attr('checked',true);
+  }else{
+    overlayMapNames = JSON.parse(storage.getItem("overlayMaps"));
+    $.each(overlayMapNames,function(k,v){$(jq(v)).attr('checked',true)});
   }
   //cloudtype
   if(!storage.getItem("cloudtype")){
@@ -425,7 +459,6 @@
     }
     return true;
   }
-
   var map = null;
   var marker ;
   $(document).on('pageshow', '#pagemap', function() {InitMap();});
@@ -437,60 +470,19 @@
     var olat = $('#latitude').val();
     var olng = $('#longitude').val();
     map = L.map('map').setView([olat, olng], 10);
-    var mapsource = $('#mapsource').get(0).selectedIndex;
-    switch(mapsource){
-      case 0:  {//mapbox
-        L.tileLayer.provider('MapBox').addTo(map);
-        break;
-      }
-      case 1: {//esri
-        L.esri.basemapLayer('Streets').addTo(map);
-        break;
-      }
-      case 2: {//gaode
-        L.tileLayer.chinaProvider('GaoDe.Normal.Map',{maxZoom:18,minZoom:5}).addTo(map);
-        break;
-        }
-      case 3: {//tianditu
-        L.tileLayer.chinaProvider('TianDiTu.Normal.Map',{maxZoom:18,minZoom:5}).addTo(map);
-        L.tileLayer.chinaProvider('TianDiTu.Normal.Annotion',{maxZoom:18,minZoom:5}).addTo(map);
-        break;
-      }
-      case 4:{//Stamen
-        L.tileLayer.provider('Stamen.Watercolor').addTo(map);
-        L.tileLayer.provider('Stamen.TonerLabels').addTo(map);
-        break;
-      }
-      case 5:{//OpenWeatherMap
-        var layers = new L.LayerGroup();
-        var hybridDaylayer = new L.tileLayer.provider('HERE.hybridDay');
-        var mapboxlayer = L.tileLayer.provider('MapBox');
-        var gaodeLayer = L.tileLayer.chinaProvider('GaoDe.Normal.Map',{maxZoom:18,minZoom:5});
-        var nightlayer = L.tileLayer.provider('HERE.normalNight');
-        var daylayer = L.tileLayer.provider('HERE.normalDay');
-        var cloudlayer = L.tileLayer.provider('OpenWeatherMap.CloudsClassic');
-        var precipitationlayer = L.tileLayer.provider('OpenWeatherMap.PrecipitationClassic');
-        var rainlayer = L.tileLayer.provider('OpenWeatherMap.RainClassic');
-        var temperaturelayer = L.tileLayer.provider('OpenWeatherMap.Temperature');
-        var pressurelayer = L.tileLayer.provider('OpenWeatherMap.Pressure');
-        var precipitationlayer = L.tileLayer.provider('OpenWeatherMap.Precipitation');
-        var windlayer = L.tileLayer.provider('OpenWeatherMap.Wind');
-        nightlayer.addTo(map);
-        L.control.layers({"夜间":nightlayer,"白天":daylayer,'卫星影像':hybridDaylayer,'Mapbox':mapboxlayer,"高德":gaodeLayer},{"Cloud":cloudlayer,"Rain":rainlayer,"Temperature":temperaturelayer,"Precipitation":precipitationlayer,"Pressure":pressurelayer,"Wind":windlayer}).addTo(map);
-        break;
-      }
-      case 6:{//HERE
-        L.tileLayer.provider('HERE.normalDay').addTo(map);
-        break;
-      }      
-      case 7:{//HERE Mode
-        L.tileLayer.provider('HERE.normalNight').addTo(map);
-        break;
-      }
-      default:
-        break;
-    }
-
+    var basemap={},overlaymap={};
+    baseMapNames = JSON.parse(storage.getItem("baseMaps"));
+    overlayMapNames = JSON.parse(storage.getItem("overlayMaps"));
+    $.each(baseMapNames,function(k,v){
+      var attrname = $(jq(v)).parent().text();
+      basemap[attrname]=L.tileLayer.provider(v);
+      if(k==0){basemap[attrname].addTo(map)}
+    });
+    $.each(overlayMapNames,function(k,v){
+      var attrname = $(jq(v)).parent().text();
+      overlaymap[attrname]=L.tileLayer.provider(v);
+    });
+    L.control.layers(basemap,overlaymap).addTo(map);
     marker= L.marker([olat, olng]).addTo(map);
     var searchControl = new L.esri.Geocoding.Controls.Geosearch().addTo(map);
 
@@ -542,10 +534,17 @@
   });
   //设置
   $('#settingset').click(function () {
-    storage.setItem("mapsource",$('#mapsource').get(0).selectedIndex);
+    var baseMapNames=[],overlayMapNames=[];
+    $('#baseMaps :checked').each(function(){
+      baseMapNames.push($(this).attr('id'));
+    });
+    $('#overlayMaps :checked').each(function(){
+      overlayMapNames.push($(this).attr('id'));
+    });
+    storage.setItem("baseMaps",JSON.stringify(baseMapNames));
+    storage.setItem("overlayMaps",JSON.stringify(overlayMapNames));
     storage.setItem("cloudtype",$('#cloudtype').get(0).selectedIndex);
     storage.setItem("theme",$('#switchtheme').val());
-    var oldtheme = $( "pagemain" ).page( "option", "theme" );
     var theme = $('#switchtheme').val();
     $.mobile.changeGlobalTheme(theme);
     if(map){map.remove();map = null;}
@@ -685,7 +684,7 @@
   $('#suncalc').click(function(){
     var lat = $('#latitude').val();
     var lng = $('#longitude').val();
-    var inputdate = stringToDate($('#inputdate').val(),"yyyy-mm-dd","-");//new Date($('#inputdate').val());
+    var inputdate = stringToDate($('#inputdate').val(),"yyyy-mm-dd","-");
     inputdate = new Date(inputdate.getTime() + 12*60*60*1000);
     var sunrisePos = SunCalc.getPosition(inputdate, lat , lng);
     var sunTimes = SunCalc.getTimes(inputdate, lat , lng);
@@ -727,23 +726,14 @@
 
     var smoonPhase = "";
     var moonPhase = moonIllumination.phase;
-      if(moonPhase < 0.01){
-          smoonPhase = "新月";
-      }else if(moonPhase < 0.24){
-          smoonPhase = "娥眉月";
-      }else if(moonPhase < 0.26){
-          smoonPhase = "上弦月";
-      }else if(moonPhase < 0.49){
-          smoonPhase = "渐盈凸月";
-      }else if(moonPhase < 0.51){
-          smoonPhase = "满月";
-      }else if(moonPhase < 0.74){
-          smoonPhase = "渐亏凸月";
-      }else if(moonPhase < 0.76){
-          smoonPhase = "下弦月";
-      }else{
-          smoonPhase = "残月";
-      }
+      if(moonPhase < 0.01){ smoonPhase = "新月";
+      }else if(moonPhase < 0.24){ smoonPhase = "娥眉月";
+      }else if(moonPhase < 0.26){ smoonPhase = "上弦月";
+      }else if(moonPhase < 0.49){ smoonPhase = "渐盈凸月";
+      }else if(moonPhase < 0.51){ smoonPhase = "满月";
+      }else if(moonPhase < 0.74){ smoonPhase = "渐亏凸月";
+      }else if(moonPhase < 0.76){ smoonPhase = "下弦月";
+      }else{ smoonPhase = "残月"; }
     $('#moonPhase').html(smoonPhase);
   });
 
