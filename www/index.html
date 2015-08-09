@@ -232,8 +232,8 @@
           <ul>
             <li>晨昏蒙影计算不消耗流量</li>
             <li>定位/查询/地图/云图/天气预报将消耗流量</li>
-            <li>云图下载可能会耗费较大流量(每次约300k),云图查询仅下载当前时间最近的云图</li>
-            <li>地图可能会消耗大量流量</li>
+            <li>云图下载可能会耗费较大流量(150-300k),仅下载当前时间最近的云图</li>
+            <li>黑白地图较省流量(15k/per Tile)，Esri地图最耗流量(55k/per Tile),其余约20k/per Tile</li>
           </ul>
           <h4>地图说明</h4>
           <ul>
@@ -242,7 +242,7 @@
             <li>底图中带Mobile的图层注释较大</li>
             <li>天地图、高德地图、MapABC仅有少量国外数据，但加载速度快，请酌情使用</li>
             <li>Mapbox、高德、天地图、OpenStreatMap、MapABC为本地语言,Stamen放大后为本地语言，其余都为英文</li>
-            <li>如果需要显示云图等可选图层，建议勾选‘HERE Night’，显示比较清晰</li>
+            <li>如果需要显示Cloud等可选图层，建议勾选‘HERE Night’，显示比较清晰</li>
           </ul>
           <h4>反馈及建议</h4>
           <ul>
@@ -387,16 +387,13 @@
     fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
     return fmt;
   };
-  function stringToDate(_date,_format,_delimiter)	{
-    var formatLowerCase=_format.toLowerCase();
-    var formatItems=formatLowerCase.split(_delimiter);
-    var dateItems=_date.split(_delimiter);
-    var monthIndex=formatItems.indexOf("mm");
-    var dayIndex=formatItems.indexOf("dd");
-    var yearIndex=formatItems.indexOf("yyyy");
-    var month=parseInt(dateItems[monthIndex]);
-    month-=1;
-    var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
+  function stringToDate(_date)	{
+    var m_date = $.trim(_date);
+    var dateItems=_date.split('-');
+    var yearitem = parseInt(dateItems[0]);
+    var monthitem = parseInt(dateItems[1]);
+    var dayitem = parseInt(dateItems[2]);
+    var formatedDate = new Date(yearitem,monthitem-1,dayitem,12);
     return formatedDate;
   }
   function jq(myid){return "#"+myid.replace(/(\.)/g,"\\$1")}
@@ -689,8 +686,7 @@
   $('#suncalc').click(function(){
     var lat = $('#latitude').val();
     var lng = $('#longitude').val();
-    var inputdate = stringToDate($('#inputdate').val(),"yyyy-mm-dd","-");
-    inputdate = new Date(inputdate.getTime() + 12*60*60*1000);
+    var inputdate = stringToDate($('#inputdate').val());
     var sunrisePos = SunCalc.getPosition(inputdate, lat , lng);
     var sunTimes = SunCalc.getTimes(inputdate, lat , lng);
     $('#sunrise').html(sunTimes.sunrise.format("yyyy/MM/dd hh:mm"));
@@ -719,9 +715,9 @@
     }else{
       $('#moonrise').html(moonTimes.rise.format("yyyy/MM/dd hh:mm"));
     }
-    if(!moonTimes.set){
+    if(!moonTimes.set || ((moonTimes.rise) && (moonTimes.set.getTime() < moonTimes.rise.getTime()))){
       var nextday = new Date(inputdate.getTime() + 24*60*60*1000);
-      var nextmoonTimes = SunCalc.getMoonTimes(prevday, lat , lng);
+      var nextmoonTimes = SunCalc.getMoonTimes(nextday, lat , lng);
       $('#moonset').html(nextmoonTimes.set.format("yyyy/MM/dd hh:mm"));
     }else{
       $('#moonset').html(moonTimes.set.format("yyyy/MM/dd hh:mm"));
