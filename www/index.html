@@ -390,9 +390,9 @@
   function stringToDate(_date)	{
     var m_date = $.trim(_date);
     var dateItems=_date.split('-');
-    var yearitem = parseInt(dateItems[0]);
-    var monthitem = parseInt(dateItems[1]);
-    var dayitem = parseInt(dateItems[2]);
+    var yearitem = parseInt(dateItems[0],10);
+    var monthitem = parseInt(dateItems[1],10);
+    var dayitem = parseInt(dateItems[2],10);
     var formatedDate = new Date(yearitem,monthitem-1,dayitem,12);
     return formatedDate;
   }
