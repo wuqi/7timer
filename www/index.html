@@ -492,7 +492,7 @@
     searchControl.on('results', function(data) {
       if (data.results.length > 0) {
         marker.setLatLng(data.results[0].latlng).update();
-        map.setView(data.results[0].latlng,map.getZoom());
+        map.setView(data.results[0].latlng);
       }
     });
     map.on('dblclick', onMapClick);
@@ -624,7 +624,7 @@
   //search position
   $('#ssearch').click(function(){
     var address = $("#sname").val();
-    L.esri.Geocoding.Tasks.geocode().text(address).run(function(err, results, response){
+    L.esri.Geocoding.geocode().text(address).run(function(err, results, response){
       if(results.results.length > 0){
         $('#slatitude').val(results.results[0].latlng.lat);
         $('#slongitude').val(results.results[0].latlng.lng);
