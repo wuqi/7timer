@@ -463,6 +463,7 @@
   }
   var map = null;
   var marker ;
+  var searchControl = new L.esri.Geocoding.geosearch({providers: [ L.esri.Geocoding.arcgisOnlineProvider()]});
   $(document).on('pageshow', '#pagemap', function() {InitMap();});
   $(window).on("orientationchange",function(){if(map){map.remove();map = null;}InitMap();});
   function InitMap(){
@@ -486,7 +487,7 @@
     });
     L.control.layers(basemap,overlaymap).addTo(map);
     marker= L.marker([olat, olng]).addTo(map);
-    var searchControl = new L.esri.Geocoding.Controls.Geosearch().addTo(map);
+    searchControl.addTo(map);
 
     searchControl.on('results', function(data) {
       if (data.results.length > 0) {
