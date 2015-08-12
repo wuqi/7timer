@@ -359,10 +359,9 @@
           <option value="1">小时预报</option>
         </select>
         <label for="forcastcnt">预报显示数量：</label>
-        <!--<input type="number" min="0" step="1" id="forcastcnt"  data-mini="true"/>-->
          <div data-role="controlgroup" data-type="horizontal" data-mini="true">
-           <input type="text" id="forcastcnt" value="0" disabled="disabled" data-wrapper-class="controlgroup-textinput ui-btn" />
            <button id="plus" data-inline="true">+</button>
+           <button id="forcastcnt" data-inline="true">6</button>
            <button id="minus" data-inline="true">-</button>
          </div>
         <div class="ui-grid-b"> 
@@ -464,9 +463,9 @@
   //forcastcnt
   if(!storage.getItem("forcastcnt")){
     storage.setItem("forcastcnt",3);
-    $('#forcastcnt').val('3');
+    $('#forcastcnt').html('6');
   }else{
-    $('#forcastcnt').val(storage.getItem("forcastcnt"));
+    $('#forcastcnt').html(storage.getItem("forcastcnt"));
   }
   function setSelector() {
     var locations = addresses.locations;
@@ -553,15 +552,15 @@
   });
   //forcastcnt
   $('#plus').unbind('click').bind('click', function () {
-    var value = parseInt($('#forcastcnt').val(),10);
+    var value = parseInt($('#forcastcnt').html(),10);
     value = value < 39 ? value+3 : 39;
-    $('#forcastcnt').val(value);
+    $('#forcastcnt').html(value);
   });
 
   $('#minus').unbind('click').bind('click', function () {
-      var value = $('#forcastcnt').val();
+      var value = $('#forcastcnt').html();
       value = value > 3 ? value-3 : 3;
-      $('#forcastcnt').val(value);
+      $('#forcastcnt').html(value);
   });
   //设置
   $('#settingset').click(function () {
@@ -576,7 +575,7 @@
     storage.setItem("overlayMaps",JSON.stringify(overlayMapNames));
     storage.setItem("cloudtype",$('#cloudtype').get(0).selectedIndex);
     storage.setItem("theme",$('#switchtheme').val());
-    storage.setItem("forcastcnt",$('#forcastcnt').val());
+    storage.setItem("forcastcnt",$('#forcastcnt').html());
     storage.setItem("forcasttype",$('#forcasttype').get(0).selectedIndex);
     var theme = $('#switchtheme').val();
     $.mobile.changeGlobalTheme(theme);
@@ -613,7 +612,7 @@
   $('#weather').click(function(){
     var lat = $('#latitude').val();
     var lng = $('#longitude').val();
-    var cnt = parseInt($('#forcastcnt').val(), 10);;
+    var cnt = parseInt($('#forcastcnt').html(), 10);;
     var requesturl;
     var daily = parseInt($('#forcasttype').get(0).selectedIndex);
     if(daily == 0){
