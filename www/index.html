@@ -269,16 +269,7 @@
     </div>
     <div data-role="content">
       <label for="img"  data-mini="true" id="cityname"></label>
-      <div class="ui-grid-b"> 
-        <div class="ui-block-a"> <p id="fday"></p><img src="" alt="Today" id="fimg"/><p id="fweather"></p></div>
-        <div class="ui-block-b"> <p id="sday"></p><img src="" alt="2st Day" id="simg"/><p id="sweather"></p></div>
-        <div class="ui-block-c"> <p id="tday"></p><img src="" alt="3rd Day " id="timg"/><p id="tweather"></p></div>
-      </div>
-      <div class="ui-grid-b"> 
-        <div class="ui-block-a"> <p id="frday"></p><img src="" alt="4th Day" id="frimg"/><p id="frweather"></p></div>
-        <div class="ui-block-b"> <p id="fvday"></p><img src="" alt="5th Day" id="fvimg"/><p id="fvweather"></p></div>
-        <div class="ui-block-c"> <p id="sxday"></p><img src="" alt="6th Day " id="sximg"/><p id="sxweather"></p></div>
-      </div>
+      <div id="forcast"></div>
       <a href="#pagemain" data-role="button" data-mini="true" data-icon="back" data-transition="slide" data-direction="reverse">返回</a>
     </div>
   </div>
@@ -362,6 +353,18 @@
         <select name="deleteLocs" id="deleteLocs" multiple="multiple" data-native-menu="false" data-mini="true">
           <option>选择</option>
         </select>
+        <label for="forcasttype">天气预报类型：</label>
+        <select name="forcasttype" id="forcasttype" data-native-menu="false" data-mini="true" >
+          <option value="0">两周预报</option>
+          <option value="1">小时预报</option>
+        </select>
+        <label for="forcastcnt">预报显示数量：</label>
+        <!--<input type="number" min="0" step="1" id="forcastcnt"  data-mini="true"/>-->
+         <div data-role="controlgroup" data-type="horizontal" data-mini="true">
+           <input type="text" id="forcastcnt" value="0" disabled="disabled" data-wrapper-class="controlgroup-textinput ui-btn" />
+           <button id="plus" data-inline="true">+</button>
+           <button id="minus" data-inline="true">-</button>
+         </div>
         <div class="ui-grid-b"> 
         <div class="ui-block-a"></div>
         <div class="ui-block-b"><a href="#" data-role="button" id="settingset"  data-icon="check" data-mini="true" >确定</a></div>
@@ -418,7 +421,6 @@
   }
   var baseMapNames=[],overlayMapNames=[];
   //baseMaps
-  
   if(!storage.getItem("baseMaps")){
     baseMapNames.push("HERE.normalDay");
     storage.setItem("baseMaps",JSON.stringify(baseMapNames));
@@ -451,6 +453,20 @@
     var theme = storage.getItem('theme');
     $('#switchtheme').val(theme);
     $.mobile.changeGlobalTheme(theme);
+  }
+  //forcasttype
+  if(!storage.getItem("forcasttype")){
+    storage.setItem("forcasttype",0);
+    $('#forcasttype').get(0).selectedIndex = 0;
+  }else{
+    $('#forcasttype').get(0).selectedIndex = storage.getItem("forcasttype");
+  }
+  //forcastcnt
+  if(!storage.getItem("forcastcnt")){
+    storage.setItem("forcastcnt",3);
+    $('#forcastcnt').val('3');
+  }else{
+    $('#forcastcnt').val(storage.getItem("forcastcnt"));
   }
   function setSelector() {
     var locations = addresses.locations;
@@ -535,6 +551,18 @@
     $('#slongitude').val("");
     $('#pagesearch').popup('open',{y:0});
   });
+  //forcastcnt
+  $('#plus').unbind('click').bind('click', function () {
+    var value = parseInt($('#forcastcnt').val(),10);
+    value = value < 39 ? value+3 : 39;
+    $('#forcastcnt').val(value);
+  });
+
+  $('#minus').unbind('click').bind('click', function () {
+      var value = $('#forcastcnt').val();
+      value = value > 3 ? value-3 : 3;
+      $('#forcastcnt').val(value);
+  });
   //设置
   $('#settingset').click(function () {
     var baseMapNames=[],overlayMapNames=[];
@@ -548,6 +576,8 @@
     storage.setItem("overlayMaps",JSON.stringify(overlayMapNames));
     storage.setItem("cloudtype",$('#cloudtype').get(0).selectedIndex);
     storage.setItem("theme",$('#switchtheme').val());
+    storage.setItem("forcastcnt",$('#forcastcnt').val());
+    storage.setItem("forcasttype",$('#forcasttype').get(0).selectedIndex);
     var theme = $('#switchtheme').val();
     $.mobile.changeGlobalTheme(theme);
     if(map){map.remove();map = null;}
@@ -583,41 +613,34 @@
   $('#weather').click(function(){
     var lat = $('#latitude').val();
     var lng = $('#longitude').val();
-    var requesturl = "http://api.openweathermap.org/data/2.5/forecast/daily?lat="+ lat+"&lon="+lng+"&cnt=6&units=metric&lang=zh_cn&callback=?";
+    var cnt = parseInt($('#forcastcnt').val(), 10);;
+    var requesturl;
+    var daily = parseInt($('#forcasttype').get(0).selectedIndex);
+    if(daily == 0){
+      requesturl = "http://api.openweathermap.org/data/2.5/forecast/daily?lat="+ lat+"&lon="+lng+"&cnt="+ cnt +"&units=metric&lang=zh_cn&callback=?";}else{
+      requesturl = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lng+"&cnt="+ cnt +"&units=metric&lang=zh_cn&callback=?"
+    }
     var curdate = new Date();
     $.getJSON(requesturl, null, function(result) {
-      var weatherinfos = new Array();
-      var icons = new Array();
-      var days = new Array();
-      for(var i=0;i<6;i++){
-        var weatherinfo = result.list[i].temp.min +"-"+result.list[i].temp.max+"℃<br/>"+result.list[i].weather[0].description+"<br/>云量:"+result.list[i].clouds+"%";
-        var icon = "weather/"+result.list[i].weather[0].icon+'.png';
-        var day = curdate.format('MM-dd');
-        weatherinfos.push(weatherinfo);
-        icons.push(icon);
-        days.push(day);
-        curdate = new Date(curdate.getTime() + 1*24*60*60*1000);
+      var divinfo = "";
+      cnt = result.list.length;
+      cnt -= cnt%3;
+      for(var i=0;i<cnt;i+=3){
+        if(daily == 0){
+           divinfo += '<div class="ui-grid-b"><div class="ui-block-a"><p>'+ curdate.format('MM-dd') +'</p><img src="'+"weather/"+result.list[i].weather[0].icon+'.png'+'"/><p>'+result.list[i].temp.min +"-"+result.list[i].temp.max+"℃<br/>"+result.list[i].weather[0].description+"<br/>云量:"+result.list[i].clouds+"%"+'</p></div><div class="ui-block-b"><p>';
+          curdate = new Date(curdate.getTime() + 1*24*60*60*1000);
+          divinfo += curdate.format('MM-dd') +'</p><img src="'+"weather/"+result.list[i+1].weather[0].icon+'.png'+'"/><p>'+result.list[i+1].temp.min +"-"+result.list[i+1].temp.max+"℃<br/>"+result.list[i+1].weather[0].description+"<br/>云量:"+result.list[i+1].clouds+"%"+'</p></div><div class="ui-block-c"><p>';
+          curdate = new Date(curdate.getTime() + 1*24*60*60*1000);
+          divinfo += curdate.format('MM-dd') +'</p><img src="'+"weather/"+result.list[i+2].weather[0].icon+'.png'+'"/><p>'+result.list[i+2].temp.min +"-"+result.list[i+2].temp.max+"℃<br/>"+result.list[i+2].weather[0].description+"<br/>云量:"+result.list[i+2].clouds+"%"+'</p></div></div>';
+          curdate = new Date(curdate.getTime() + 1*24*60*60*1000);
+        }else{
+          divinfo += '<div class="ui-grid-b"><div class="ui-block-a"><p>'+result.list[i].dt_txt+'</p><img src="'+"weather/"+result.list[i].weather[0].icon+'.png'+'"/><p>'+result.list[i].main.temp_min +"-"+result.list[i].main.temp_max+"℃<br/>"+result.list[i].weather[0].description+"<br/>云量:"+result.list[i].clouds.all+"%"+'</p></div><div class="ui-block-b"><p>';
+          divinfo += result.list[i+1].dt_txt+'</p><img src="'+"weather/"+result.list[i+1].weather[0].icon+'.png'+'"/><p>'+result.list[i+1].main.temp_min +"-"+result.list[i+1].main.temp_max+"℃<br/>"+result.list[i+1].weather[0].description+"<br/>云量:"+result.list[i+1].clouds.all+"%"+'</p></div><div class="ui-block-c"><p>';
+          divinfo+=result.list[i+2].dt_txt+'</p><img src="'+"weather/"+result.list[i+2].weather[0].icon+'.png'+'"/><p>'+result.list[i+2].main.temp_min +"-"+result.list[i+2].main.temp_max+"℃<br/>"+result.list[i+2].weather[0].description+"<br/>云量:"+result.list[i+2].clouds.all+"%"+'</p></div></div>';
+        }
       }
-      //cityname
-      $('#cityname').html("站点名称："+result.city.name);
-      $('#fday').html(days[0]);
-      $('#fweather').html(weatherinfos[0]);
-      $('#fimg').attr("src", icons[0]);
-      $('#sday').html(days[1]);
-      $('#sweather').html(weatherinfos[1]);
-      $('#simg').attr("src", icons[1]);
-      $('#tday').html(days[2]);
-      $('#tweather').html(weatherinfos[2]);
-      $('#timg').attr("src", icons[2]);
-      $('#frday').html(days[3]);
-      $('#frweather').html(weatherinfos[3]);
-      $('#frimg').attr("src", icons[3]);
-      $('#fvday').html(days[4]);
-      $('#fvweather').html(weatherinfos[4]);
-      $('#fvimg').attr("src", icons[4]);
-      $('#sxday').html(days[5])
-      $('#sxweather').html(weatherinfos[5]);
-      $('#sximg').attr("src", icons[5]);
+      $('#cityname').html("站点名称："+result.city.name +"  UTC±00:00");
+      $('#forcast').html(divinfo);
     });
     $.mobile.changePage( "#pageweather",{transition:'slide'});
   });
