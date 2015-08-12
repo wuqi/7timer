@@ -353,11 +353,13 @@
         <select name="deleteLocs" id="deleteLocs" multiple="multiple" data-native-menu="false" data-mini="true">
           <option>选择</option>
         </select>
-        <label for="forcasttype">天气预报类型：</label>
-        <select name="forcasttype" id="forcasttype" data-native-menu="false" data-mini="true" >
-          <option value="0">两周预报</option>
-          <option value="1">小时预报</option>
-        </select>
+        <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="forcasttype">
+            <legend>天气预报类型：</legend>
+            <input name="forcasttype" id="dailyforcast" value="on" checked="checked" type="radio">
+            <label for="dailyforcast">逐日预报</label>
+            <input name="forcasttype" id="hourforcast" value="off" type="radio">
+            <label for="hourforcast">小时预报</label>
+        </fieldset>
         <label for="forcastcnt">预报显示数量：</label>
          <div data-role="controlgroup" data-type="horizontal" data-mini="true">
            <button id="plus" data-inline="true">+</button>
@@ -455,10 +457,11 @@
   }
   //forcasttype
   if(!storage.getItem("forcasttype")){
-    storage.setItem("forcasttype",0);
-    $('#forcasttype').get(0).selectedIndex = 0;
+    storage.setItem("forcasttype","dailyforcast");
+    $(jq("dailyforcast")).prop('checked',true);
   }else{
-    $('#forcasttype').get(0).selectedIndex = storage.getItem("forcasttype");
+    var forcasttype = storage.getItem("forcasttype");
+    $(jq(forcasttype)).prop('checked',true);
   }
   //forcastcnt
   if(!storage.getItem("forcastcnt")){
@@ -576,7 +579,7 @@
     storage.setItem("cloudtype",$('#cloudtype').get(0).selectedIndex);
     storage.setItem("theme",$('#switchtheme').val());
     storage.setItem("forcastcnt",$('#forcastcnt').html());
-    storage.setItem("forcasttype",$('#forcasttype').get(0).selectedIndex);
+    storage.setItem("forcasttype",$('#dailyforcast').is(':checked')?"dailyforcast":"hourforcast");
     var theme = $('#switchtheme').val();
     $.mobile.changeGlobalTheme(theme);
     if(map){map.remove();map = null;}
@@ -614,8 +617,8 @@
     var lng = $('#longitude').val();
     var cnt = parseInt($('#forcastcnt').html(), 10);;
     var requesturl;
-    var daily = parseInt($('#forcasttype').get(0).selectedIndex);
-    if(daily == 0){
+    var daily = $('#dailyforcast').is(':checked');
+    if(daily){
       requesturl = "http://api.openweathermap.org/data/2.5/forecast/daily?lat="+ lat+"&lon="+lng+"&cnt="+ cnt +"&units=metric&lang=zh_cn&callback=?";}else{
       requesturl = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lng+"&cnt="+ cnt +"&units=metric&lang=zh_cn&callback=?"
     }
@@ -625,7 +628,7 @@
       cnt = result.list.length;
       cnt -= cnt%3;
       for(var i=0;i<cnt;i+=3){
-        if(daily == 0){
+        if(daily){
            divinfo += '<div class="ui-grid-b"><div class="ui-block-a"><p>'+ curdate.format('MM-dd') +'</p><img src="'+"weather/"+result.list[i].weather[0].icon+'.png'+'"/><p>'+result.list[i].temp.min +"-"+result.list[i].temp.max+"℃<br/>"+result.list[i].weather[0].description+"<br/>云量:"+result.list[i].clouds+"%"+'</p></div><div class="ui-block-b"><p>';
           curdate = new Date(curdate.getTime() + 1*24*60*60*1000);
           divinfo += curdate.format('MM-dd') +'</p><img src="'+"weather/"+result.list[i+1].weather[0].icon+'.png'+'"/><p>'+result.list[i+1].temp.min +"-"+result.list[i+1].temp.max+"℃<br/>"+result.list[i+1].weather[0].description+"<br/>云量:"+result.list[i+1].clouds+"%"+'</p></div><div class="ui-block-c"><p>';
