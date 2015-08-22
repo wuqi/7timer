@@ -458,10 +458,12 @@
   //forcasttype
   if(!storage.getItem("forcasttype")){
     storage.setItem("forcasttype","dailyforcast");
-    $(jq("dailyforcast")).prop('checked',true);
+    $(jq("dailyforcast")).prop('checked',true).checkboxradio( "refresh" );
   }else{
     var forcasttype = storage.getItem("forcasttype");
-    $(jq(forcasttype)).prop('checked',true);
+    var uncheckbox = forcasttype == "dailyforcast"? "hourforcast":"dailyforcast";
+    $(jq(forcasttype)).prop('checked',true).checkboxradio( "refresh" );
+    $(jq(uncheckbox)).prop('checked',false).checkboxradio( "refresh" );
   }
   //forcastcnt
   if(!storage.getItem("forcastcnt")){
