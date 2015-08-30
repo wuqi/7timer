@@ -536,7 +536,7 @@
       $.mobile.toast({ message: e.message,position:"center" });
     }
     $('#slocate').click(function() {
-        navigator.geolocation.getCurrentPosition(disp,errdisp);
+        navigator.geolocation.getCurrentPosition(disp,errdisp,{ maximumAge: 3000, timeout: 5000});
     });
   }
   //initial
