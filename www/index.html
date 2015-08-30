@@ -10,6 +10,7 @@
   <script type="text/javascript" src="esri-leaflet-geocoder.js"></script>
   <script type="text/javascript" src="leaflet-providers.js"></script>
   <script type="text/javascript" src="suncalc.js"></script>
+  <script type="text/javascript" src="jquery.mobile.toast.min.js"></script>
   <script type="text/javascript" src="jqm-datebox.all.min.js"></script>
   <script type="text/javascript" src="jquery.panzoom.min.js"></script>
   <script type="text/javascript" src="cordova.js"></script>
@@ -527,12 +528,15 @@
 
   function onDeviceReady() {
     function disp(pos) {
-       $("#sname").val("新地点");
+       if($("#sname").val() === ""){$("#sname").val("新地点");}
        $('#slatitude').val(pos.coords.latitude);
        $('#slongitude').val(pos.coords.longitude);
     }
+    function errdisp(e){
+      $.mobile.toast({ message: e.message,position:"center" });
+    }
     $('#slocate').click(function() {
-        navigator.geolocation.getCurrentPosition(disp);
+        navigator.geolocation.getCurrentPosition(disp,errdisp);
     });
   }
   //initial
@@ -655,7 +659,7 @@
       if(results.results.length > 0){
         $('#slatitude').val(results.results[0].latlng.lat);
         $('#slongitude').val(results.results[0].latlng.lng);
-      }
+      }else{$.mobile.toast({ message: '查询失败',position:"center" });}
     });
   });
   //显示popup
