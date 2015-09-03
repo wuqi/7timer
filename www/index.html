@@ -14,6 +14,7 @@
   <script type="text/javascript" src="jquery.mobile.toast.min.js"></script>
   <script type="text/javascript" src="jqm-datebox.all.min.js"></script>
   <script type="text/javascript" src="jquery.panzoom.min.js"></script>
+  <script type="text/javascript" src="fastclick.js"></script>
   <link rel="stylesheet" href="leaflet.css"/>
   <link rel="stylesheet" href="esri-leaflet-geocoder.css"/>
   <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
@@ -330,6 +331,8 @@
           <label><input type="checkbox" id="OpenWeatherMap.Snow">Snow</label>
           <label><input type="checkbox" id="OpenWeatherMap.Temperature">Temperature</label>
           <label><input type="checkbox" id="NASAGIBS.ViirsEarthAtNight2012">Earth At Night2012</label>
+          <label><input type="checkbox" id="Lightpollutionmap2015">Light Pollution 2015</label>
+          <label><input type="checkbox" id="Lightpollutionmap2014">Light Pollution 2014</label>
           <label><input type="checkbox" id="NASAGIBS.ModisTerraLSTDay">Modis Terra LST Day</label>
           <label><input type="checkbox" id="NASAGIBS.ModisTerraAOD">Modis Terra AOD</label>
           </div>
@@ -375,6 +378,7 @@
     </div>
   </div>
   <script type="text/javascript">
+  $(function({FastClick.attach(document.body)}));
   Date.prototype.format = function(fmt) { //author: meizz
     var o = {   
       "M+" : this.getMonth()+1,                 //月份
@@ -503,6 +507,8 @@
       if(k==0){basemap[attrname].addTo(map)}
     });
     $.each(overlayMapNames,function(k,v){
+      if(v==="Lightpollutionmap2014"){overlaymap["Light Pollution 2014"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2014',format:'image/png',transparent:true,opacity: 0.6,attribution:"lightpollutionmap.info"});return;}
+      if(v==="Lightpollutionmap2015"){overlaymap["Light Pollution 2015"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2015',format:'image/png',transparent:true,opacity: 0.6,attribution:"lightpollutionmap.info"});return;}
       var attrname = $(jq(v)).parent().text();
       overlaymap[attrname]=L.tileLayer.provider(v);
     });
