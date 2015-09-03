@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <script type="text/javascript" src="cordova.js"></script>
   <script type="text/javascript" src="jquery.min.js"></script>
   <script type="text/javascript" src="jquery.mobile-1.4.5.min.js"></script>
   <script type="text/javascript" src="leaflet.js"></script>
@@ -13,7 +14,6 @@
   <script type="text/javascript" src="jquery.mobile.toast.min.js"></script>
   <script type="text/javascript" src="jqm-datebox.all.min.js"></script>
   <script type="text/javascript" src="jquery.panzoom.min.js"></script>
-  <script type="text/javascript" src="cordova.js"></script>
   <link rel="stylesheet" href="leaflet.css"/>
   <link rel="stylesheet" href="esri-leaflet-geocoder.css"/>
   <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
@@ -484,7 +484,7 @@
   }
   var map = null;
   var marker ;
-  var searchControl = new L.esri.Geocoding.geosearch({providers: [ L.esri.Geocoding.arcgisOnlineProvider()]});
+  var searchControl;
   $(document).on('pageshow', '#pagemap', function() {InitMap();});
   $(window).on("orientationchange",function(){if(map){map.remove();map = null;}InitMap();});
   function InitMap(){
@@ -508,6 +508,7 @@
     });
     L.control.layers(basemap,overlaymap).addTo(map);
     marker= L.marker([olat, olng]).addTo(map);
+    if(searchControl === undefined){searchControl = new L.esri.Geocoding.geosearch({providers: [ L.esri.Geocoding.arcgisOnlineProvider()]});}
     searchControl.addTo(map);
 
     searchControl.on('results', function(data) {
@@ -759,14 +760,15 @@
 
     var smoonPhase = "";
     var moonPhase = moonIllumination.phase;
-      if(moonPhase < 0.01){ smoonPhase = "新月";
-      }else if(moonPhase < 0.24){ smoonPhase = "娥眉月";
-      }else if(moonPhase < 0.26){ smoonPhase = "上弦月";
-      }else if(moonPhase < 0.49){ smoonPhase = "渐盈凸月";
-      }else if(moonPhase < 0.51){ smoonPhase = "满月";
-      }else if(moonPhase < 0.74){ smoonPhase = "渐亏凸月";
-      }else if(moonPhase < 0.76){ smoonPhase = "下弦月";
-      }else{ smoonPhase = "残月"; }
+    alert(moonPhase);
+    if(moonPhase < 0.03 || moonPhase > 0.98){ smoonPhase = "新月";
+    }else if(moonPhase < 0.27){ smoonPhase = "娥眉月";
+    }else if(moonPhase < 0.23){ smoonPhase = "上弦月";
+    }else if(moonPhase < 0.47){ smoonPhase = "渐盈凸月";
+    }else if(moonPhase < 0.53){ smoonPhase = "满月";
+    }else if(moonPhase < 0.73){ smoonPhase = "渐亏凸月";
+    }else if(moonPhase < 0.77){ smoonPhase = "下弦月";
+    }else{ smoonPhase = "残月"; }
     $('#moonPhase').html(smoonPhase);
   });
 
