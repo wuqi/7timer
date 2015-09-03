@@ -1,1 +1,780 @@
-<!DOCTYPE html><html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /><script type="text/javascript" src="cordova.js"></script><script type="text/javascript" src="jquery.min.js"></script><script type="text/javascript" src="jquery.mobile-1.4.5.min.js"></script><script type="text/javascript" src="leaflet.js"></script><script type="text/javascript" src="esri-leaflet.js"></script><script type="text/javascript" src="esri-leaflet-geocoder.js"></script><script type="text/javascript" src="leaflet-providers.js"></script><script type="text/javascript" src="suncalc.js"></script><script type="text/javascript" src="jquery.mobile.toast.min.js"></script><script type="text/javascript" src="jqm-datebox.all.min.js"></script><script type="text/javascript" src="jquery.panzoom.min.js"></script><link rel="stylesheet" href="leaflet.css"/><link rel="stylesheet" href="esri-leaflet-geocoder.css"/><link rel="stylesheet" href="jquery.mobile-1.4.5.min.css"><link rel="stylesheet" href="jqm-datebox.min.css"><style type="text/css" >  #pagemap>.ui-content {      position: absolute;      top: 40px;      right: 0;      bottom: 0;      left: 0;      padding: 0 !important;  }  #map {      height: 100%;  }</style></head><body><div data-role="page" id="pagemain" class="page"><div data-role="header" data-position="fixed"><h1>晴天钟</h1><div data-role="navbar" data-iconpos="left"><ul><li><a href="#pagemap" data-icon="eye" data-transition="slide">地图</a></li><li><a href="#pagesettings" data-icon="gear" data-transition="slide">设置</a></li><li><a href="#pageinfo" data-icon="info"  data-transition="slide">说明</a></li></ul></div></div><div data-role="content" style="padding: 10px"><div data-role="fieldcontain"><label for="address">地名：</label><select name="address" id="address" data-native-menu="false"  data-mini="true" ></select></div><div data-role="fieldcontain"><label for="longitude"  data-mini="true" >经度：</label><input type="text" name="longitude" id="longitude" value=""  data-mini="true" ></div><div data-role="fieldcontain"><label for="latitude"  data-mini="true" >纬度：</label><input type="text" name="latitude" id="latitude" value=""  data-mini="true" ></div><div data-role="fieldcontain"><label for="inputdate"  data-mini="true" >时间：</label><input type="text" name="inputdate" id="inputdate"  data-mini="true" data-role="datebox" data-options='{"mode":"calbox","useFocus":"true","overrideDateFormat":"%Y-%m-%d "}'/></div><div class="ui-grid-b btngroup"><div class="ui-block-a"><a href="#" data-role="button" id="clock" data-transition="slide" data-icon="clock"  data-mini="true" >晴天钟</a></div><div class="ui-block-b"><a href="#pageresult" data-role="button" id="suncalc" data-transition="slide" data-icon="star" data-mini="true" >晨昏蒙影</a></div><div class="ui-block-c"><a href="#pagesearch" data-role="button" id="newLoc" data-transition="slide" data-icon="plus" data-rel="popup" data-mini="true" >添加地点</a></div></div><div class="ui-grid-a"><div class="ui-block-a"><a href="#" data-role="button" id="weather" data-transition="slide" data-icon="calendar"  data-mini="true">天气预报</a></div><div class="ui-block-b"><a href="#" data-role="button" id="nircloud" data-transition="slide" data-icon="cloud" data-mini="true" >红外云图</a></div></div></div><div data-role="popup" id="pagesearch" style="width:100%"  data-dismissible="false"><div data-role="header"><h1>添加新地点</h1><a href="#" data-rel="back" data-icon="delete" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all">Close</a></div><div data-role="content"><div data-role="fieldcontain" ><input type="text" name="sname" id="sname" placeholder = "地点"><input type="text" name="slongitude" id="slongitude" placeholder = "经度"><input type="text" name="slatitude" id="slatitude" placeholder = "纬度"></div><div class="ui-grid-b"><div class="ui-block-a"><a href="#" data-role="button" id="slocate"  data-mini="true" data-icon="location">定位</a></div><div class="ui-block-b"><a href="#" data-role="button" id="ssearch"  data-mini="true" data-icon="search">搜索</a></div><div class="ui-block-c"><a href="#" data-role="button" id="sok"  data-mini="true" data-icon="check">确定</a></div></div></div></div></div><div data-role="page" id="pagemap" class="page"><div data-role="header" data-position="fixed"><h1>地图</h1><a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a><a href="#" data-role="button" data-icon="clock" id="headerClock">晴天钟</a></div><div data-role="content"><div id="map" style="float:left height:100% min-height:100% width:100%"></div></div></div><div data-role="page" id="pageresult" class="page"><div data-role="header"><h1>晨昏蒙影</h1><a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a></div><div data-role="content"><table><thead><tr><th align="left">晨昏蒙影</th></tr></thead><tbody><tr><td align="left">日出起始时间</td><td id = "sunrise" align="right"></td></tr><tr><td align="left">日出结束时间</td><td id = "sunriseEnd" align="right"></td></tr><tr><td align="left">日出黄金时间</td><td id = "goldenHourEnd" align="right"></td></tr><tr><td align="left">日落黄金时间</td><td id = "goldenHour" align="right"></td></tr><tr><td align="left">太阳最高点时间</td><td id = "solarNoon" align="right"></td></tr><tr><td align="left">日落开始时间</td><td id = "sunsetStart" align="right"></td></tr><tr><td align="left">民用晨光始</td><td id = "dawn" align="right"></td></tr><tr><td align="left">民用昏影终</td><td id = "sunset" align="right"></td></tr><tr><td align="left">航海晨光始</td><td id = "nauticalDawn" align="right"></td></tr><tr><td align="left">航海昏影终</td><td id = "dusk" align="right"></td></tr><tr><td align="left">天文晨光始</td><td id = "nightEnd" align="right"></td></tr><tr><td align="left">天文昏影终</td><td id = "nauticalDusk" align="right"></td></tr><tr><td align="left">黑暗</td><td id = "night" align="right"></td></tr><tr><td align="left">最暗时刻</td><td id = "nadir" align="right"></td></tr></tbody><thead><tr><th align="left">月相</th></tr></thead><tbody><tr><td align="left">月出时间</td><td id = "moonrise" align="right"></td></tr><tr><td align="left">月落时间</td><td id = "moonset" align="right"></td></tr><tr><td align="left">月相</td><td id = "moonPhase" align="right"></td></tr><tr><td align="left">亮度</td><td id = "light" align="right"></td></tr></tbody></table></div></div><div data-role="page" id="pageinfo" class="page"><div data-role="header" data-position="fixed"><h1>软件说明</h1><a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a></div><div data-role="content"><div><h4>软件说明:</h4><ul><li>本软件使用<a onclick="navigator.app.loadUrl('http://phonegap.com', { openExternal:true });">PhoneGap</a> 开发</li><li>软件最新版本可在<a onclick="navigator.app.loadUrl('https://build.phonegap.com/apps/1575380/builds', { openExternal:true });">PhoneGap App</a> 上下载</li><li>软件源码在<a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer', { openExternal:true });">Github</a> 上托管</li><li>晴天钟数据来源:<a onclick="navigator.app.loadUrl('http://202.127.24.18', { openExternal:true });">7Timer</a></li><li>地图显示使用<a onclick="navigator.app.loadUrl('http://leafletjs.com/', { openExternal:true });">Leafletjs</a> 库</li><li>晨昏蒙影计算:<a onclick="navigator.app.loadUrl('https://github.com/mourner/suncalc', { openExternal:true });">Suncalc</a></li><li>天气预报来源:<a onclick="navigator.app.loadUrl('http://openweathermap.org/forecast16', { openExternal:true });">OpenWeatherMap</a></li><li>云图数据来源:<a onclick="navigator.app.loadUrl('http://www.nsmc.cma.gov.cn/NSMC/Channels/100028.html', { openExternal:true });">国家气象卫星中心</a></li></ul><h4>使用说明:</h4><ul><li>地图模式下，双击选择位置，点击晴天钟按钮显示天气</li><li>地图模式或者添加新地点中搜索框中，可以使用空格，中文，英文搜索，例如：“湖北 武汉 武汉大学”</li><li>如果地图无法加载，可以尝试在设置中更换地图，更换后，地图将自动重置到起点</li><li>设置中可以更换红外云图模式，如果需要其他模式，请参考《反馈及建议》部分提出建议</li><li>地图默认起始位置为所选地点</li></ul><h4>网络说明:</h4><ul><li>晨昏蒙影计算不消耗流量</li><li>定位/查询/地图/云图/天气预报将消耗流量</li><li>云图下载可能会耗费较大流量(150-300k),仅下载当前时间最近的云图</li><li>黑白地图较省流量(15k/per Tile)，Esri地图最耗流量(55k/per Tile),其余约20k/per Tile</li></ul><h4>地图说明</h4><ul><li>地图设置中分为底图设置和可选图层设置，底图只能显示一个，可以切换，可选图层都为透明，可以叠加显示</li><li>水彩地图和天地图需要单独添加注释图层</li><li>底图中带Mobile的图层注释较大</li><li>天地图、高德地图、MapABC仅有少量国外数据，但加载速度快，请酌情使用</li><li>Mapbox、高德、天地图、OpenStreatMap、MapABC为本地语言,Stamen放大后为本地语言，其余都为英文</li><li>如果需要显示Cloud等可选图层，建议勾选‘HERE Night’，显示比较清晰</li></ul><h4>反馈及建议</h4><ul><li>请使用<a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer/issues', { openExternal:true });">Github Issue</a> 反馈问题或提出建议(需要注册Github账号)</li></ul></div></div></div><div data-role="page" id="pageclock" class="page"><div data-role="header"><h1>晴天钟</h1><a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a></div><div  id="clockcontent" height="100%"><img src=""  alt="晴天钟" id="imgClock" width="100%"/></div></div><div data-role="page" id="pageweather" class="page"><div data-role="header"><h1>天气预报</h1><a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a></div><div data-role="content"><label for="img"  data-mini="true" id="cityname"></label><div id="forcast"></div><a href="#pagemain" data-role="button" data-mini="true" data-icon="back" data-transition="slide" data-direction="reverse">返回</a></div></div><div data-role="page" id="pagecloud" class="page"><div data-role="header"><h1>红外云图</h1><a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a></div><label for="img"  data-mini="true" id="cloudLable"></label><div  id="cloudcontent" height="100%"><img src="" alt="红外云图" id="imgCloud" width="100%"/></div></div><div data-role="page" id="pagesettings" class="page"><div data-role="header"><h1>设置</h1><a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a></div><div data-role="content"><label for="baseMaps">地图设置：</label><fieldset data-role="collapsible" data-mini="true" id="baseMaps"><legend>底图：</legend><div data-role="controlgroup"><label><input type="checkbox" id="Stamen.Toner"/>黑白地图</label><label><input type="checkbox" id="Stamen.TonerLite"/>灰白地图</label><label><input type="checkbox" id="Stamen.Watercolor"/>水彩地图</label><label><input type="checkbox" id="TianDiTu.Map"/>天地图</label><label><input type="checkbox" id="MapABC"/>MapABC</label><label><input type="checkbox" id="GaoDe"/>高德</label><label><input type="checkbox" id="Esri.WorldStreetMap"/>Esri街道图</label><label><input type="checkbox" id="Esri.WorldTopoMap"/>Esri地形图</label><label><input type="checkbox" id="OpenStreetMap.Mapnik"/>OpenStreetMap</label><label><input type="checkbox" id="MapBox"/>Mapbox</label><label><input type="checkbox" id="HERE.normalDay"/>Here</label><label><input type="checkbox" id="HERE.normalDayMobile"/>Here Mobile</label><label><input type="checkbox" id="HERE.normalNight"/>Here Night</label><label><input type="checkbox" id="HERE.normalNightMobile"/>Here Night Mobile</label><label><input type="checkbox" id="HERE.terrainDayMobile"/>Here地形图</label><label><input type="checkbox" id="HERE.hybridDay"/>Here卫星图</label><label><input type="checkbox" id="HERE.hybridDayMobile"/>Here Satellite Mobile</label><label><input type="checkbox" id="NASAGIBS.ModisTerraTrueColorCR"/>Modis Terra</label></div></fieldset><fieldset data-role="collapsible" data-mini="true" id="overlayMaps"><legend>可选图层：</legend><div data-role="controlgroup"><label><input type="checkbox" id="Stamen.TonerLabels">水彩地图注记</label><label><input type="checkbox" id="TianDiTu.Annotion">天地图注记</label><label><input type="checkbox" id="OpenWeatherMap.Clouds">Clouds</label><label><input type="checkbox" id="OpenWeatherMap.CloudsClassic">Clouds Classic</label><label><input type="checkbox" id="OpenWeatherMap.Precipitation">Precipitation</label><label><input type="checkbox" id="OpenWeatherMap.PrecipitationClassic">Precipitation Classic</label><label><input type="checkbox" id="OpenWeatherMap.Rain">Rain</label><label><input type="checkbox" id="OpenWeatherMap.Wind">Wind</label><label><input type="checkbox" id="OpenWeatherMap.Snow">Snow</label><label><input type="checkbox" id="OpenWeatherMap.Temperature">Temperature</label><label><input type="checkbox" id="NASAGIBS.ViirsEarthAtNight2012">Earth At Night2012</label><label><input type="checkbox" id="NASAGIBS.ModisTerraLSTDay">Modis Terra LST Day</label><label><input type="checkbox" id="NASAGIBS.ModisTerraAOD">Modis Terra AOD</label></div></fieldset><label for="cloudtype">红外云图类型：</label><select name="cloudtype" id="cloudtype" data-native-menu="false" data-mini="true" ><option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_CLC_GRA_">中国区域红外一彩色</option><option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_IR1_COL_">中国区域红外一增强</option><option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_IR2_COL_">中国区域红外二增强</option><option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2/F2DE/FY2X_ANI_CLC_ECN_">双星红外一彩色</option><option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_CLC_GRA_">圆盘图红外一彩色</option><option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR1_COL_">圆盘图红外一增强</option><option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR2_COL_">圆盘图红外二增强</option></select><label for="switchtheme">切换主题：</label><select name="switchtheme" id="switchtheme" data-native-menu="false" data-mini="true" ><option value="a">白色</option><option value="b">黑色</option><option value="c">简单</option></select><label for="deleteLocs">删除地点:</label><select name="deleteLocs" id="deleteLocs" multiple="multiple" data-native-menu="false" data-mini="true"><option>选择</option></select><fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="forcasttype"><legend>天气预报类型：</legend><input name="forcasttype" id="dailyforcast" value="on" checked="checked" type="radio"><label for="dailyforcast">逐日预报</label><input name="forcasttype" id="hourforcast" value="off" type="radio"><label for="hourforcast">小时预报</label></fieldset><label for="forcastcnt">预报显示数量：</label><div data-role="controlgroup" data-type="horizontal" data-mini="true"><button id="plus" data-inline="true">+</button><button id="forcastcnt" data-inline="true">6</button><button id="minus" data-inline="true">-</button></div><div class="ui-grid-b"><div class="ui-block-a"></div><div class="ui-block-b"><a href="#" data-role="button" id="settingset"  data-icon="check" data-mini="true" >确定</a></div><div class="ui-block-c"><a href="#pagemain" data-role="button" id="settingcancel" data-icon="back" data-mini="true"  data-transition="slide" data-direction="reverse">取消</a></div></div></div></div><script type="text/javascript">Date.prototype.format=function(fmt){var o={"M+":this.getMonth()+1,"d+":this.getDate(),"h+":this.getHours(),"m+":this.getMinutes(),"s+":this.getSeconds(),"q+":Math.floor((this.getMonth()+3)/3),"S":this.getMilliseconds()};if(/(y+)/.test(fmt)){fmt=fmt.replace(RegExp.$1,(this.getFullYear()+"").substr(4-RegExp.$1.length))}for(var k in o){if(new RegExp("("+k+")").test(fmt)){fmt=fmt.replace(RegExp.$1,(RegExp.$1.length==1)?(o[k]):(("00"+o[k]).substr((""+o[k]).length)))}}return fmt};function stringToDate(_date){var m_date=$.trim(_date);var dateItems=_date.split("-");var yearitem=parseInt(dateItems[0],10);var monthitem=parseInt(dateItems[1],10);var dayitem=parseInt(dateItems[2],10);var formatedDate=new Date(yearitem,monthitem-1,dayitem,12);return formatedDate}function jq(myid){return"#"+myid.replace(/(\.)/g,"\\$1")}var storage=window.localStorage;var addresses;$.mobile.changeGlobalTheme=function(theme){if(document.readyState=="complete"){$(".page").page("option","theme",theme)}else{$(".page").page({"theme":theme})}};if(!storage.getItem("addresses")){addresses={locations:[{name:"北京",lat:39.9,lng:116.4},{name:"武汉",lat:30.6,lng:114.3}]};storage.setItem("addresses",JSON.stringify(addresses));setSelector()}else{addresses=JSON.parse(storage.getItem("addresses"));setSelector()}var baseMapNames=[],overlayMapNames=[];if(!storage.getItem("baseMaps")){baseMapNames.push("HERE.normalDay");storage.setItem("baseMaps",JSON.stringify(baseMapNames));$(jq("HERE.normalDay")).attr("checked",true)}else{baseMapNames=JSON.parse(storage.getItem("baseMaps"));$.each(baseMapNames,function(k,v){$(jq(v)).attr("checked",true)})}if(!storage.getItem("overlayMaps")){overlayMapNames.push("OpenWeatherMap.Clouds");storage.setItem("overlayMaps",JSON.stringify(overlayMapNames));$(jq("OpenWeatherMap.Clouds")).attr("checked",true)}else{overlayMapNames=JSON.parse(storage.getItem("overlayMaps"));$.each(overlayMapNames,function(k,v){$(jq(v)).attr("checked",true)})}if(!storage.getItem("cloudtype")){storage.setItem("cloudtype",0);$("#cloudtype").get(0).selectedIndex=0}else{$("#cloudtype").get(0).selectedIndex=storage.getItem("cloudtype")}if(!storage.getItem("theme")){storage.setItem("theme","a");$.mobile.changeGlobalTheme(theme)}else{var theme=storage.getItem("theme");$("#switchtheme").val(theme);$.mobile.changeGlobalTheme(theme)}if(!storage.getItem("forcasttype")){storage.setItem("forcasttype","dailyforcast");$(jq("dailyforcast")).prop("checked",true).checkboxradio("refresh")}else{var forcasttype=storage.getItem("forcasttype");var uncheckbox=forcasttype=="dailyforcast"?"hourforcast":"dailyforcast";$(jq(forcasttype)).prop("checked",true).checkboxradio("refresh");$(jq(uncheckbox)).prop("checked",false).checkboxradio("refresh")}if(!storage.getItem("forcastcnt")){storage.setItem("forcastcnt",3);$("#forcastcnt").html("6")}else{$("#forcastcnt").html(storage.getItem("forcastcnt"))}function setSelector(){var locations=addresses.locations;for(var i=0;i<locations.length;i++){var name=locations[i].name;$("#address").append(new Option(name,name,false,false));$("#deleteLocs").append(new Option(name,name,false,false))}return true}var map=null;var marker;var searchControl;$(document).on("pageshow","#pagemap",function(){InitMap()});$(window).on("orientationchange",function(){if(map){map.remove();map=null}InitMap()});function InitMap(){if(map!==null){return}var olat=$("#latitude").val();var olng=$("#longitude").val();map=L.map("map").setView([olat,olng],10);var basemap={},overlaymap={};baseMapNames=JSON.parse(storage.getItem("baseMaps"));overlayMapNames=JSON.parse(storage.getItem("overlayMaps"));$.each(baseMapNames,function(k,v){var attrname=$(jq(v)).parent().text();basemap[attrname]=L.tileLayer.provider(v);if(k==0){basemap[attrname].addTo(map)}});$.each(overlayMapNames,function(k,v){var attrname=$(jq(v)).parent().text();overlaymap[attrname]=L.tileLayer.provider(v)});L.control.layers(basemap,overlaymap).addTo(map);marker=L.marker([olat,olng]).addTo(map);if(searchControl===undefined){searchControl=new L.esri.Geocoding.geosearch({providers:[L.esri.Geocoding.arcgisOnlineProvider()]})}searchControl.addTo(map);searchControl.on("results",function(data){if(data.results.length>0){marker.setLatLng(data.results[0].latlng).update();map.setView(data.results[0].latlng)}});map.on("dblclick",onMapClick);map.doubleClickZoom.disable()}function onMapClick(e){marker.setLatLng(e.latlng).update()}document.addEventListener("deviceready",onDeviceReady,false);function onDeviceReady(){function disp(pos){if($("#sname").val()===""){$("#sname").val("新地点")}$("#slatitude").val(pos.coords.latitude);$("#slongitude").val(pos.coords.longitude)}function errdisp(e){$.mobile.toast({message:e.message,position:"center"})}$("#slocate").click(function(){navigator.geolocation.getCurrentPosition(disp,errdisp,{maximumAge:3000,timeout:5000})})}var tempdate=new Date();$("#inputdate").val(tempdate.format("yyyy-MM-dd"));var index=$("#address").get(0).selectedIndex;var item=addresses.locations[index];$("#latitude").val(item.lat);$("#longitude").val(item.lng);$("#address").change(function(){var index=$(this).get(0).selectedIndex;var item=addresses.locations[index];$("#latitude").val(item.lat);$("#longitude").val(item.lng)});$("#newLoc").click(function(){$("#sname").val("");$("#slatitude").val("");$("#slongitude").val("");$("#pagesearch").popup("open",{y:0})});$("#plus").unbind("click").bind("click",function(){var value=parseInt($("#forcastcnt").html(),10);value=value<39?value+3:39;$("#forcastcnt").html(value)});$("#minus").unbind("click").bind("click",function(){var value=$("#forcastcnt").html();value=value>3?value-3:3;$("#forcastcnt").html(value)});$("#settingset").click(function(){var baseMapNames=[],overlayMapNames=[];$("#baseMaps :checked").each(function(){baseMapNames.push($(this).attr("id"))});$("#overlayMaps :checked").each(function(){overlayMapNames.push($(this).attr("id"))});storage.setItem("baseMaps",JSON.stringify(baseMapNames));storage.setItem("overlayMaps",JSON.stringify(overlayMapNames));storage.setItem("cloudtype",$("#cloudtype").get(0).selectedIndex);storage.setItem("theme",$("#switchtheme").val());storage.setItem("forcastcnt",$("#forcastcnt").html());storage.setItem("forcasttype",$("#dailyforcast").is(":checked")?"dailyforcast":"hourforcast");var theme=$("#switchtheme").val();$.mobile.changeGlobalTheme(theme);if(map){map.remove();map=null}var sels=[];sels=$("#deleteLocs").val();var newlocs=[];for(var i=0;i<addresses.locations.length;i++){if($.inArray(addresses.locations[i].name,sels)==-1){newlocs.push(addresses.locations[i])}}addresses.locations=[];addresses.locations=newlocs;$("#address").empty();$("#deleteLocs").empty();setSelector();$("#address").selectmenu("refresh");$("#deleteLocs").selectmenu("refresh");storage.setItem("addresses",JSON.stringify(addresses));$.mobile.changePage("#pagemain",{transition:"slide",reverse:true})});$("#sok").click(function(){var item=new Object();item.name=$("#sname").val();item.lat=$("#slatitude").val();item.lng=$("#slongitude").val();addresses.locations.push(item);storage.setItem("addresses",JSON.stringify(addresses));$("#address").append("<option value='"+item.name+"'>"+item.name+"</option>");$("#deleteLocs").append("<option value='"+item.name+"'>"+item.name+"</option>");$("#address").selectmenu("refresh");$("#deleteLocs").selectmenu("refresh");$("#pagesearch").popup("close")});$("#weather").click(function(){var lat=$("#latitude").val();var lng=$("#longitude").val();var cnt=parseInt($("#forcastcnt").html(),10);var requesturl;var daily=$("#dailyforcast").is(":checked");if(daily){requesturl="http://api.openweathermap.org/data/2.5/forecast/daily?lat="+lat+"&lon="+lng+"&cnt="+cnt+"&units=metric&lang=zh_cn&callback=?"}else{requesturl="http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lng+"&cnt="+cnt+"&units=metric&lang=zh_cn&callback=?"}var curdate=new Date();$.getJSON(requesturl,null,function(result){var divinfo="";cnt=result.list.length;cnt-=cnt%3;for(var i=0;i<cnt;i+=3){if(daily){divinfo+='<div class="ui-grid-b"><div class="ui-block-a"><p>'+curdate.format("MM-dd")+'</p><img src="'+"weather/"+result.list[i].weather[0].icon+".png"+'"/><p>'+result.list[i].temp.min+"-"+result.list[i].temp.max+"℃<br/>"+result.list[i].weather[0].description+"<br/>云量:"+result.list[i].clouds+"%"+'</p></div><div class="ui-block-b"><p>';curdate=new Date(curdate.getTime()+1*24*60*60*1000);divinfo+=curdate.format("MM-dd")+'</p><img src="'+"weather/"+result.list[i+1].weather[0].icon+".png"+'"/><p>'+result.list[i+1].temp.min+"-"+result.list[i+1].temp.max+"℃<br/>"+result.list[i+1].weather[0].description+"<br/>云量:"+result.list[i+1].clouds+"%"+'</p></div><div class="ui-block-c"><p>';curdate=new Date(curdate.getTime()+1*24*60*60*1000);divinfo+=curdate.format("MM-dd")+'</p><img src="'+"weather/"+result.list[i+2].weather[0].icon+".png"+'"/><p>'+result.list[i+2].temp.min+"-"+result.list[i+2].temp.max+"℃<br/>"+result.list[i+2].weather[0].description+"<br/>云量:"+result.list[i+2].clouds+"%"+"</p></div></div>";curdate=new Date(curdate.getTime()+1*24*60*60*1000)}else{divinfo+='<div class="ui-grid-b"><div class="ui-block-a"><p>'+result.list[i].dt_txt+'</p><img src="'+"weather/"+result.list[i].weather[0].icon+".png"+'"/><p>'+result.list[i].main.temp_min+"-"+result.list[i].main.temp_max+"℃<br/>"+result.list[i].weather[0].description+"<br/>云量:"+result.list[i].clouds.all+"%"+'</p></div><div class="ui-block-b"><p>';divinfo+=result.list[i+1].dt_txt+'</p><img src="'+"weather/"+result.list[i+1].weather[0].icon+".png"+'"/><p>'+result.list[i+1].main.temp_min+"-"+result.list[i+1].main.temp_max+"℃<br/>"+result.list[i+1].weather[0].description+"<br/>云量:"+result.list[i+1].clouds.all+"%"+'</p></div><div class="ui-block-c"><p>';divinfo+=result.list[i+2].dt_txt+'</p><img src="'+"weather/"+result.list[i+2].weather[0].icon+".png"+'"/><p>'+result.list[i+2].main.temp_min+"-"+result.list[i+2].main.temp_max+"℃<br/>"+result.list[i+2].weather[0].description+"<br/>云量:"+result.list[i+2].clouds.all+"%"+"</p></div></div>"}}$("#cityname").html("站点名称："+result.city.name+"  UTC±00:00");$("#forcast").html(divinfo)});$.mobile.changePage("#pageweather",{transition:"slide"})});$("#ssearch").click(function(){var address=$("#sname").val();L.esri.Geocoding.geocode().text(address).run(function(err,results,response){if(results.results.length>0){$("#slatitude").val(results.results[0].latlng.lat);$("#slongitude").val(results.results[0].latlng.lng)}else{$.mobile.toast({message:"查询失败",position:"center"})}})});$("#headerClock").click(function(){var pos=marker.getLatLng().wrap();var imgpath="http://202.127.24.18/v4/bin/astro.php?lon="+pos.lng+"&lat="+pos.lat+"&lang=zh-CN&ac=0&unit=metric&tzshift=0";var content='<div  style="width:500px"><img src="'+imgpath+'"  alt="晴天钟" id="imgClock" style="width:500px"/></div>';marker.bindPopup(content,{maxWidth:500}).openPopup()});$("#clock").click(function(){var lat=$("#latitude").val();var lng=$("#longitude").val();var imgpath="http://202.127.24.18/v4/bin/astro.php?lon="+lng+"&lat="+lat+"&lang=zh-CN&ac=0&unit=metric&tzshift=0";$("#imgClock").attr("src",imgpath);$("#clockcontent").panzoom();$.mobile.changePage("#pageclock",{transition:"slide"})});$("#nircloud").click(function(){var now=new Date();now=new Date(now.getTime());$("#cloudcontent").panzoom();$.mobile.changePage("#pagecloud",{transition:"slide"});var currenttime=new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);currenttime=new Date(currenttime.getTime()+currenttime.getTimezoneOffset()*60*1000);var imgurl=$("#cloudtype").val()+currenttime.format("yyyyMMdd_hhmm")+".jpg";$("#imgCloud").attr("src",imgurl).error(function(){currenttime=new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-2);currenttime=new Date(currenttime.getTime()+currenttime.getTimezoneOffset()*60*1000);imgurl=$("#cloudtype").val()+currenttime.format("yyyyMMdd_hhmm")+".jpg";$("#imgCloud").attr("src",imgurl).error(function(){currenttime=new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-3);currenttime=new Date(currenttime.getTime()+currenttime.getTimezoneOffset()*60*1000);imgurl=$("#cloudtype").val()+currenttime.format("yyyyMMdd_hhmm")+".jpg";$("#imgCloud").attr("src",imgurl).error(function(){currenttime=new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-4);currenttime=new Date(currenttime.getTime()+currenttime.getTimezoneOffset()*60*1000);imgurl=$("#cloudtype").val()+currenttime.format("yyyyMMdd_hhmm")+".jpg";$("#imgCloud").attr("src",imgurl).error(function(){$("#cloudLable").html("Load Image Failed")});$("#cloudLable").html(currenttime.format("yyyyMMdd_hhmm")+"UTC±00:00")});$("#cloudLable").html(currenttime.format("yyyyMMdd_hhmm")+"UTC±00:00")});$("#cloudLable").html(currenttime.format("yyyyMMdd_hhmm")+"UTC±00:00")});$("#cloudLable").html(currenttime.format("yyyyMMdd_hhmm")+"UTC±00:00")});$("#suncalc").click(function(){var lat=$("#latitude").val();var lng=$("#longitude").val();var inputdate=stringToDate($("#inputdate").val());var sunrisePos=SunCalc.getPosition(inputdate,lat,lng);var sunTimes=SunCalc.getTimes(inputdate,lat,lng);$("#sunrise").html(sunTimes.sunrise.format("yyyy/MM/dd hh:mm"));$("#sunriseEnd").html(sunTimes.sunriseEnd.format("yyyy/MM/dd hh:mm"));$("#goldenHourEnd").html(sunTimes.goldenHourEnd.format("yyyy/MM/dd hh:mm"));$("#solarNoon").html(sunTimes.solarNoon.format("yyyy/MM/dd hh:mm"));$("#goldenHour").html(sunTimes.goldenHour.format("yyyy/MM/dd hh:mm"));$("#sunsetStart").html(sunTimes.sunsetStart.format("yyyy/MM/dd hh:mm"));$("#sunset").html(sunTimes.sunset.format("yyyy/MM/dd hh:mm"));$("#dusk").html(sunTimes.dusk.format("yyyy/MM/dd hh:mm"));$("#nauticalDusk").html(sunTimes.nauticalDusk.format("yyyy/MM/dd hh:mm"));$("#night").html(sunTimes.night.format("yyyy/MM/dd hh:mm"));$("#nadir").html(sunTimes.nadir.format("yyyy/MM/dd hh:mm"));$("#nightEnd").html(sunTimes.nightEnd.format("yyyy/MM/dd hh:mm"));$("#nauticalDawn").html(sunTimes.nauticalDawn.format("yyyy/MM/dd hh:mm"));$("#dawn").html(sunTimes.dawn.format("yyyy/MM/dd hh:mm"));var moonTimes=SunCalc.getMoonTimes(inputdate,lat,lng);var moonPos=SunCalc.getMoonPosition(inputdate,lat,lng);var moonIllumination=SunCalc.getMoonIllumination(inputdate);if(!moonTimes.rise){var prevday=new Date(inputdate.getTime()-24*60*60*1000);var prevmoonTimes=SunCalc.getMoonTimes(prevday,lat,lng);$("#moonrise").html(prevmoonTimes.rise.format("yyyy/MM/dd hh:mm"))}else{$("#moonrise").html(moonTimes.rise.format("yyyy/MM/dd hh:mm"))}if(!moonTimes.set||((moonTimes.rise)&&(moonTimes.set.getTime()<moonTimes.rise.getTime()))){var nextday=new Date(inputdate.getTime()+24*60*60*1000);var nextmoonTimes=SunCalc.getMoonTimes(nextday,lat,lng);$("#moonset").html(nextmoonTimes.set.format("yyyy/MM/dd hh:mm"))}else{$("#moonset").html(moonTimes.set.format("yyyy/MM/dd hh:mm"))}$("#light").html(moonIllumination.fraction.toPrecision(6));var smoonPhase="";var moonPhase=moonIllumination.phase;alert(moonPhase);if(moonPhase<0.03||moonPhase>0.98){smoonPhase="新月"}else{if(moonPhase<0.27){smoonPhase="娥眉月"}else{if(moonPhase<0.23){smoonPhase="上弦月"}else{if(moonPhase<0.47){smoonPhase="渐盈凸月"}else{if(moonPhase<0.53){smoonPhase="满月"}else{if(moonPhase<0.73){smoonPhase="渐亏凸月"}else{if(moonPhase<0.77){smoonPhase="下弦月"}else{smoonPhase="残月"}}}}}}}$("#moonPhase").html(smoonPhase)});</script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <script type="text/javascript" src="cordova.js"></script>
+  <script type="text/javascript" src="jquery.min.js"></script>
+  <script type="text/javascript" src="jquery.mobile-1.4.5.min.js"></script>
+  <script type="text/javascript" src="leaflet.js"></script>
+  <script type="text/javascript" src="esri-leaflet.js"></script>
+  <script type="text/javascript" src="esri-leaflet-geocoder.js"></script>
+  <script type="text/javascript" src="leaflet-providers.js"></script>
+  <script type="text/javascript" src="suncalc.js"></script>
+  <script type="text/javascript" src="jquery.mobile.toast.min.js"></script>
+  <script type="text/javascript" src="jqm-datebox.all.min.js"></script>
+  <script type="text/javascript" src="jquery.panzoom.min.js"></script>
+  <link rel="stylesheet" href="leaflet.css"/>
+  <link rel="stylesheet" href="esri-leaflet-geocoder.css"/>
+  <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
+  <link rel="stylesheet" href="jqm-datebox.min.css">
+  <style type="text/css" >
+  #pagemap>.ui-content {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 0 !important;
+  }
+  #map {
+      height: 100%;
+  }
+  </style>
+</head>
+<body>
+  <!--主页面-->
+  <div data-role="page" id="pagemain" class="page">
+    <div data-role="header" data-position="fixed">
+       <h1>晴天钟</h1>
+      <div data-role="navbar" data-iconpos="left">
+        <ul>
+          <li><a href="#pagemap" data-icon="eye" data-transition="slide">地图</a></li>
+          <li><a href="#pagesettings" data-icon="gear" data-transition="slide">设置</a></li>
+          <li><a href="#pageinfo" data-icon="info"  data-transition="slide">说明</a></li>
+        </ul>
+      </div>
+    </div>
+    <div data-role="content" style="padding: 10px">
+      <div data-role="fieldcontain">
+        <label for="address">地名：</label>
+        <select name="address" id="address" data-native-menu="false"  data-mini="true" >
+        </select>
+      </div>
+      <div data-role="fieldcontain">
+        <label for="longitude"  data-mini="true" >经度：</label>
+        <input type="text" name="longitude" id="longitude" value=""  data-mini="true" >
+      </div>
+      <div data-role="fieldcontain">
+        <label for="latitude"  data-mini="true" >纬度：</label>
+        <input type="text" name="latitude" id="latitude" value=""  data-mini="true" >
+      </div>
+      <div data-role="fieldcontain">
+        <label for="inputdate"  data-mini="true" >时间：</label>
+        <input type="text" name="inputdate" id="inputdate"  data-mini="true" data-role="datebox" data-options='{"mode":"calbox","useFocus":"true","overrideDateFormat":"%Y-%m-%d "}'/>
+      </div>
+      <div class="ui-grid-b btngroup"> 
+        <div class="ui-block-a"><a href="#" data-role="button" id="clock" data-transition="slide" data-icon="clock"  data-mini="true" >晴天钟</a></div>
+        <div class="ui-block-b"><a href="#pageresult" data-role="button" id="suncalc" data-transition="slide" data-icon="star" data-mini="true" >晨昏蒙影</a></div>
+        <div class="ui-block-c">
+          <a href="#pagesearch" data-role="button" id="newLoc" data-transition="slide" data-icon="plus" data-rel="popup" data-mini="true" >添加地点</a></div>
+      </div>
+      <div class="ui-grid-a"> 
+        <div class="ui-block-a"><a href="#" data-role="button" id="weather" data-transition="slide" data-icon="calendar"  data-mini="true">天气预报</a></div>
+        <div class="ui-block-b"><a href="#" data-role="button" id="nircloud" data-transition="slide" data-icon="cloud" data-mini="true" >红外云图</a></div>
+      </div>
+    </div>
+    <!--添加新地点-->
+    <div data-role="popup" id="pagesearch" style="width:100%"  data-dismissible="false">
+      <div data-role="header">
+         <h1>添加新地点</h1>
+         <a href="#" data-rel="back" data-icon="delete" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all">Close</a>
+      </div>
+      <div data-role="content">
+        <div data-role="fieldcontain" >
+          <input type="text" name="sname" id="sname" placeholder = "地点">
+          <input type="text" name="slongitude" id="slongitude" placeholder = "经度">
+          <input type="text" name="slatitude" id="slatitude" placeholder = "纬度">
+        </div>
+        <div class="ui-grid-b"> 
+          <div class="ui-block-a"><a href="#" data-role="button" id="slocate"  data-mini="true" data-icon="location">定位</a></div>
+          <div class="ui-block-b"><a href="#" data-role="button" id="ssearch"  data-mini="true" data-icon="search">搜索</a></div>
+          <div class="ui-block-c"><a href="#" data-role="button" id="sok"  data-mini="true" data-icon="check">确定</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--地图-->
+  <div data-role="page" id="pagemap" class="page">
+    <div data-role="header" data-position="fixed">
+       <h1>地图</h1>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+       <a href="#" data-role="button" data-icon="clock" id="headerClock">晴天钟</a>
+    </div>
+    <div data-role="content">
+        <div id="map" style="float:left height:100% min-height:100% width:100%"></div>
+    </div>
+  </div>
+  <!--suncalc结果-->
+  <div data-role="page" id="pageresult" class="page">
+    <div data-role="header">
+       <h1>晨昏蒙影</h1>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+    </div>
+    <div data-role="content">
+      <table>
+        <thead>
+     <tr>
+       <th align="left">晨昏蒙影</th>
+     </tr>
+   </thead>
+   <tbody>
+        <tr>
+          <td align="left">日出起始时间</td>
+          <td id = "sunrise" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">日出结束时间</td>
+          <td id = "sunriseEnd" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">日出黄金时间</td>
+          <td id = "goldenHourEnd" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">日落黄金时间</td>
+          <td id = "goldenHour" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">太阳最高点时间</td>
+          <td id = "solarNoon" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">日落开始时间</td>
+          <td id = "sunsetStart" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">民用晨光始</td>
+          <td id = "dawn" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">民用昏影终</td>
+          <td id = "sunset" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">航海晨光始</td>
+          <td id = "nauticalDawn" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">航海昏影终</td>
+          <td id = "dusk" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">天文晨光始</td>
+          <td id = "nightEnd" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">天文昏影终</td>
+          <td id = "nauticalDusk" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">黑暗</td>
+          <td id = "night" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">最暗时刻</td>
+          <td id = "nadir" align="right"></td>
+        </tr>
+     </tbody>
+     <thead>
+     <tr>
+       <th align="left">月相</th>
+     </tr>
+   </thead>
+   <tbody>
+        <tr>
+          <td align="left">月出时间</td>
+          <td id = "moonrise" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">月落时间</td>
+          <td id = "moonset" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">月相</td>
+          <td id = "moonPhase" align="right"></td>
+        </tr>
+        <tr>
+          <td align="left">亮度</td>
+          <td id = "light" align="right"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!--pageinfo-->
+  <div data-role="page" id="pageinfo" class="page">
+    <div data-role="header" data-position="fixed">
+       <h1>软件说明</h1>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+    </div>
+    <div data-role="content">
+        <div>
+          <h4>软件说明:</h4>
+          <ul>
+          <li>本软件使用 <a onclick="navigator.app.loadUrl('http://phonegap.com', { openExternal:true });">PhoneGap</a> 开发</li>
+          <li>软件最新版本可在 <a onclick="navigator.app.loadUrl('https://build.phonegap.com/apps/1575380/builds', { openExternal:true });">PhoneGap App</a> 上下载</li>
+          <li>软件源码在 <a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer', { openExternal:true });">Github</a> 上托管</li>
+          <li>晴天钟数据来源: <a onclick="navigator.app.loadUrl('http://202.127.24.18', { openExternal:true });">7Timer</a></li>
+          <li>地图显示使用 <a onclick="navigator.app.loadUrl('http://leafletjs.com/', { openExternal:true });">Leafletjs</a> 库</li>
+          <li>晨昏蒙影计算:   <a onclick="navigator.app.loadUrl('https://github.com/mourner/suncalc', { openExternal:true });">Suncalc</a></li>
+          <li>天气预报来源: <a onclick="navigator.app.loadUrl('http://openweathermap.org/forecast16', { openExternal:true });">OpenWeatherMap</a></li>
+          <li>云图数据来源:  <a onclick="navigator.app.loadUrl('http://www.nsmc.cma.gov.cn/NSMC/Channels/100028.html', { openExternal:true });">国家气象卫星中心</a></li>
+          </ul>
+          <h4>使用说明:</h4>
+          <ul>
+            <li>地图模式下，双击选择位置，点击晴天钟按钮显示天气</li>
+            <li>地图模式或者添加新地点中搜索框中，可以使用空格，中文，英文搜索，例如：“湖北 武汉 武汉大学”</li>
+            <li>如果地图无法加载，可以尝试在设置中更换地图，更换后，地图将自动重置到起点</li>
+            <li>设置中可以更换红外云图模式，如果需要其他模式，请参考《反馈及建议》部分提出建议</li>
+            <li>地图默认起始位置为所选地点</li>
+          </ul>
+          <h4>网络说明:</h4>
+          <ul>
+            <li>晨昏蒙影计算不消耗流量</li>
+            <li>定位/查询/地图/云图/天气预报将消耗流量</li>
+            <li>云图下载可能会耗费较大流量(150-300k),仅下载当前时间最近的云图</li>
+            <li>黑白地图较省流量(15k/per Tile)，Esri地图最耗流量(55k/per Tile),其余约20k/per Tile</li>
+          </ul>
+          <h4>地图说明</h4>
+          <ul>
+            <li>地图设置中分为底图设置和可选图层设置，底图只能显示一个，可以切换，可选图层都为透明，可以叠加显示</li>
+            <li>水彩地图和天地图需要单独添加注释图层</li>
+            <li>底图中带Mobile的图层注释较大</li>
+            <li>天地图、高德地图、MapABC仅有少量国外数据，但加载速度快，请酌情使用</li>
+            <li>Mapbox、高德、天地图、OpenStreatMap、MapABC为本地语言,Stamen放大后为本地语言，其余都为英文</li>
+            <li>如果需要显示Cloud等可选图层，建议勾选‘HERE Night’，显示比较清晰</li>
+          </ul>
+          <h4>反馈及建议</h4>
+          <ul>
+          <li>请使用<a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer/issues', { openExternal:true });">Github Issue</a> 反馈问题或提出建议(需要注册Github账号)</li>
+          </ul>
+        </div>
+    </div>
+  </div>
+  <!--clock-->
+  <div data-role="page" id="pageclock" class="page">
+    <div data-role="header">
+       <h1>晴天钟</h1>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+    </div>
+    <div  id="clockcontent" height="100%">
+      <img src=""  alt="晴天钟" id="imgClock" width="100%"/>
+    </div>
+  </div>
+  <!--天气预报-->
+  <div data-role="page" id="pageweather" class="page">
+    <div data-role="header">
+       <h1>天气预报</h1>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+    </div>
+    <div data-role="content">
+      <label for="img"  data-mini="true" id="cityname"></label>
+      <div id="forcast"></div>
+      <a href="#pagemain" data-role="button" data-mini="true" data-icon="back" data-transition="slide" data-direction="reverse">返回</a>
+    </div>
+  </div>
+  <!--红外云图-->
+  <div data-role="page" id="pagecloud" class="page">
+    <div data-role="header">
+       <h1>红外云图</h1>
+        <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+    </div>
+    <label for="img"  data-mini="true" id="cloudLable"></label>
+    <div  id="cloudcontent" height="100%">
+      <img src="" alt="红外云图" id="imgCloud" width="100%"/>
+    </div>
+  </div>
+  <!--pagesettings-->
+  <div data-role="page" id="pagesettings" class="page">
+    <div data-role="header">
+       <h1>设置</h1>
+        <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+    </div>
+    <div data-role="content">
+        <label for="baseMaps">地图设置：</label>
+        <fieldset data-role="collapsible" data-mini="true" id="baseMaps">
+          <legend>底图：</legend>
+          <div data-role="controlgroup">
+          <label><input type="checkbox" id="Stamen.Toner"/>黑白地图</label>
+          <label><input type="checkbox" id="Stamen.TonerLite"/>灰白地图</label>
+          <label><input type="checkbox" id="Stamen.Watercolor"/>水彩地图</label>
+          <label><input type="checkbox" id="TianDiTu.Map"/>天地图</label>
+          <label><input type="checkbox" id="MapABC"/>MapABC</label>
+          <label><input type="checkbox" id="GaoDe"/>高德</label>
+          <label><input type="checkbox" id="Esri.WorldStreetMap"/>Esri街道图</label>
+          <label><input type="checkbox" id="Esri.WorldTopoMap"/>Esri地形图</label>
+          <label><input type="checkbox" id="OpenStreetMap.Mapnik"/>OpenStreetMap</label>
+          <label><input type="checkbox" id="MapBox"/>Mapbox</label>
+          <label><input type="checkbox" id="HERE.normalDay"/>Here</label>
+          <label><input type="checkbox" id="HERE.normalDayMobile"/>Here Mobile</label>
+          <label><input type="checkbox" id="HERE.normalNight"/>Here Night</label>
+          <label><input type="checkbox" id="HERE.normalNightMobile"/>Here Night Mobile</label>
+          <label><input type="checkbox" id="HERE.terrainDayMobile"/>Here地形图</label>
+          <label><input type="checkbox" id="HERE.hybridDay"/>Here卫星图</label>
+          <label><input type="checkbox" id="HERE.hybridDayMobile"/>Here Satellite Mobile</label>
+          <label><input type="checkbox" id="NASAGIBS.ModisTerraTrueColorCR"/>Modis Terra</label>
+          </div>
+        </fieldset>
+        <fieldset data-role="collapsible" data-mini="true" id="overlayMaps">
+          <legend>可选图层：</legend>
+          <div data-role="controlgroup">
+          <label><input type="checkbox" id="Stamen.TonerLabels">水彩地图注记</label>
+          <label><input type="checkbox" id="TianDiTu.Annotion">天地图注记</label>
+          <label><input type="checkbox" id="OpenWeatherMap.Clouds">Clouds</label>
+          <label><input type="checkbox" id="OpenWeatherMap.CloudsClassic">Clouds Classic</label>
+          <label><input type="checkbox" id="OpenWeatherMap.Precipitation">Precipitation</label>
+          <label><input type="checkbox" id="OpenWeatherMap.PrecipitationClassic">Precipitation Classic</label>
+          <label><input type="checkbox" id="OpenWeatherMap.Rain">Rain</label>
+          <label><input type="checkbox" id="OpenWeatherMap.Wind">Wind</label>
+          <label><input type="checkbox" id="OpenWeatherMap.Snow">Snow</label>
+          <label><input type="checkbox" id="OpenWeatherMap.Temperature">Temperature</label>
+          <label><input type="checkbox" id="NASAGIBS.ViirsEarthAtNight2012">Earth At Night2012</label>
+          <label><input type="checkbox" id="Lightpollutionmap2015">Light Pollution 2015</label>
+          <label><input type="checkbox" id="Lightpollutionmap2014">Light Pollution 2014</label>
+          <label><input type="checkbox" id="NASAGIBS.ModisTerraLSTDay">Modis Terra LST Day</label>
+          <label><input type="checkbox" id="NASAGIBS.ModisTerraAOD">Modis Terra AOD</label>
+          </div>
+        </fieldset>
+        <label for="cloudtype">红外云图类型：</label>
+        <select name="cloudtype" id="cloudtype" data-native-menu="false" data-mini="true" >
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_CLC_GRA_">中国区域红外一彩色</option>
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_IR1_COL_">中国区域红外一增强</option>
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_IR2_COL_">中国区域红外二增强</option>
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2/F2DE/FY2X_ANI_CLC_ECN_">双星红外一彩色</option>
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_CLC_GRA_">圆盘图红外一彩色</option>
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR1_COL_">圆盘图红外一增强</option>
+          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR2_COL_">圆盘图红外二增强</option>
+        </select>
+        <label for="switchtheme">切换主题：</label>
+        <select name="switchtheme" id="switchtheme" data-native-menu="false" data-mini="true" >
+          <option value="a">白色</option>
+          <option value="b">黑色</option>
+          <option value="c">简单</option>
+        </select>
+        <label for="deleteLocs">删除地点:</label>
+        <select name="deleteLocs" id="deleteLocs" multiple="multiple" data-native-menu="false" data-mini="true">
+          <option>选择</option>
+        </select>
+        <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="forcasttype">
+            <legend>天气预报类型：</legend>
+            <input name="forcasttype" id="dailyforcast" value="on" checked="checked" type="radio">
+            <label for="dailyforcast">逐日预报</label>
+            <input name="forcasttype" id="hourforcast" value="off" type="radio">
+            <label for="hourforcast">小时预报</label>
+        </fieldset>
+        <label for="forcastcnt">预报显示数量：</label>
+         <div data-role="controlgroup" data-type="horizontal" data-mini="true">
+           <button id="plus" data-inline="true">+</button>
+           <button id="forcastcnt" data-inline="true">6</button>
+           <button id="minus" data-inline="true">-</button>
+         </div>
+        <div class="ui-grid-b"> 
+        <div class="ui-block-a"></div>
+        <div class="ui-block-b"><a href="#" data-role="button" id="settingset"  data-icon="check" data-mini="true" >确定</a></div>
+        <div class="ui-block-c"><a href="#pagemain" data-role="button" id="settingcancel" data-icon="back" data-mini="true"  data-transition="slide" data-direction="reverse">取消</a></div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+  Date.prototype.format = function(fmt) { //author: meizz
+    var o = {   
+      "M+" : this.getMonth()+1,                 //月份
+      "d+" : this.getDate(),                    //日
+      "h+" : this.getHours(),                   //小时
+      "m+" : this.getMinutes(),                 //分
+      "s+" : this.getSeconds(),                 //秒
+      "q+" : Math.floor((this.getMonth()+3)/3), //季度
+      "S"  : this.getMilliseconds()             //毫秒
+    };   
+    if(/(y+)/.test(fmt))
+      fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+    for(var k in o)
+      if(new RegExp("("+ k +")").test(fmt))
+    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+    return fmt;
+  };
+  function stringToDate(_date)	{
+    var m_date = $.trim(_date);
+    var dateItems=_date.split('-');
+    var yearitem = parseInt(dateItems[0],10);
+    var monthitem = parseInt(dateItems[1],10);
+    var dayitem = parseInt(dateItems[2],10);
+    var formatedDate = new Date(yearitem,monthitem-1,dayitem,12);
+    return formatedDate;
+  }
+  function jq(myid){return "#"+myid.replace(/(\.)/g,"\\$1")}
+  var storage = window.localStorage;
+  var addresses;
+  //changes theme
+  $.mobile.changeGlobalTheme = function(theme){
+    if(document.readyState=="complete"){
+      $( ".page" ).page( "option", "theme", theme );
+    }else{
+      $( ".page" ).page({"theme": theme});
+    } 
+  };
+  //address
+  if (!storage.getItem("addresses")) {
+    addresses =  {locations:[{name:"北京",lat:39.90,lng:116.40},{name:"武汉",lat:30.60,lng:114.3}]};
+    storage.setItem("addresses",JSON.stringify(addresses));
+    setSelector();
+  }else{
+    addresses = JSON.parse(storage.getItem("addresses"));
+    setSelector();
+  }
+  var baseMapNames=[],overlayMapNames=[];
+  //baseMaps
+  if(!storage.getItem("baseMaps")){
+    baseMapNames.push("HERE.normalDay");
+    storage.setItem("baseMaps",JSON.stringify(baseMapNames));
+    $(jq('HERE.normalDay')).attr('checked',true);
+  }else{
+    baseMapNames = JSON.parse(storage.getItem("baseMaps"));
+    $.each(baseMapNames,function(k,v){$(jq(v)).attr('checked',true)});
+  }
+  //overlayMaps
+  if(!storage.getItem("overlayMaps")){
+    overlayMapNames.push("OpenWeatherMap.Clouds");
+    storage.setItem("overlayMaps",JSON.stringify(overlayMapNames));
+    $(jq('OpenWeatherMap.Clouds')).attr('checked',true);
+  }else{
+    overlayMapNames = JSON.parse(storage.getItem("overlayMaps"));
+    $.each(overlayMapNames,function(k,v){$(jq(v)).attr('checked',true)});
+  }
+  //cloudtype
+  if(!storage.getItem("cloudtype")){
+    storage.setItem("cloudtype",0);
+    $('#cloudtype').get(0).selectedIndex = 0;
+  }else{
+    $('#cloudtype').get(0).selectedIndex = storage.getItem("cloudtype");
+  }
+  //theme
+  if(!storage.getItem("theme")){
+    storage.setItem("theme","a");
+    $.mobile.changeGlobalTheme(theme);
+  }else{
+    var theme = storage.getItem('theme');
+    $('#switchtheme').val(theme);
+    $.mobile.changeGlobalTheme(theme);
+  }
+  //forcasttype
+  if(!storage.getItem("forcasttype")){
+    storage.setItem("forcasttype","dailyforcast");
+    $(jq("dailyforcast")).prop('checked',true).checkboxradio( "refresh" );
+  }else{
+    var forcasttype = storage.getItem("forcasttype");
+    var uncheckbox = forcasttype == "dailyforcast"? "hourforcast":"dailyforcast";
+    $(jq(forcasttype)).prop('checked',true).checkboxradio( "refresh" );
+    $(jq(uncheckbox)).prop('checked',false).checkboxradio( "refresh" );
+  }
+  //forcastcnt
+  if(!storage.getItem("forcastcnt")){
+    storage.setItem("forcastcnt",3);
+    $('#forcastcnt').html('6');
+  }else{
+    $('#forcastcnt').html(storage.getItem("forcastcnt"));
+  }
+  function setSelector() {
+    var locations = addresses.locations;
+    for(var i=0;i<locations.length;i++){
+      var name = locations[i].name;
+     	$('#address').append(new Option(name,name,false,false));
+     	$('#deleteLocs').append(new Option(name,name,false,false));
+    }
+    return true;
+  }
+  var map = null;
+  var marker ;
+  var searchControl;
+  $(document).on('pageshow', '#pagemap', function() {InitMap();});
+  $(window).on("orientationchange",function(){if(map){map.remove();map = null;}InitMap();});
+  function InitMap(){
+    if(map !== null){
+      return;
+    }
+    var olat = $('#latitude').val();
+    var olng = $('#longitude').val();
+    map = L.map('map').setView([olat, olng], 10);
+    var basemap={},overlaymap={};
+    baseMapNames = JSON.parse(storage.getItem("baseMaps"));
+    overlayMapNames = JSON.parse(storage.getItem("overlayMaps"));
+    $.each(baseMapNames,function(k,v){
+      var attrname = $(jq(v)).parent().text();
+      basemap[attrname]=L.tileLayer.provider(v);
+      if(k==0){basemap[attrname].addTo(map)}
+    });
+    $.each(overlayMapNames,function(k,v){
+      if(v==="Lightpollutionmap2014"){overlaymap["Light Pollution 2014"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2014',format:'image/png',transparent:true,opacity: 0.6,attribution:"lightpollutionmap.info"});return;}
+      if(v==="Lightpollutionmap2015"){overlaymap["Light Pollution 2015"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2015',format:'image/png',transparent:true,opacity: 0.6,attribution:"lightpollutionmap.info"});return;}
+      var attrname = $(jq(v)).parent().text();
+      overlaymap[attrname]=L.tileLayer.provider(v);
+    });
+    L.control.layers(basemap,overlaymap).addTo(map);
+    marker= L.marker([olat, olng]).addTo(map);
+    if(searchControl === undefined){searchControl = new L.esri.Geocoding.geosearch({providers: [ L.esri.Geocoding.arcgisOnlineProvider()]});}
+    searchControl.addTo(map);
+
+    searchControl.on('results', function(data) {
+      if (data.results.length > 0) {
+        marker.setLatLng(data.results[0].latlng).update();
+        map.setView(data.results[0].latlng);
+      }
+    });
+    map.on('dblclick', onMapClick);
+    map.doubleClickZoom.disable();
+  }
+
+  function onMapClick(e) {
+      marker.setLatLng( e.latlng).update();
+  }
+  var cot=(('ontouchend' in window))?'touchend':'click';
+  document.addEventListener('deviceready', onDeviceReady, false);
+
+  function onDeviceReady() {
+    function disp(pos) {
+       if($("#sname").val() === ""){$("#sname").val("新地点");}
+       $('#slatitude').val(pos.coords.latitude);
+       $('#slongitude').val(pos.coords.longitude);
+    }
+    function errdisp(e){
+      $.mobile.toast({ message: e.message,position:"center" });
+    }
+    $('#slocate').on(cot,function() {
+        navigator.geolocation.getCurrentPosition(disp,errdisp,{ maximumAge: 3000, timeout: 5000});
+    });
+  }
+  //initial
+  var tempdate = new Date();
+  $('#inputdate').val(tempdate.format('yyyy-MM-dd'));
+  var index = $('#address').get(0).selectedIndex;
+  var item = addresses.locations[index];
+  $('#latitude').val(item.lat);
+  $('#longitude').val(item.lng);
+  //切换地点
+  $('#address').change(function(){
+   var index = $(this).get(0).selectedIndex;
+   var item = addresses.locations[index];
+   $('#latitude').val(item.lat);
+   $('#longitude').val(item.lng);
+  });
+  $('#newLoc').on(cot,function () {
+    $("#sname").val("");
+    $('#slatitude').val("");
+    $('#slongitude').val("");
+    $('#pagesearch').popup('open',{y:0});
+  });
+  //forcastcnt
+  $('#plus').unbind('click').bind('click', function () {
+    var value = parseInt($('#forcastcnt').html(),10);
+    value = value < 39 ? value+3 : 39;
+    $('#forcastcnt').html(value);
+  });
+
+  $('#minus').unbind('click').bind('click', function () {
+      var value = $('#forcastcnt').html();
+      value = value > 3 ? value-3 : 3;
+      $('#forcastcnt').html(value);
+  });
+  //设置
+  $('#settingset').on(cot,function () {
+    var baseMapNames=[],overlayMapNames=[];
+    $('#baseMaps :checked').each(function(){
+      baseMapNames.push($(this).attr('id'));
+    });
+    $('#overlayMaps :checked').each(function(){
+      overlayMapNames.push($(this).attr('id'));
+    });
+    storage.setItem("baseMaps",JSON.stringify(baseMapNames));
+    storage.setItem("overlayMaps",JSON.stringify(overlayMapNames));
+    storage.setItem("cloudtype",$('#cloudtype').get(0).selectedIndex);
+    storage.setItem("theme",$('#switchtheme').val());
+    storage.setItem("forcastcnt",$('#forcastcnt').html());
+    storage.setItem("forcasttype",$('#dailyforcast').is(':checked')?"dailyforcast":"hourforcast");
+    var theme = $('#switchtheme').val();
+    $.mobile.changeGlobalTheme(theme);
+    if(map){map.remove();map = null;}
+    var sels = [];
+    sels = $('#deleteLocs').val();
+    var newlocs=[];
+    for(var i=0;i<addresses.locations.length;i++){if($.inArray(addresses.locations[i].name,sels) == -1){newlocs.push(addresses.locations[i]);}}
+    addresses.locations = [];
+    addresses.locations = newlocs;
+    $('#address').empty();
+    $('#deleteLocs').empty();
+    setSelector();
+    $('#address').selectmenu('refresh');
+    $('#deleteLocs').selectmenu('refresh');
+    storage.setItem("addresses",JSON.stringify(addresses));
+    $.mobile.changePage( "#pagemain",{transition:'slide',reverse:true});
+  });
+  //添加地点
+  $('#sok').on(cot,function(){
+    var item = new Object();
+    item.name = $("#sname").val();
+    item.lat = $('#slatitude').val();
+    item.lng = $('#slongitude').val();
+    addresses.locations.push(item);
+    storage.setItem("addresses",JSON.stringify(addresses));
+    $("#address").append("<option value='"+item.name+"'>"+item.name+"</option>");
+    $("#deleteLocs").append("<option value='"+item.name+"'>"+item.name+"</option>");
+    $('#address').selectmenu('refresh');
+    $('#deleteLocs').selectmenu('refresh');
+    $("#pagesearch" ).popup( "close" );
+  });
+  //天气预报
+  $('#weather').on(cot,function(){
+    var lat = $('#latitude').val();
+    var lng = $('#longitude').val();
+    var cnt = parseInt($('#forcastcnt').html(), 10);;
+    var requesturl;
+    var daily = $('#dailyforcast').is(':checked');
+    if(daily){
+      requesturl = "http://api.openweathermap.org/data/2.5/forecast/daily?lat="+ lat+"&lon="+lng+"&cnt="+ cnt +"&units=metric&lang=zh_cn&callback=?";}else{
+      requesturl = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lng+"&cnt="+ cnt +"&units=metric&lang=zh_cn&callback=?"
+    }
+    var curdate = new Date();
+    $.getJSON(requesturl, null, function(result) {
+      var divinfo = "";
+      cnt = result.list.length;
+      cnt -= cnt%3;
+      for(var i=0;i<cnt;i+=3){
+        if(daily){
+           divinfo += '<div class="ui-grid-b"><div class="ui-block-a"><p>'+ curdate.format('MM-dd') +'</p><img src="'+"weather/"+result.list[i].weather[0].icon+'.png'+'"/><p>'+result.list[i].temp.min +"-"+result.list[i].temp.max+"℃<br/>"+result.list[i].weather[0].description+"<br/>云量:"+result.list[i].clouds+"%"+'</p></div><div class="ui-block-b"><p>';
+          curdate = new Date(curdate.getTime() + 1*24*60*60*1000);
+          divinfo += curdate.format('MM-dd') +'</p><img src="'+"weather/"+result.list[i+1].weather[0].icon+'.png'+'"/><p>'+result.list[i+1].temp.min +"-"+result.list[i+1].temp.max+"℃<br/>"+result.list[i+1].weather[0].description+"<br/>云量:"+result.list[i+1].clouds+"%"+'</p></div><div class="ui-block-c"><p>';
+          curdate = new Date(curdate.getTime() + 1*24*60*60*1000);
+          divinfo += curdate.format('MM-dd') +'</p><img src="'+"weather/"+result.list[i+2].weather[0].icon+'.png'+'"/><p>'+result.list[i+2].temp.min +"-"+result.list[i+2].temp.max+"℃<br/>"+result.list[i+2].weather[0].description+"<br/>云量:"+result.list[i+2].clouds+"%"+'</p></div></div>';
+          curdate = new Date(curdate.getTime() + 1*24*60*60*1000);
+        }else{
+          divinfo += '<div class="ui-grid-b"><div class="ui-block-a"><p>'+result.list[i].dt_txt+'</p><img src="'+"weather/"+result.list[i].weather[0].icon+'.png'+'"/><p>'+result.list[i].main.temp_min +"-"+result.list[i].main.temp_max+"℃<br/>"+result.list[i].weather[0].description+"<br/>云量:"+result.list[i].clouds.all+"%"+'</p></div><div class="ui-block-b"><p>';
+          divinfo += result.list[i+1].dt_txt+'</p><img src="'+"weather/"+result.list[i+1].weather[0].icon+'.png'+'"/><p>'+result.list[i+1].main.temp_min +"-"+result.list[i+1].main.temp_max+"℃<br/>"+result.list[i+1].weather[0].description+"<br/>云量:"+result.list[i+1].clouds.all+"%"+'</p></div><div class="ui-block-c"><p>';
+          divinfo+=result.list[i+2].dt_txt+'</p><img src="'+"weather/"+result.list[i+2].weather[0].icon+'.png'+'"/><p>'+result.list[i+2].main.temp_min +"-"+result.list[i+2].main.temp_max+"℃<br/>"+result.list[i+2].weather[0].description+"<br/>云量:"+result.list[i+2].clouds.all+"%"+'</p></div></div>';
+        }
+      }
+      $('#cityname').html("站点名称："+result.city.name +"  UTC±00:00");
+      $('#forcast').html(divinfo);
+    });
+    $.mobile.changePage( "#pageweather",{transition:'slide'});
+  });
+  //search position
+  $('#ssearch').on(cot,function(){
+    var address = $("#sname").val();
+    L.esri.Geocoding.geocode().text(address).run(function(err, results, response){
+      if(results.results.length > 0){
+        $('#slatitude').val(results.results[0].latlng.lat);
+        $('#slongitude').val(results.results[0].latlng.lng);
+      }else{$.mobile.toast({ message: '查询失败',position:"center" });}
+    });
+  });
+  //显示popup
+  $('#headerClock').on(cot,function(){
+    //if(!marker){
+      var pos = marker.getLatLng().wrap();
+      var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
+      var content = "<div  style=\"width:500px\"><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:500px\"/></div>";
+      marker.bindPopup(content,{maxWidth:500}).openPopup();
+  });
+  //晴天钟
+  $('#clock').on(cot,function () {
+    var lat = $('#latitude').val();
+    var lng = $('#longitude').val();
+    var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ lng +"&lat="+ lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
+    $('#imgClock').attr("src", imgpath);
+    $('#clockcontent').panzoom();
+    $.mobile.changePage("#pageclock",{transition:'slide'});
+  });
+  //红外云图
+  $('#nircloud').on(cot,function(){
+    var now = new Date();
+    now = new Date(now.getTime());
+    $("#cloudcontent").panzoom();
+    $.mobile.changePage( "#pagecloud",{transition:'slide'});
+
+    var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
+    currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
+    var imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
+
+    $("#imgCloud").attr("src", imgurl).error(function() {
+      currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-2);
+      currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
+      imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
+      $("#imgCloud").attr("src", imgurl).error(function() {
+        currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-3);
+        currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
+        imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
+        $("#imgCloud").attr("src", imgurl).error(function(){
+          currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-4);
+          currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
+          imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
+          $("#imgCloud").attr("src", imgurl).error(function(){
+            $('#cloudLable').html("Load Image Failed");
+          });
+          $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+        });
+        $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+      });
+      $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+    });
+    $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+  });
+
+  //晨昏蒙影
+  $('#suncalc').on(cot,function(){
+    var lat = $('#latitude').val();
+    var lng = $('#longitude').val();
+    var inputdate = stringToDate($('#inputdate').val());
+    var sunrisePos = SunCalc.getPosition(inputdate, lat , lng);
+    var sunTimes = SunCalc.getTimes(inputdate, lat , lng);
+    $('#sunrise').html(sunTimes.sunrise.format("yyyy/MM/dd hh:mm"));
+    $('#sunriseEnd').html(sunTimes.sunriseEnd.format("yyyy/MM/dd hh:mm"));
+    $('#goldenHourEnd').html(sunTimes.goldenHourEnd.format("yyyy/MM/dd hh:mm"));
+    $('#solarNoon').html(sunTimes.solarNoon.format("yyyy/MM/dd hh:mm"));
+    $('#goldenHour').html(sunTimes.goldenHour.format("yyyy/MM/dd hh:mm"));
+    $('#sunsetStart').html(sunTimes.sunsetStart.format("yyyy/MM/dd hh:mm"));
+    $('#sunset').html(sunTimes.sunset.format("yyyy/MM/dd hh:mm"));
+    $('#dusk').html(sunTimes.dusk.format("yyyy/MM/dd hh:mm"));
+    $('#nauticalDusk').html(sunTimes.nauticalDusk.format("yyyy/MM/dd hh:mm"));
+    $('#night').html(sunTimes.night.format("yyyy/MM/dd hh:mm"));
+    $('#nadir').html(sunTimes.nadir.format("yyyy/MM/dd hh:mm"));
+    $('#nightEnd').html(sunTimes.nightEnd.format("yyyy/MM/dd hh:mm"));
+    $('#nauticalDawn').html(sunTimes.nauticalDawn.format("yyyy/MM/dd hh:mm"));
+    $('#dawn').html(sunTimes.dawn.format("yyyy/MM/dd hh:mm"));
+
+    var moonTimes = SunCalc.getMoonTimes(inputdate, lat , lng);
+    var moonPos = SunCalc.getMoonPosition(inputdate,lat,lng);
+    var moonIllumination =SunCalc.getMoonIllumination(inputdate);
+    //moon time
+    if(!moonTimes.rise){
+      var prevday = new Date(inputdate.getTime() - 24*60*60*1000);
+      var prevmoonTimes = SunCalc.getMoonTimes(prevday, lat , lng);
+      $('#moonrise').html(prevmoonTimes.rise.format("yyyy/MM/dd hh:mm"));
+    }else{
+      $('#moonrise').html(moonTimes.rise.format("yyyy/MM/dd hh:mm"));
+    }
+    if(!moonTimes.set || ((moonTimes.rise) && (moonTimes.set.getTime() < moonTimes.rise.getTime()))){
+      var nextday = new Date(inputdate.getTime() + 24*60*60*1000);
+      var nextmoonTimes = SunCalc.getMoonTimes(nextday, lat , lng);
+      $('#moonset').html(nextmoonTimes.set.format("yyyy/MM/dd hh:mm"));
+    }else{
+      $('#moonset').html(moonTimes.set.format("yyyy/MM/dd hh:mm"));
+    }
+    //moon ill
+    $('#light').html(moonIllumination.fraction.toPrecision(6));
+
+    var smoonPhase = "";
+    var moonPhase = moonIllumination.phase;
+    if(moonPhase < 0.03 || moonPhase > 0.98){ smoonPhase = "新月";
+    }else if(moonPhase < 0.27){ smoonPhase = "娥眉月";
+    }else if(moonPhase < 0.23){ smoonPhase = "上弦月";
+    }else if(moonPhase < 0.47){ smoonPhase = "渐盈凸月";
+    }else if(moonPhase < 0.53){ smoonPhase = "满月";
+    }else if(moonPhase < 0.73){ smoonPhase = "渐亏凸月";
+    }else if(moonPhase < 0.77){ smoonPhase = "下弦月";
+    }else{ smoonPhase = "残月"; }
+    $('#moonPhase').html(smoonPhase);
+  });
+
+  </script>
+</body>
+</html>
