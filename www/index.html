@@ -14,7 +14,6 @@
   <script type="text/javascript" src="jquery.mobile.toast.min.js"></script>
   <script type="text/javascript" src="jqm-datebox.all.min.js"></script>
   <script type="text/javascript" src="jquery.panzoom.min.js"></script>
-  <script type="text/javascript" src="fastclick.js"></script>
   <link rel="stylesheet" href="leaflet.css"/>
   <link rel="stylesheet" href="esri-leaflet-geocoder.css"/>
   <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
@@ -378,7 +377,6 @@
     </div>
   </div>
   <script type="text/javascript">
-  $(function({FastClick.attach(document.body)}));
   Date.prototype.format = function(fmt) { //author: meizz
     var o = {   
       "M+" : this.getMonth()+1,                 //月份
@@ -530,7 +528,7 @@
   function onMapClick(e) {
       marker.setLatLng( e.latlng).update();
   }
-
+  var cot=(('ontouchend' in window))?'touchend':'click';
   document.addEventListener('deviceready', onDeviceReady, false);
 
   function onDeviceReady() {
@@ -542,7 +540,7 @@
     function errdisp(e){
       $.mobile.toast({ message: e.message,position:"center" });
     }
-    $('#slocate').click(function() {
+    $('#slocate').on(cot,function() {
         navigator.geolocation.getCurrentPosition(disp,errdisp,{ maximumAge: 3000, timeout: 5000});
     });
   }
@@ -560,7 +558,7 @@
    $('#latitude').val(item.lat);
    $('#longitude').val(item.lng);
   });
-  $('#newLoc').click(function () {
+  $('#newLoc').on(cot,function () {
     $("#sname").val("");
     $('#slatitude').val("");
     $('#slongitude').val("");
@@ -579,7 +577,7 @@
       $('#forcastcnt').html(value);
   });
   //设置
-  $('#settingset').click(function () {
+  $('#settingset').on(cot,function () {
     var baseMapNames=[],overlayMapNames=[];
     $('#baseMaps :checked').each(function(){
       baseMapNames.push($(this).attr('id'));
@@ -611,7 +609,7 @@
     $.mobile.changePage( "#pagemain",{transition:'slide',reverse:true});
   });
   //添加地点
-  $('#sok').click(function(){
+  $('#sok').on(cot,function(){
     var item = new Object();
     item.name = $("#sname").val();
     item.lat = $('#slatitude').val();
@@ -625,7 +623,7 @@
     $("#pagesearch" ).popup( "close" );
   });
   //天气预报
-  $('#weather').click(function(){
+  $('#weather').on(cot,function(){
     var lat = $('#latitude').val();
     var lng = $('#longitude').val();
     var cnt = parseInt($('#forcastcnt').html(), 10);;
@@ -660,7 +658,7 @@
     $.mobile.changePage( "#pageweather",{transition:'slide'});
   });
   //search position
-  $('#ssearch').click(function(){
+  $('#ssearch').on(cot,function(){
     var address = $("#sname").val();
     L.esri.Geocoding.geocode().text(address).run(function(err, results, response){
       if(results.results.length > 0){
@@ -670,7 +668,7 @@
     });
   });
   //显示popup
-  $('#headerClock').click(function(){
+  $('#headerClock').on(cot,function(){
     //if(!marker){
       var pos = marker.getLatLng().wrap();
       var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
@@ -678,7 +676,7 @@
       marker.bindPopup(content,{maxWidth:500}).openPopup();
   });
   //晴天钟
-  $('#clock').click(function () {
+  $('#clock').on(cot,function () {
     var lat = $('#latitude').val();
     var lng = $('#longitude').val();
     var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ lng +"&lat="+ lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
@@ -687,7 +685,7 @@
     $.mobile.changePage("#pageclock",{transition:'slide'});
   });
   //红外云图
-  $('#nircloud').click(function(){
+  $('#nircloud').on(cot,function(){
     var now = new Date();
     now = new Date(now.getTime());
     $("#cloudcontent").panzoom();
@@ -722,7 +720,7 @@
   });
 
   //晨昏蒙影
-  $('#suncalc').click(function(){
+  $('#suncalc').on(cot,function(){
     var lat = $('#latitude').val();
     var lng = $('#longitude').val();
     var inputdate = stringToDate($('#inputdate').val());
