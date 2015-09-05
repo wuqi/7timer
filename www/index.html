@@ -61,9 +61,10 @@
         <div class="ui-block-c">
           <a href="#pagesearch" data-role="button" id="newLoc" data-transition="slide" data-icon="plus" data-rel="popup" data-mini="true" >添加地点</a></div>
       </div>
-      <div class="ui-grid-a"> 
+      <div class="ui-grid-b btngroup"> 
         <div class="ui-block-a"><a href="#" data-role="button" id="weather" data-transition="slide" data-icon="calendar"  data-mini="true">天气预报</a></div>
         <div class="ui-block-b"><a href="#" data-role="button" id="nircloud" data-transition="slide" data-icon="cloud" data-mini="true" >红外云图</a></div>
+        <div class="ui-block-c"><a href="#" data-role="button" id="radar" data-transition="slide" data-icon="eye" data-mini="true" >雷达拼图</a></div>
       </div>
     </div>
     <!--添加新地点-->
@@ -104,94 +105,7 @@
        <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
     </div>
     <div data-role="content">
-      <table>
-        <thead>
-     <tr>
-       <th align="left">晨昏蒙影</th>
-     </tr>
-   </thead>
-   <tbody>
-        <tr>
-          <td align="left">日出起始时间</td>
-          <td id = "sunrise" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">日出结束时间</td>
-          <td id = "sunriseEnd" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">日出黄金时间</td>
-          <td id = "goldenHourEnd" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">日落黄金时间</td>
-          <td id = "goldenHour" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">太阳最高点时间</td>
-          <td id = "solarNoon" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">日落开始时间</td>
-          <td id = "sunsetStart" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">民用晨光始</td>
-          <td id = "dawn" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">民用昏影终</td>
-          <td id = "sunset" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">航海晨光始</td>
-          <td id = "nauticalDawn" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">航海昏影终</td>
-          <td id = "dusk" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">天文晨光始</td>
-          <td id = "nightEnd" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">天文昏影终</td>
-          <td id = "nauticalDusk" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">黑暗</td>
-          <td id = "night" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">最暗时刻</td>
-          <td id = "nadir" align="right"></td>
-        </tr>
-     </tbody>
-     <thead>
-     <tr>
-       <th align="left">月相</th>
-     </tr>
-   </thead>
-   <tbody>
-        <tr>
-          <td align="left">月出时间</td>
-          <td id = "moonrise" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">月落时间</td>
-          <td id = "moonset" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">月相</td>
-          <td id = "moonPhase" align="right"></td>
-        </tr>
-        <tr>
-          <td align="left">亮度</td>
-          <td id = "light" align="right"></td>
-        </tr>
-        </tbody>
-      </table>
+<table><thead><tr><th align="left">晨昏蒙影</th></tr></thead><tbody><tr><td align="left">日出起始时间</td><td id = "sunrise" align="right"></td></tr><tr><td align="left">日出结束时间</td><td id = "sunriseEnd" align="right"></td></tr><tr><td align="left">日出黄金时间</td><td id = "goldenHourEnd" align="right"></td></tr><tr><td align="left">日落黄金时间</td><td id = "goldenHour" align="right"></td></tr><tr><td align="left">太阳最高点时间</td><td id = "solarNoon" align="right"></td></tr><tr><td align="left">日落开始时间</td><td id = "sunsetStart" align="right"></td></tr><tr><td align="left">民用晨光始</td><td id = "dawn" align="right"></td></tr><tr><td align="left">民用昏影终</td><td id = "sunset" align="right"></td></tr><tr><td align="left">航海晨光始</td><td id = "nauticalDawn" align="right"></td></tr><tr><td align="left">航海昏影终</td><td id = "dusk" align="right"></td></tr><tr><td align="left">天文晨光始</td><td id = "nightEnd" align="right"></td></tr><tr><td align="left">天文昏影终</td><td id = "nauticalDusk" align="right"></td></tr><tr><td align="left">黑暗</td><td id = "night" align="right"></td></tr><tr><td align="left">最暗时刻</td><td id = "nadir" align="right"></td></tr></tbody><thead><tr><th align="left">月相</th></tr></thead><tbody><tr><td align="left">月出时间</td><td id = "moonrise" align="right"></td></tr><tr><td align="left">月落时间</td><td id = "moonset" align="right"></td></tr><tr><td align="left">月相</td><td id = "moonPhase" align="right"></td></tr><tr><td align="left">亮度</td><td id = "light" align="right"></td></tr></tbody></table>
     </div>
   </div>
   <!--pageinfo-->
@@ -212,13 +126,13 @@
           <li>晨昏蒙影计算:   <a onclick="navigator.app.loadUrl('https://github.com/mourner/suncalc', { openExternal:true });">Suncalc</a></li>
           <li>天气预报来源: <a onclick="navigator.app.loadUrl('http://openweathermap.org/forecast16', { openExternal:true });">OpenWeatherMap</a></li>
           <li>云图数据来源:  <a onclick="navigator.app.loadUrl('http://www.nsmc.cma.gov.cn/NSMC/Channels/100028.html', { openExternal:true });">国家气象卫星中心</a></li>
+          <li>雷达数据来源:  <a onclick="navigator.app.loadUrl('http://www.cma.gov.cn/tqyb/radar/radar.php', { openExternal:true });">中国气象局</a></li>
           </ul>
           <h4>使用说明:</h4>
           <ul>
             <li>地图模式下，双击选择位置，点击晴天钟按钮显示天气</li>
             <li>地图模式或者添加新地点中搜索框中，可以使用空格，中文，英文搜索，例如：“湖北 武汉 武汉大学”</li>
-            <li>如果地图无法加载，可以尝试在设置中更换地图，更换后，地图将自动重置到起点</li>
-            <li>设置中可以更换红外云图模式，如果需要其他模式，请参考《反馈及建议》部分提出建议</li>
+            <li>如果地图无法加载，可以更换底图</li>
             <li>地图默认起始位置为所选地点</li>
           </ul>
           <h4>网络说明:</h4>
@@ -227,12 +141,13 @@
             <li>定位/查询/地图/云图/天气预报将消耗流量</li>
             <li>云图下载可能会耗费较大流量(150-300k),仅下载当前时间最近的云图</li>
             <li>黑白地图较省流量(15k/per Tile)，Esri地图最耗流量(55k/per Tile),其余约20k/per Tile</li>
+            <li>雷达图每张90kb</li>
           </ul>
           <h4>地图说明</h4>
           <ul>
             <li>地图设置中分为底图设置和可选图层设置，底图只能显示一个，可以切换，可选图层都为透明，可以叠加显示</li>
             <li>水彩地图和天地图需要单独添加注释图层</li>
-            <li>底图中带Mobile的图层注释较大</li>
+            <li>底图中带Mobile的图层注释字体较大</li>
             <li>天地图、高德地图、MapABC仅有少量国外数据，但加载速度快，请酌情使用</li>
             <li>Mapbox、高德、天地图、OpenStreatMap、MapABC为本地语言,Stamen放大后为本地语言，其余都为英文</li>
             <li>如果需要显示Cloud等可选图层，建议勾选‘HERE Night’，显示比较清晰</li>
@@ -275,6 +190,21 @@
     <label for="img"  data-mini="true" id="cloudLable"></label>
     <div  id="cloudcontent" height="100%">
       <img src="" alt="红外云图" id="imgCloud" width="100%"/>
+    </div>
+  </div>
+  <!--雷达拼图-->
+  <div data-role="page" id="pageradar" class="page">
+    <div data-role="header">
+       <h1>雷达拼图</h1>
+        <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+    </div>
+    <label for="img"  data-mini="true" id="radarLable"></label>
+    <div  id="radarcontent" height="100%">
+      <img src="" alt="雷达拼图" id="imgRadar" width="100%"/>
+    </div>
+    <div class="ui-grid-a"> 
+      <div class="ui-block-a"><a href="#" data-role="button" id="radarprev"  data-mini="true" data-icon="minus">上一页</a></div>
+      <div class="ui-block-b"><a href="#" data-role="button" id="radarnext"  data-mini="true" data-icon="plus">下一页</a></div>
     </div>
   </div>
   <!--pagesettings-->
@@ -719,7 +649,34 @@
     });
     $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
   });
-
+  var radartime;
+  //雷达
+  $('#radar').on(cot,function(){
+    var now = new Date();
+    now = new Date(now.getTime());
+    $("#radarcontent").panzoom();
+    $.mobile.changePage( "#pageradar",{transition:'slide'});
+    var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
+    radartime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
+    currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
+    var imgurl = 'http://www.cma.gov.cn/tqyb/images/forecast/products/radar/data/l/sevp_nmc_rdcp_sldas_ez9_achn_l88_pi_'+ currenttime.format('yyyyMMddhhmm') +'00000.gif';
+    $("#imgRadar").attr("src", imgurl);
+    $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+  });
+  $('#radarprev').on(cot,function(){
+    radartime = new Date(radartime.getFullYear(),radartime.getMonth(),radartime.getDate(),radartime.getHours(),radartime.getMinutes()-10);
+    var currenttime= new Date(radartime.getTime() + radartime.getTimezoneOffset() * 60 * 1000);
+    var imgurl = 'http://www.cma.gov.cn/tqyb/images/forecast/products/radar/data/l/sevp_nmc_rdcp_sldas_ez9_achn_l88_pi_'+ currenttime.format('yyyyMMddhhmm') +'00000.gif';
+    $("#imgRadar").attr("src", imgurl);
+    $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+  });
+  $('#radarnext').on(cot,function(){
+    radartime = new Date(radartime.getFullYear(),radartime.getMonth(),radartime.getDate(),radartime.getHours(),radartime.getMinutes()+10);
+    var currenttime= new Date(radartime.getTime() + radartime.getTimezoneOffset() * 60 * 1000);
+    var imgurl = 'http://www.cma.gov.cn/tqyb/images/forecast/products/radar/data/l/sevp_nmc_rdcp_sldas_ez9_achn_l88_pi_'+ currenttime.format('yyyyMMddhhmm') +'00000.gif';
+    $("#imgRadar").attr("src", imgurl);
+    $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+  });
   //晨昏蒙影
   $('#suncalc').on(cot,function(){
     var lat = $('#latitude').val();
