@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="leaflet.css"/>
   <link rel="stylesheet" href="esri-leaflet-geocoder.css"/>
   <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
-  <link rel="stylesheet" href="jqm-datebox.min.css">
+  <link rel="stylesheet" href="glDatePicker.flatwhite.css">
+  <link rel="stylesheet" href="glDatePicker.defalut.css">
   <style type="text/css" >
   #pagemap>.ui-content {
       position: absolute;
@@ -22,6 +23,23 @@
   #map {
       height: 100%;
   }
+  .ui-body-a, .ui-bar-a, .ui-btn-up-a,.ui-btn-hover-a,.ui-btn-down-a,
+.ui-body-b,.ui-bar-b,.ui-btn-up-b,.ui-btn-hover-b,.ui-btn-down-b,
+.ui-body-c,.ui-bar-c,.ui-btn-up-c,.ui-btn-hover-c,.ui-btn-down-c,
+.ui-body-d,.ui-bar-d,.ui-btn-up-d,.ui-btn-hover-d,.ui-btn-down-d,
+.ui-body-e,.ui-bar-e,.ui-btn-up-e,.ui-btn-hover-e,.ui-btn-down-e,
+.ui-shadow-inset,
+.ui-icon-shadow,
+.ui-focus,
+.ui-overlay-shadow,
+.ui-shadow,
+.ui-btn-active{
+    text-shadow: none !important;
+    box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -webkit-transform: translateZ(0);
+}
   </style>
 </head>
 <body>
@@ -53,7 +71,7 @@
       </div>
       <div data-role="fieldcontain">
         <label for="inputdate"  data-mini="true" >时间：</label>
-        <input type="text" name="inputdate" id="inputdate"  data-mini="true" data-role="datebox" data-options='{"mode":"calbox","useFocus":"true","overrideDateFormat":"%Y-%m-%d "}'/>
+        <input type="text" name="inputdate" id="inputdate"  data-mini="true" readonly="readonly"/>
       </div>
       <div class="ui-grid-b btngroup"> 
         <div class="ui-block-a"><a href="#" data-role="button" id="clock" data-transition="slide" data-icon="clock"  data-mini="true" >晴天钟</a></div>
@@ -304,8 +322,8 @@
   <script type="text/javascript" src="esri-leaflet-geocoder.js"></script>
   <script type="text/javascript" src="leaflet-providers.js"></script>
   <script type="text/javascript" src="suncalc.js"></script>
+  <script type="text/javascript" src="glDatePicker.min.js"></script>
   <script type="text/javascript" src="jquery.mobile.toast.min.js"></script>
-  <script type="text/javascript" src="jqm-datebox.all.min.js"></script>
   <script type="text/javascript" src="jquery.panzoom.min.js"></script>
   <script type="text/javascript">
   Date.prototype.format = function(fmt) { //author: meizz
@@ -327,7 +345,7 @@
   };
   function stringToDate(_date)	{
     var m_date = $.trim(_date);
-    var dateItems=_date.split('-');
+    var dateItems=_date.split('/');
     var yearitem = parseInt(dateItems[0],10);
     var monthitem = parseInt(dateItems[1],10);
     var dayitem = parseInt(dateItems[2],10);
@@ -415,6 +433,7 @@
     }
     return true;
   }
+  $(window).load(function(){$("#inputdate").glDatePicker({cssName:'flatwhite',monthNames:[' 一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],dowNames:['日','一','二','三','四','五','六']})});
   var map = null;
   var marker ;
   var searchControl;
@@ -475,9 +494,19 @@
         navigator.geolocation.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:true,maximumAge: 3000, timeout: 5000});
     });
   }
+  $(document).bind("mobileinit", function(){
+    $.mobile.touchOverflowEnabled = false;
+    $.mobile.defaultPageTransition = 'none';
+    $.mobile.defaultDialogTransition = 'none';
+    $.mobile.useFastClick = false;
+    $.mobile.buttonMarkup.hoverDelay = 0;
+    $.mobile.page.prototype.options.domCache = false;
+    $.event.special.swipe.scrollSupressionThreshold = 100;
+  });
+  $(document).bind("touchstart", function(event){});
   //initial
   var tempdate = new Date();
-  $('#inputdate').val(tempdate.format('yyyy-MM-dd'));
+  $('#inputdate').val(tempdate.format('yyyy/MM/dd'));
   var index = $('#address').get(0).selectedIndex;
   var item = addresses.locations[index];
   $('#latitude').val(item.lat);
