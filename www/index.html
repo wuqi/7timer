@@ -9,8 +9,7 @@
   <link rel="stylesheet" href="leaflet.css"/>
   <link rel="stylesheet" href="esri-leaflet-geocoder.css"/>
   <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
-  <link rel="stylesheet" href="glDatePicker.flatwhite.css">
-  <link rel="stylesheet" href="glDatePicker.defalut.css">
+  <link rel="stylesheet" href="flatpickr.css">
   <style type="text/css" >
   #pagemap>.ui-content {
       position: absolute;
@@ -20,15 +19,8 @@
       left: 0;
       padding: 0 !important;
   }
-  #map { height: 100%; }
-  .ui-body-a, .ui-bar-a, .ui-btn-up-a,.ui-btn-hover-a,.ui-btn-down-a,
-  .ui-body-b,.ui-bar-b,.ui-btn-up-b,.ui-btn-hover-b,.ui-btn-down-b,
-  .ui-shadow-inset,.ui-icon-shadow,.ui-focus,.ui-overlay-shadow,.ui-shadow,.ui-btn-active{
-    text-shadow: none !important;
-    box-shadow: none !important;
-    -moz-box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-    -webkit-transform: translateZ(0);
+  #map {
+      height: 100%;
   }
   </style>
 </head>
@@ -61,6 +53,7 @@
       </div>
       <div data-role="fieldcontain">
         <label for="inputdate"  data-mini="true" >时间：</label>
+        <!--<input type="text" name="inputdate" id="inputdate"  data-mini="true" data-role="datebox" data-options='{"mode":"calbox","useFocus":"true","overrideDateFormat":"%Y-%m-%d "}'/>-->
         <input type="text" name="inputdate" id="inputdate"  data-mini="true" readonly="readonly"/>
       </div>
       <div class="ui-grid-b btngroup"> 
@@ -312,8 +305,8 @@
   <script type="text/javascript" src="esri-leaflet-geocoder.js"></script>
   <script type="text/javascript" src="leaflet-providers.js"></script>
   <script type="text/javascript" src="suncalc.js"></script>
-  <script type="text/javascript" src="glDatePicker.min.js"></script>
   <script type="text/javascript" src="jquery.mobile.toast.min.js"></script>
+  <script type="text/javascript" src="flatpickr.js"></script>
   <script type="text/javascript" src="jquery.panzoom.min.js"></script>
   <script type="text/javascript">
   Date.prototype.format = function(fmt) { //author: meizz
@@ -335,7 +328,7 @@
   };
   function stringToDate(_date)	{
     var m_date = $.trim(_date);
-    var dateItems=_date.split('/');
+    var dateItems=_date.split('-');
     var yearitem = parseInt(dateItems[0],10);
     var monthitem = parseInt(dateItems[1],10);
     var dayitem = parseInt(dateItems[2],10);
@@ -423,7 +416,6 @@
     }
     return true;
   }
-  $(window).load(function(){$("#inputdate").glDatePicker({cssName:'flatwhite',monthNames:[' 一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],dowNames:['日','一','二','三','四','五','六']})});
   var map = null;
   var marker ;
   var searchControl;
@@ -484,19 +476,10 @@
         navigator.geolocation.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:true,maximumAge: 3000, timeout: 5000});
     });
   }
-  $(document).bind("mobileinit", function(){
-    $.mobile.touchOverflowEnabled = false;
-    $.mobile.defaultPageTransition = 'none';
-    $.mobile.defaultDialogTransition = 'none';
-    $.mobile.useFastClick = false;
-    $.mobile.buttonMarkup.hoverDelay = 0;
-    $.mobile.page.prototype.options.domCache = false;
-    $.event.special.swipe.scrollSupressionThreshold = 100;
-  });
-  $(document).bind("touchstart", function(event){});
   //initial
   var tempdate = new Date();
-  $('#inputdate').val(tempdate.format('yyyy/MM/dd'));
+  $('#inputdate').val(tempdate.format('yyyy-MM-dd'));
+  var defDate = flatpickr('#inputdate', { dateFormat: 'Y-m-d'});
   var index = $('#address').get(0).selectedIndex;
   var item = addresses.locations[index];
   $('#latitude').val(item.lat);
@@ -507,7 +490,6 @@
    var item = addresses.locations[index];
    $('#latitude').val(item.lat);
    $('#longitude').val(item.lng);
-   if(map!==null){marker.setLatLng(item).update();map.setView(item)}
   });
   $('#newLoc').on(cot,function () {
     $("#sname").val("");
@@ -620,12 +602,38 @@
   });
   //显示popup
   $('#headerClock').on(cot,function(){
-    //if(!marker){
-      var pos = marker.getLatLng().wrap();
-      var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
-      var content = "<div  style=\"width:500px\"><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:500px\"/></div>";
-      marker.bindPopup(content,{maxWidth:500}).openPopup();
+    var pos = marker.getLatLng().wrap();
+    var opts;
+    for(var i=0;i<addresses.locations.length;i++){
+      var name = addresses.locations[i].name;
+      opts += "<option value='"+name+"'>"+name+"</option>";
+    }
+    var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
+    var content = "<div  style=\"width:500px\"><span><input id=\"lblName\" type=\"text\" placeholder=\"新地名\" value=\"新地名\"><button id=\"addLblPos\" onclick=\"addLblPos()\">添加地点</button><select id=\"selLbl\" placeholder=\"选择地名\">"+opts+"</select><button id=\"gotoLblPos\" onclick=\"gotoLblPos()\">跳转</button></span><div><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:500px\"/></div></div>";
+    marker.bindPopup(content,{maxWidth:500}).openPopup();
   });
+  //跳转地点
+  function gotoLblPos() {
+    var index = $('#selLbl').get(0).selectedIndex;
+    var item = addresses.locations[index];
+    $('#latitude').val(item.lat);
+    $('#longitude').val(item.lng);
+    marker.setLatLng(item).update();map.setView(item);
+  }
+  //添加地点
+  function addLblPos() {
+    var pos = marker.getLatLng().wrap();
+    var item = new Object();
+    item.name = $("#lblName").val();
+    item.lat = pos.lat;
+    item.lng = pos.lng;
+    addresses.locations.push(item);
+    storage.setItem("addresses",JSON.stringify(addresses));
+    $("#address").append("<option value='"+item.name+"'>"+item.name+"</option>");
+    $("#deleteLocs").append("<option value='"+item.name+"'>"+item.name+"</option>");
+    $('#address').selectmenu('refresh');
+    $('#deleteLocs').selectmenu('refresh');
+  }
   //晴天钟
   $('#clock').on(cot,function () {
     var lat = $('#latitude').val();
