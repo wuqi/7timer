@@ -22,6 +22,10 @@
   #map {
       height: 100%;
   }
+  #popupclock>input{width:175px}
+  #popupclock>select{width:120px;height:2.5em}
+  #popupclock>button{width:88px;font-size:100%;padding:.5em .6em;color:rgba(0,0,0,0.8);border:0 none transparent;background-color: #e6e6e6;text-decoration:none;border-radius:2px}
+  #popupclock>input,#popupclock>select{padding:.5em .6em;display: inline-block;border: 1px solid #ccc;box-shadow:0 1px 3px #ddd inset;border-radius:4px;transition:border:.3s linear 0s;box-sizing:border-box;margin:.5em}
   </style>
 </head>
 <body>
@@ -53,7 +57,6 @@
       </div>
       <div data-role="fieldcontain">
         <label for="inputdate"  data-mini="true" >时间：</label>
-        <!--<input type="text" name="inputdate" id="inputdate"  data-mini="true" data-role="datebox" data-options='{"mode":"calbox","useFocus":"true","overrideDateFormat":"%Y-%m-%d "}'/>-->
         <input type="text" name="inputdate" id="inputdate"  data-mini="true" readonly="readonly"/>
       </div>
       <div class="ui-grid-b btngroup"> 
@@ -479,7 +482,7 @@
   //initial
   var tempdate = new Date();
   $('#inputdate').val(tempdate.format('yyyy-MM-dd'));
-  var defDate = flatpickr('#inputdate', { dateFormat: 'Y-m-d'});
+  flatpickr('#inputdate', { dateFormat: 'Y-m-d'});
   var index = $('#address').get(0).selectedIndex;
   var item = addresses.locations[index];
   $('#latitude').val(item.lat);
@@ -609,7 +612,7 @@
       opts += "<option value='"+name+"'>"+name+"</option>";
     }
     var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
-    var content = "<div  style=\"width:500px\"><span><input id=\"lblName\" type=\"text\" placeholder=\"新地名\" value=\"新地名\"><button id=\"addLblPos\" onclick=\"addLblPos()\">添加地点</button><select id=\"selLbl\" placeholder=\"选择地名\">"+opts+"</select><button id=\"gotoLblPos\" onclick=\"gotoLblPos()\">跳转</button></span><div><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:500px\"/></div></div>";
+    var content = "<div  style=\"width:500px\"><span id=\"popupclock\"><input id=\"lblName\" type=\"text\" placeholder=\"新地名\" value=\"新地名\"><button id=\"addLblPos\" onclick=\"addLblPos()\">添加地点</button><select id=\"selLbl\" placeholder=\"选择地名\">"+opts+"</select><button id=\"gotoLblPos\" onclick=\"gotoLblPos()\">跳转</button></span><div><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:500px\"/></div></div>";
     marker.bindPopup(content,{maxWidth:500}).openPopup();
   });
   //跳转地点
