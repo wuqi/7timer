@@ -22,10 +22,10 @@
   #map {
       height: 100%;
   }
-  #popupclock>input{width:175px}
-  #popupclock>select{width:120px;height:2.5em}
-  #popupclock>button{width:88px;font-size:100%;padding:.5em .6em;color:rgba(0,0,0,0.8);border:0 none transparent;background-color: #e6e6e6;text-decoration:none;border-radius:2px}
-  #popupclock>input,#popupclock>select{padding:.5em .6em;display: inline-block;border: 1px solid #ccc;box-shadow:0 1px 3px #ddd inset;border-radius:4px;transition:border:.3s linear 0s;box-sizing:border-box;margin:.5em}
+  #popupclock>input{width:120px}
+  #popupclock>select{width:110px;height: 2.5em;background-color:#fff}
+  #popupclock>input,#popupclock>select{padding:.5em .6em;display:inline-block;border:1px solid #CCC;box-shadow:0 1px 3px #DDD inset;border-radius:4px;transition:border .3s linear 0s;box-sizing:border-box;margin:.5em}
+  #popupclock>button{width:80px;font-size:100%;padding:.5em .6em;color:rgba(0,0,0,0.8);border:0 none transparent;background-color:#e6e6e6;text-decoration:none;border-radius:2px}
   </style>
 </head>
 <body>
@@ -152,9 +152,9 @@
             <li>地图设置中分为底图设置和可选图层设置，底图只能显示一个，可以切换，可选图层都为透明，可以叠加显示</li>
             <li>水彩地图和天地图需要单独添加注释图层</li>
             <li>底图中带Mobile的图层注释字体较大</li>
-            <li>天地图、高德地图、MapABC仅有少量国外数据，但加载速度快，请酌情使用</li>
+            <li>天地图、高德地图、MapABC仅有少量国外数据,且高德地图和MapABC国内地图有偏移，但加载速度快，请酌情使用</li>
             <li>Mapbox、高德、天地图、OpenStreatMap、MapABC为本地语言,Stamen放大后为本地语言，其余都为英文</li>
-            <li>如果需要显示Cloud等可选图层，建议勾选‘HERE Night’，显示比较清晰</li>
+            <li>Here中国部分地图数据最近部分被删除，若需要可以使用卫星图数据</li>
           </ul>
           <h4>反馈及建议</h4>
           <ul>
@@ -361,9 +361,9 @@
   var baseMapNames=[],overlayMapNames=[];
   //baseMaps
   if(!storage.getItem("baseMaps")){
-    baseMapNames.push("HERE.normalDay");
+    baseMapNames.push("Stamen.Toner");
     storage.setItem("baseMaps",JSON.stringify(baseMapNames));
-    $(jq('HERE.normalDay')).attr('checked',true);
+    $(jq('Stamen.Toner')).attr('checked',true);
   }else{
     baseMapNames = JSON.parse(storage.getItem("baseMaps"));
     $.each(baseMapNames,function(k,v){$(jq(v)).attr('checked',true)});
@@ -465,14 +465,20 @@
   }
   var cot=(('ontouchend' in window))?'touchend':'click';
   document.addEventListener('deviceready', onDeviceReady, false);
-
+  var disp,errdisp,jmpdisp;
   function onDeviceReady() {
-    function disp(pos) {
+    disp = function (pos) {
        if($("#sname").val() === ""){$("#sname").val("新地点");}
        $('#slatitude').val(pos.coords.latitude);
        $('#slongitude').val(pos.coords.longitude);
-    }
-    function errdisp(e){
+    };
+    jmpdisp = function (pos) {
+      var p = marker.getLatLng().wrap();
+      p.lat = pos.coords.latitude;
+      p.lng = pos.coords.longitude;
+      marker.setLatLng(p).update();map.setView(p);
+    };
+    errdisp = function (e){
       $.mobile.toast({ message: e.message,position:"center" });
     }
     $('#slocate').on(cot,function() {
@@ -612,9 +618,12 @@
       opts += "<option value='"+name+"'>"+name+"</option>";
     }
     var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
-    var content = "<div  style=\"width:500px\"><span id=\"popupclock\"><input id=\"lblName\" type=\"text\" placeholder=\"新地名\" value=\"新地名\"><button id=\"addLblPos\" onclick=\"addLblPos()\">添加地点</button><select id=\"selLbl\" placeholder=\"选择地名\">"+opts+"</select><button id=\"gotoLblPos\" onclick=\"gotoLblPos()\">跳转</button></span><div><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:500px\"/></div></div>";
+    var content = "<div  style=\"width:500px\"><span id=\"popupclock\"><button id=\"lctPos\" onclick=\"lctPos()\">定位</button><input id=\"lblName\" type=\"text\" placeholder=\"新地名\" value=\"新地名\"><button id=\"addLblPos\" onclick=\"addLblPos()\">添加地点</button><select id=\"selLbl\" placeholder=\"选择地名\">"+opts+"</select><button id=\"gotoLblPos\" onclick=\"gotoLblPos()\">跳转</button></span><div><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:500px\"/></div></div>";
     marker.bindPopup(content,{maxWidth:500}).openPopup();
   });
+  function lctPos(){
+    navigator.geolocation.getCurrentPosition(jmpdisp,errdisp,{ enableHighAccuracy:true,maximumAge: 3000, timeout: 5000});
+  }
   //跳转地点
   function gotoLblPos() {
     var index = $('#selLbl').get(0).selectedIndex;
