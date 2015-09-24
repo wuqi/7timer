@@ -618,8 +618,8 @@
       var name = addresses.locations[i].name;
       opts += "<option value='"+name+"'>"+name+"</option>";
     }
-    var mw = screen.width/window.devicePixelRatio;
-    if(mw>500){mw =500}else if(mw<320){mw=320}
+    var mw = $(document).width();
+    mw = mw>500?500:mw<300?300:mw-38;
     var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
     var content = "<div  style=\"width:"+mw+"px\"><span id=\"popupclock\"><button id=\"lctPos\" onclick=\"lctPos()\">定位</button><input id=\"lblName\" type=\"text\" placeholder=\"新地名\" value=\"新地名\"><button id=\"addLblPos\" onclick=\"addLblPos()\">添加地点</button><select id=\"selLbl\" placeholder=\"选择地名\">"+opts+"</select><button id=\"gotoLblPos\" onclick=\"gotoLblPos()\">跳转</button></span><div><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:"+ mw+"px\"/></div></div>";
     marker.bindPopup(content,{maxWidth:mw}).openPopup();
