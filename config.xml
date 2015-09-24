@@ -3,6 +3,7 @@
   <description>7Timer Mobile App</description>
   <author href="http://diphda.info" email="wuqi198772@gmail.com">Wu Qi</author>
   <content src="index.html"/>
+  <preference name="phonegap-version" value="3.5.0" /> 
   <preference name="permissions"                value="none"/>
   <preference name="orientation"                value="default" />
   <preference name="target-device"              value="universal" />
