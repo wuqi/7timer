@@ -22,7 +22,7 @@
   <gap:plugin name="cordova-plugin-splashscreen" source="npm" />
   <gap:plugin name="org.apache.cordova.geolocation" />
   <icon src="icon.png"/>
-  <gap:splash src="splash.9.png"/>
+  <gap:splash src="splash.png"/>
   <feature name="http://api.phonegap.com/1.0/network" />
   <access origin="*" />
 </widget>
