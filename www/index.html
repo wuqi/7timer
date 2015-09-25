@@ -489,7 +489,7 @@
   //initial
   var tempdate = new Date();
   $('#inputdate').val(tempdate.format('yyyy-MM-dd'));
-  flatpickr('#inputdate', { dateFormat: 'Y-m-d'});
+  flatpickr('#inputdate');
   var index = $('#address').get(0).selectedIndex;
   var item = addresses.locations[index];
   $('#latitude').val(item.lat);
