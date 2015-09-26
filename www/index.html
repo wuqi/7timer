@@ -36,9 +36,9 @@
        <h1>晴天钟</h1>
       <div data-role="navbar" data-iconpos="left">
         <ul>
-          <li><a href="#pagemap" data-icon="eye" data-transition="slide">地图</a></li>
-          <li><a href="#pagesettings" data-icon="gear" data-transition="slide">设置</a></li>
-          <li><a href="#pageinfo" data-icon="info"  data-transition="slide">说明</a></li>
+          <li><a href="#pagemap" data-icon="eye" data-transition="none">地图</a></li>
+          <li><a href="#pagesettings" data-icon="gear" data-transition="none">设置</a></li>
+          <li><a href="#pageinfo" data-icon="info"  data-transition="none">说明</a></li>
         </ul>
       </div>
     </div>
@@ -61,15 +61,15 @@
         <input type="text" name="inputdate" id="inputdate"  data-mini="true" readonly="readonly"/>
       </div>
       <div class="ui-grid-b btngroup"> 
-        <div class="ui-block-a"><a href="#" data-role="button" id="clock" data-transition="slide" data-icon="clock"  data-mini="true" >晴天钟</a></div>
-        <div class="ui-block-b"><a href="#pageresult" data-role="button" id="suncalc" data-transition="slide" data-icon="star" data-mini="true" >晨昏蒙影</a></div>
+        <div class="ui-block-a"><a href="#" data-role="button" id="clock" data-transition="none" data-icon="clock"  data-mini="true" >晴天钟</a></div>
+        <div class="ui-block-b"><a href="#pageresult" data-role="button" id="suncalc" data-transition="none" data-icon="star" data-mini="true" >晨昏蒙影</a></div>
         <div class="ui-block-c">
-          <a href="#pagesearch" data-role="button" id="newLoc" data-transition="slide" data-icon="plus" data-rel="popup" data-mini="true" >添加地点</a></div>
+          <a href="#pagesearch" data-role="button" id="newLoc" data-transition="none" data-icon="plus" data-rel="popup" data-mini="true" >添加地点</a></div>
       </div>
       <div class="ui-grid-b btngroup"> 
-        <div class="ui-block-a"><a href="#" data-role="button" id="weather" data-transition="slide" data-icon="calendar"  data-mini="true">天气预报</a></div>
-        <div class="ui-block-b"><a href="#" data-role="button" id="nircloud" data-transition="slide" data-icon="cloud" data-mini="true" >红外云图</a></div>
-        <div class="ui-block-c"><a href="#" data-role="button" id="radar" data-transition="slide" data-icon="eye" data-mini="true" >雷达拼图</a></div>
+        <div class="ui-block-a"><a href="#" data-role="button" id="weather" data-transition="none" data-icon="calendar"  data-mini="true">天气预报</a></div>
+        <div class="ui-block-b"><a href="#" data-role="button" id="nircloud" data-transition="none" data-icon="cloud" data-mini="true" >红外云图</a></div>
+        <div class="ui-block-c"><a href="#" data-role="button" id="radar" data-transition="none" data-icon="eye" data-mini="true" >雷达拼图</a></div>
       </div>
     </div>
     <!--添加新地点-->
@@ -96,7 +96,7 @@
   <div data-role="page" id="pagemap" class="page">
     <div data-role="header" data-position="fixed">
        <h1>地图</h1>
-       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
        <a href="#" data-role="button" data-icon="clock" id="headerClock">晴天钟</a>
     </div>
     <div data-role="content">
@@ -107,7 +107,7 @@
   <div data-role="page" id="pageresult" class="page">
     <div data-role="header">
        <h1>晨昏蒙影</h1>
-       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
     </div>
     <div data-role="content">
 <table><thead><tr><th align="left">晨昏蒙影</th></tr></thead><tbody><tr><td align="left">日出起始时间</td><td id = "sunrise" align="right"></td></tr><tr><td align="left">日出结束时间</td><td id = "sunriseEnd" align="right"></td></tr><tr><td align="left">日出黄金时间</td><td id = "goldenHourEnd" align="right"></td></tr><tr><td align="left">日落黄金时间</td><td id = "goldenHour" align="right"></td></tr><tr><td align="left">太阳最高点时间</td><td id = "solarNoon" align="right"></td></tr><tr><td align="left">日落开始时间</td><td id = "sunsetStart" align="right"></td></tr><tr><td align="left">民用晨光始</td><td id = "dawn" align="right"></td></tr><tr><td align="left">民用昏影终</td><td id = "sunset" align="right"></td></tr><tr><td align="left">航海晨光始</td><td id = "nauticalDawn" align="right"></td></tr><tr><td align="left">航海昏影终</td><td id = "dusk" align="right"></td></tr><tr><td align="left">天文晨光始</td><td id = "nightEnd" align="right"></td></tr><tr><td align="left">天文昏影终</td><td id = "nauticalDusk" align="right"></td></tr><tr><td align="left">黑暗</td><td id = "night" align="right"></td></tr><tr><td align="left">最暗时刻</td><td id = "nadir" align="right"></td></tr></tbody><thead><tr><th align="left">月相</th></tr></thead><tbody><tr><td align="left">月出时间</td><td id = "moonrise" align="right"></td></tr><tr><td align="left">月落时间</td><td id = "moonset" align="right"></td></tr><tr><td align="left">月相</td><td id = "moonPhase" align="right"></td></tr><tr><td align="left">亮度</td><td id = "light" align="right"></td></tr></tbody></table>
@@ -117,7 +117,7 @@
   <div data-role="page" id="pageinfo" class="page">
     <div data-role="header" data-position="fixed">
        <h1>软件说明</h1>
-       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
     </div>
     <div data-role="content">
         <div>
@@ -168,7 +168,7 @@
   <div data-role="page" id="pageclock" class="page">
     <div data-role="header">
        <h1>晴天钟</h1>
-       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
     </div>
     <div  id="clockcontent" height="100%">
       <img src=""  alt="晴天钟" id="imgClock" width="100%"/>
@@ -178,19 +178,19 @@
   <div data-role="page" id="pageweather" class="page">
     <div data-role="header">
        <h1>天气预报</h1>
-       <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
     </div>
     <div data-role="content">
       <label for="img"  data-mini="true" id="cityname"></label>
       <div id="forcast"></div>
-      <a href="#pagemain" data-role="button" data-mini="true" data-icon="back" data-transition="slide" data-direction="reverse">返回</a>
+      <a href="#pagemain" data-role="button" data-mini="true" data-icon="back" data-transition="none">返回</a>
     </div>
   </div>
   <!--红外云图-->
   <div data-role="page" id="pagecloud" class="page">
     <div data-role="header">
        <h1>红外云图</h1>
-        <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
     </div>
     <label for="img"  data-mini="true" id="cloudLable"></label>
     <div  id="cloudcontent" height="100%">
@@ -201,7 +201,7 @@
   <div data-role="page" id="pageradar" class="page">
     <div data-role="header">
        <h1>雷达拼图</h1>
-        <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
     </div>
     <label for="img"  data-mini="true" id="radarLable"></label>
     <div  id="radarcontent" height="100%">
@@ -216,7 +216,7 @@
   <div data-role="page" id="pagesettings" class="page">
     <div data-role="header">
        <h1>设置</h1>
-        <a href="#pagemain" data-role="button" data-icon="home" data-transition="slide" data-direction="reverse">首页</a>
+        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
     </div>
     <div data-role="content">
         <label for="baseMaps">地图设置：</label>
@@ -299,7 +299,7 @@
         <div class="ui-grid-b"> 
         <div class="ui-block-a"></div>
         <div class="ui-block-b"><a href="#" data-role="button" id="settingset"  data-icon="check" data-mini="true" >确定</a></div>
-        <div class="ui-block-c"><a href="#pagemain" data-role="button" id="settingcancel" data-icon="back" data-mini="true"  data-transition="slide" data-direction="reverse">取消</a></div>
+        <div class="ui-block-c"><a href="#pagemain" data-role="button" id="settingcancel" data-icon="back" data-mini="true"  data-transition="none">取消</a></div>
       </div>
     </div>
   </div>
@@ -549,7 +549,7 @@
     $('#address').selectmenu('refresh');
     $('#deleteLocs').selectmenu('refresh');
     storage.setItem("addresses",JSON.stringify(addresses));
-    $.mobile.changePage( "#pagemain",{transition:'slide',reverse:true});
+    $.mobile.changePage( "#pagemain",{transition:'none'});
   });
   //添加地点
   $('#sok').on(cot,function(){
@@ -598,7 +598,7 @@
       $('#cityname').html("站点名称："+result.city.name +"  UTC±00:00");
       $('#forcast').html(divinfo);
     });
-    $.mobile.changePage( "#pageweather",{transition:'slide'});
+    $.mobile.changePage( "#pageweather",{transition:'none'});
   });
   //search position
   $('#ssearch').on(cot,function(){
@@ -657,14 +657,14 @@
     var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ lng +"&lat="+ lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
     $('#imgClock').attr("src", imgpath);
     $('#clockcontent').panzoom();
-    $.mobile.changePage("#pageclock",{transition:'slide'});
+    $.mobile.changePage("#pageclock",{transition:'none'});
   });
   //红外云图
   $('#nircloud').on(cot,function(){
     var now = new Date();
     now = new Date(now.getTime());
     $("#cloudcontent").panzoom();
-    $.mobile.changePage( "#pagecloud",{transition:'slide'});
+    $.mobile.changePage( "#pagecloud",{transition:'none'});
 
     var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
     currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
@@ -699,7 +699,7 @@
     var now = new Date();
     now = new Date(now.getTime());
     $("#radarcontent").panzoom();
-    $.mobile.changePage( "#pageradar",{transition:'slide'});
+    $.mobile.changePage( "#pageradar",{transition:'none'});
     var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
     radartime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
     currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
