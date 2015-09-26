@@ -468,6 +468,7 @@
   document.addEventListener('deviceready', onDeviceReady, false);
   var disp,errdisp,jmpdisp;
   function onDeviceReady() {
+    document.addEventListener("backbutton",function(e){e.preventDefault();},false);
     disp = function (pos) {
        if($("#sname").val() === ""){$("#sname").val("新地点");}
        $('#slatitude').val(pos.coords.latitude);
