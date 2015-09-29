@@ -18,10 +18,9 @@
   <preference name="disable-cursor"             value="false" />
   <preference name="android-minSdkVersion"      value="14" />
   <preference name="android-installLocation"    value="auto" />
-  <preference name="android-build-tool" value="ant" />
   <gap:plugin name="cordova-plugin-whitelist" source="npm" />
-  <gap:plugin name="org.apache.cordova.splashscreen" version="0.3.4" />
-  <gap:plugin name="org.apache.cordova.geolocation" />
+  <gap:plugin name="cordova-plugin-splashscreen" source="npm" />
+  <gap:plugin name="cordova-plugin--geolocation" source="npm"/>
   <icon src="icon.png"/>
   <gap:splash src="splash.png"/>
   <feature name="http://api.phonegap.com/1.0/network" />
