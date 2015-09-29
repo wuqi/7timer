@@ -18,6 +18,7 @@
   <preference name="disable-cursor"             value="false" />
   <preference name="android-minSdkVersion"      value="14" />
   <preference name="android-installLocation"    value="auto" />
+  <preference name="android-build-tool" value="ant" />
   <gap:plugin name="cordova-plugin-whitelist" source="npm" />
   <gap:plugin name="cordova-plugin-splashscreen" source="npm" />
   <gap:plugin name="org.apache.cordova.geolocation" />
