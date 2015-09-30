@@ -490,6 +490,7 @@
   //initial
   var tempdate = new Date();
   var dtpicker = flatpickr('#cacldate');
+  $('#cacldate').val(tempdate.format('yyyy-MM-dd'));
   var index = $('#address').get(0).selectedIndex;
   var item = addresses.locations[index];
   $('#latitude').val(item.lat);
@@ -772,12 +773,12 @@
     }else if(moonPhase < 0.47){ smoonPhase = "渐盈凸月";
     }else if(moonPhase < 0.53){ smoonPhase = "满月";
     }else if(moonPhase < 0.73){ smoonPhase = "渐亏凸月";
-    }else if(moonPhase < 0.87){ smoonPhase = "下弦月";
+    }else if(moonPhase < 0.79){ smoonPhase = "下弦月";
     }else{ smoonPhase = "残月"; }
     var imgphase = parseInt(moonPhase*28);
     $('#moonPhase').html("<img style='height:21px;margin-bottom:-5px' src='moon/"+ imgphase +".png'/>"+smoonPhase);
   }
-  $('#suncalc').on(cot,function(){dtpicker.set('defaultDate',tempdate.format('yyyy-MM-dd');$('#cacldate').val(tempdate.format('yyyy-MM-dd'));sunmooncalc()})
+  $('#suncalc').on(cot,function(){sunmooncalc()})
   dtpicker.element.addEventListener('change',sunmooncalc);
   //$('#cacldate').on('change',function(){sunmooncalc()});
   </script>
