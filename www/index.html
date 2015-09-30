@@ -468,7 +468,7 @@
   document.addEventListener('deviceready', onDeviceReady, false);
   var disp,errdisp,jmpdisp;
   function onDeviceReady() {
-    document.addEventListener("backbutton",function(e){if($.mobile.activePage.is('#pagemain')){navigator.app.exitApp()}else{navigator.app.backHistory()}},false);
+    document.addEventListener("backbutton",function(e){if($.mobile.activePage.is('#pagemain')){if(navigator.app){ navigator.app.exitApp();}else if(navigator.device){ navigator.device.exitApp();}}else{navigator.app.backHistory()}},false);
     disp = function (pos) {
        if($("#sname").val() === ""){$("#sname").val("新地点");}
        $('#slatitude').val(pos.coords.latitude);
