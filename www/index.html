@@ -777,7 +777,7 @@
     var imgphase = parseInt(moonPhase*28);
     $('#moonPhase').html("<img style='height:21px;margin-bottom:-5px' src='moon/"+ imgphase +".png'/>"+smoonPhase);
   }
-  $('#suncalc').on(cot,function(){$('#cacldate').val(tempdate.format('yyyy-MM-dd'));sunmooncalc()})
+  $('#suncalc').on(cot,function(){dtpicker.set('defaultDate',tempdate.format('yyyy-MM-dd');$('#cacldate').val(tempdate.format('yyyy-MM-dd'));sunmooncalc()})
   dtpicker.element.addEventListener('change',sunmooncalc);
   //$('#cacldate').on('change',function(){sunmooncalc()});
   </script>
