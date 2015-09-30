@@ -778,7 +778,7 @@
     $('#moonPhase').html("<img style='height:21px;margin-bottom:-5px' src='moon/"+ imgphase +".png'/>"+smoonPhase);
   }
   $('#suncalc').on(cot,function(){$('#inputdate').val(tempdate.format('yyyy-MM-dd'));sunmooncalc()})
-  //dtpicker.element.addEventListener('change',sunmooncalc);
-  //$('#inputdate').on('change',sunmooncalc);
+  dtpicker.element.addEventListener('change',sunmooncalc);
+  //$('#inputdate').on('change',function(){sunmooncalc()});
   </script>
 </html>
