@@ -107,8 +107,8 @@
     </div>
     <div data-role="content">
       <div data-role="fieldcontain">
-        <label for="inputdate"  data-mini="true" >时间：</label>
-        <input type="text" name="inputdate" id="inputdate"  data-mini="true" readonly="readonly"/>
+        <label for="cacldate"  data-mini="true" >时间：</label>
+        <input type="text" name="cacldate" id="cacldate"  data-mini="true" readonly="readonly"/>
       </div>
 <table><thead><tr><th align="left">晨昏蒙影</th></tr></thead><tbody><tr><td align="left">日出起始时间</td><td id = "sunrise" align="right"></td></tr><tr><td align="left">日出结束时间</td><td id = "sunriseEnd" align="right"></td></tr><tr><td align="left">日出黄金时间</td><td id = "goldenHourEnd" align="right"></td></tr><tr><td align="left">日落黄金时间</td><td id = "goldenHour" align="right"></td></tr><tr><td align="left">太阳最高点时间</td><td id = "solarNoon" align="right"></td></tr><tr><td align="left">日落开始时间</td><td id = "sunsetStart" align="right"></td></tr><tr><td align="left">民用晨光始</td><td id = "dawn" align="right"></td></tr><tr><td align="left">民用昏影终</td><td id = "sunset" align="right"></td></tr><tr><td align="left">航海晨光始</td><td id = "nauticalDawn" align="right"></td></tr><tr><td align="left">航海昏影终</td><td id = "dusk" align="right"></td></tr><tr><td align="left">天文晨光始</td><td id = "nightEnd" align="right"></td></tr><tr><td align="left">天文昏影终</td><td id = "nauticalDusk" align="right"></td></tr><tr><td align="left">黑暗</td><td id = "night" align="right"></td></tr><tr><td align="left">最暗时刻</td><td id = "nadir" align="right"></td></tr></tbody><thead><tr><th align="left">月相</th></tr></thead><tbody><tr><td align="left">月出时间</td><td id = "moonrise" align="right"></td></tr><tr><td align="left">月落时间</td><td id = "moonset" align="right"></td></tr><tr><td align="left">月相</td><td id = "moonPhase" align="right"></td></tr><tr><td align="left">亮度</td><td id = "light" align="right"></td></tr></tbody></table>
     </div>
@@ -489,7 +489,7 @@
   }
   //initial
   var tempdate = new Date();
-  var dtpicker = flatpickr('#inputdate');
+  var dtpicker = flatpickr('#cacldate');
   var index = $('#address').get(0).selectedIndex;
   var item = addresses.locations[index];
   $('#latitude').val(item.lat);
@@ -725,9 +725,9 @@
   function sunmooncalc(){
     var lat = $('#latitude').val();
     var lng = $('#longitude').val();
-    var inputdate = stringToDate($('#inputdate').val());
-    var sunrisePos = SunCalc.getPosition(inputdate, lat , lng);
-    var sunTimes = SunCalc.getTimes(inputdate, lat , lng);
+    var cacldate = stringToDate($('#cacldate').val());
+    var sunrisePos = SunCalc.getPosition(cacldate, lat , lng);
+    var sunTimes = SunCalc.getTimes(cacldate, lat , lng);
     $('#sunrise').html(sunTimes.sunrise.format("yyyy/MM/dd hh:mm"));
     $('#sunriseEnd').html(sunTimes.sunriseEnd.format("yyyy/MM/dd hh:mm"));
     $('#goldenHourEnd').html(sunTimes.goldenHourEnd.format("yyyy/MM/dd hh:mm"));
@@ -743,19 +743,19 @@
     $('#nauticalDawn').html(sunTimes.nauticalDawn.format("yyyy/MM/dd hh:mm"));
     $('#dawn').html(sunTimes.dawn.format("yyyy/MM/dd hh:mm"));
 
-    var moonTimes = SunCalc.getMoonTimes(inputdate, lat , lng);
-    var moonPos = SunCalc.getMoonPosition(inputdate,lat,lng);
-    var moonIllumination =SunCalc.getMoonIllumination(inputdate);
+    var moonTimes = SunCalc.getMoonTimes(cacldate, lat , lng);
+    var moonPos = SunCalc.getMoonPosition(cacldate,lat,lng);
+    var moonIllumination =SunCalc.getMoonIllumination(cacldate);
     //moon time
     if(!moonTimes.rise){
-      var prevday = new Date(inputdate.getTime() - 24*60*60*1000);
+      var prevday = new Date(cacldate.getTime() - 24*60*60*1000);
       var prevmoonTimes = SunCalc.getMoonTimes(prevday, lat , lng);
       $('#moonrise').html(prevmoonTimes.rise.format("yyyy/MM/dd hh:mm"));
     }else{
       $('#moonrise').html(moonTimes.rise.format("yyyy/MM/dd hh:mm"));
     }
     if(!moonTimes.set || ((moonTimes.rise) && (moonTimes.set.getTime() < moonTimes.rise.getTime()))){
-      var nextday = new Date(inputdate.getTime() + 24*60*60*1000);
+      var nextday = new Date(cacldate.getTime() + 24*60*60*1000);
       var nextmoonTimes = SunCalc.getMoonTimes(nextday, lat , lng);
       $('#moonset').html(nextmoonTimes.set.format("yyyy/MM/dd hh:mm"));
     }else{
@@ -777,8 +777,8 @@
     var imgphase = parseInt(moonPhase*28);
     $('#moonPhase').html("<img style='height:21px;margin-bottom:-5px' src='moon/"+ imgphase +".png'/>"+smoonPhase);
   }
-  $('#suncalc').on(cot,function(){$('#inputdate').val(tempdate.format('yyyy-MM-dd'));sunmooncalc()})
+  $('#suncalc').on(cot,function(){$('#cacldate').val(tempdate.format('yyyy-MM-dd'));sunmooncalc()})
   dtpicker.element.addEventListener('change',sunmooncalc);
-  //$('#inputdate').on('change',function(){sunmooncalc()});
+  //$('#cacldate').on('change',function(){sunmooncalc()});
   </script>
 </html>
