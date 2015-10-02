@@ -768,14 +768,14 @@
     var smoonPhase = "";
     var moonPhase = moonIllumination.phase;
     if(moonPhase < 0.03 || moonPhase > 0.98){ smoonPhase = "新月";
-    }else if(moonPhase < 0.23){ smoonPhase = "娥眉月";
+    }else if(moonPhase < 0.24){ smoonPhase = "娥眉月";
     }else if(moonPhase < 0.27){ smoonPhase = "上弦月";
     }else if(moonPhase < 0.47){ smoonPhase = "渐盈凸月";
-    }else if(moonPhase < 0.53){ smoonPhase = "满月";
+    }else if(moonPhase < 0.52){ smoonPhase = "满月";
     }else if(moonPhase < 0.73){ smoonPhase = "渐亏凸月";
     }else if(moonPhase < 0.79){ smoonPhase = "下弦月";
     }else{ smoonPhase = "残月"; }
-    var imgphase = parseInt(moonPhase*28);
+    var imgphase = Math.round(moonPhase*28);
     $('#moonPhase').html("<img style='height:21px;margin-bottom:-5px' src='moon/"+ imgphase +".png'/>"+smoonPhase);
   }
   $('#suncalc').on(cot,function(){sunmooncalc()})
