@@ -1,4 +1,4 @@
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="info.diphda.seventimer" version="1.5.1">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="info.diphda.seventimer" version="1.5.2">
   <name>SevenTimer</name>
   <description>7Timer Mobile App</description>
   <author href="http://diphda.info" email="wuqi198772@gmail.com">Wu Qi</author>
@@ -18,7 +18,7 @@
   <preference name="disable-cursor"             value="false" />
   <preference name="android-minSdkVersion"      value="14" />
   <preference name="android-installLocation"    value="auto" />
-  <preference name="android-build-tool" value="ant" />
+  <preference name="android-build-tool" value="gradle" />
   <gap:plugin name="cordova-plugin-whitelist" source="npm" />
   <gap:plugin name="cordova-plugin-splashscreen" source="npm" />
   <gap:plugin name="cordova-plugin-geolocation" source="npm"/>
