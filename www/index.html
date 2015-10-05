@@ -773,7 +773,7 @@
     }else if(moonPhase < 0.47){ smoonPhase = "渐盈凸月";
     }else if(moonPhase < 0.52){ smoonPhase = "满月";
     }else if(moonPhase < 0.73){ smoonPhase = "渐亏凸月";
-    }else if(moonPhase < 0.79){ smoonPhase = "下弦月";
+    }else if(moonPhase < 0.76){ smoonPhase = "下弦月";
     }else{ smoonPhase = "残月"; }
     var imgphase = Math.round(moonPhase*28);
     $('#moonPhase').html("<img style='height:21px;margin-bottom:-5px' src='moon/"+ imgphase +".png'/>"+smoonPhase);
