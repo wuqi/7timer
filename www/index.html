@@ -441,8 +441,8 @@
       if(k==0){basemap[attrname].addTo(map)}
     });
     $.each(overlayMapNames,function(k,v){
-      if(v==="Lightpollutionmap2014"){overlaymap["Light Pollution 2014"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2014',format:'image/png',transparent:true,opacity: 0.6,attribution:"lightpollutionmap.info"});return;}
-      if(v==="Lightpollutionmap2015"){overlaymap["Light Pollution 2015"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2015',format:'image/png',transparent:true,opacity: 0.6,attribution:"lightpollutionmap.info"});return;}
+      if(v==="Lightpollutionmap2014"){overlaymap["Light Pollution 2014"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2014',format:'image/png',transparent:true,opacity: 0.6,attribution:"Map tiles by:Jurij Stare, www.lightpollutionmap.info --Map data &copy; Earth Observation Group, NOAA National Geophysical Data Center"});return;}
+      if(v==="Lightpollutionmap2015"){overlaymap["Light Pollution 2015"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2015',format:'image/png',transparent:true,opacity: 0.6,attribution:"Map tiles by:Jurij Stare, www.lightpollutionmap.info --Map data &copy; Earth Observation Group, NOAA National Geophysical Data Center"});return;}
       var attrname = $(jq(v)).parent().text();
       overlaymap[attrname]=L.tileLayer.provider(v);
     });
