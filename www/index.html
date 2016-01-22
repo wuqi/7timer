@@ -7,6 +7,7 @@
   <script type="text/javascript" src="jquery.min.js"></script>
   <script type="text/javascript" src="jquery.mobile-1.4.5.min.js"></script>
   <link rel="stylesheet" href="leaflet.css"/>
+  <link rel="stylesheet" href="leaflet-compass.min.css"/>
   <link rel="stylesheet" href="esri-leaflet-geocoder.css"/>
   <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
   <link rel="stylesheet" href="flatpickr.css">
@@ -307,6 +308,7 @@
 </body>
   <script type="text/javascript" src="leaflet.js"></script>
   <script type="text/javascript" src="esri-leaflet.js"></script>
+  <script type="text/javascript" src="leaflet-compass.min.js"></script>
   <script type="text/javascript" src="esri-leaflet-geocoder.js"></script>
   <script type="text/javascript" src="leaflet-providers.js"></script>
   <script type="text/javascript" src="suncalc.js"></script>
@@ -433,6 +435,7 @@
     var olat = $('#latitude').val();
     var olng = $('#longitude').val();
     map = L.map('map').setView([olat, olng], 10);
+    map.addControl( new L.Control.Compass() );
     var basemap={},overlaymap={};
     baseMapNames = JSON.parse(storage.getItem("baseMaps"));
     overlayMapNames = JSON.parse(storage.getItem("overlayMaps"));
