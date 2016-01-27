@@ -110,7 +110,94 @@
         <label for="cacldate"  data-mini="true" >时间：</label>
         <input type="text" name="cacldate" id="cacldate"  data-mini="true" readonly="readonly"/>
       </div>
-<table><thead><tr><th align="left">晨昏蒙影</th></tr></thead><tbody><tr><td align="left">日出起始时间</td><td id = "sunrise" align="right"></td></tr><tr><td align="left">日出结束时间</td><td id = "sunriseEnd" align="right"></td></tr><tr><td align="left">日出黄金时间</td><td id = "goldenHourEnd" align="right"></td></tr><tr><td align="left">日落黄金时间</td><td id = "goldenHour" align="right"></td></tr><tr><td align="left">太阳最高点时间</td><td id = "solarNoon" align="right"></td></tr><tr><td align="left">日落开始时间</td><td id = "sunsetStart" align="right"></td></tr><tr><td align="left">民用晨光始</td><td id = "dawn" align="right"></td></tr><tr><td align="left">民用昏影终</td><td id = "sunset" align="right"></td></tr><tr><td align="left">航海晨光始</td><td id = "nauticalDawn" align="right"></td></tr><tr><td align="left">航海昏影终</td><td id = "dusk" align="right"></td></tr><tr><td align="left">天文晨光始</td><td id = "nightEnd" align="right"></td></tr><tr><td align="left">天文昏影终</td><td id = "nauticalDusk" align="right"></td></tr><tr><td align="left">黑暗</td><td id = "night" align="right"></td></tr><tr><td align="left">最暗时刻</td><td id = "nadir" align="right"></td></tr></tbody><thead><tr><th align="left">月相</th></tr></thead><tbody><tr><td align="left">月出时间</td><td id = "moonrise" align="right"></td></tr><tr><td align="left">月落时间</td><td id = "moonset" align="right"></td></tr><tr><td align="left">月相</td><td id = "moonPhase" align="right"></td></tr><tr><td align="left">亮度</td><td id = "light" align="right"></td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th align="left">晨昏蒙影</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">天文晨光始</td>
+      <td id="nightEnd" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">航海晨光始</td>
+      <td id="nauticalDawn" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">民用晨光始</td>
+      <td id="dawn" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">日出起始时间</td>
+      <td id="sunrise" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">日出结束时间</td>
+      <td id="sunriseEnd" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">日出黄金时间</td>
+      <td id="goldenHourEnd" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">上中天</td>
+      <td id="solarNoon" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">日落黄金时间</td>
+      <td id="goldenHour" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">日落开始时间</td>
+      <td id="sunsetStart" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">日落结束时间</td>
+      <td id="sunset" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">民用昏影终</td>
+      <td id="dusk" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">航海昏影终</td>
+      <td id="nauticalDusk" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">天文昏影终</td>
+      <td id="night" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">下中天</td>
+      <td id="nadir" align="right"></td>
+    </tr>
+  </tbody>
+  <thead>
+    <tr>
+      <th align="left">月相</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">月出时间</td>
+      <td id="moonrise" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">月落时间</td>
+      <td id="moonset" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">月相</td>
+      <td id="moonPhase" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">亮度</td>
+      <td id="light" align="right"></td>
+    </tr>
+  </tbody>
+</table>
     </div>
   </div>
   <!--pageinfo-->
@@ -132,6 +219,8 @@
           <li>天气预报来源: <a onclick="navigator.app.loadUrl('http://openweathermap.org/forecast16', { openExternal:true });">OpenWeatherMap</a></li>
           <li>云图数据来源:  <a onclick="navigator.app.loadUrl('http://www.nsmc.cma.gov.cn/NSMC/Channels/100028.html', { openExternal:true });">国家气象卫星中心</a></li>
           <li>雷达数据来源:  <a onclick="navigator.app.loadUrl('http://www.cma.gov.cn/tqyb/radar/radar.php', { openExternal:true });">中国气象局</a></li>
+          <li id="satellite">人造卫星过境:  <a onclick="navigator.app.loadUrl('http://www.heavens-above.com/allsats.aspx?lat=39.9&lng=116.4&loc=', { openExternal:true });">Heavens-Above</a></li>
+          <li id="iridiumFlares">铱星闪光:  <a onclick="navigator.app.loadUrl('http://www.heavens-above.com/IridiumFlares.aspx?lat=39.9&lng=116.4&loc=', { openExternal:true });">Heavens-Above</a></li>
           </ul>
           <h4>使用说明:</h4>
           <ul>
@@ -523,6 +612,10 @@
    var item = addresses.locations[index];
    $('#latitude').val(item.lat);
    $('#longitude').val(item.lng);
+   var saHtml = "人造卫星过境:  <a onclick=\"navigator.app.loadUrl('http://www.heavens-above.com/allsats.aspx?lat="+ item.lat +"&lng="+ item.lng +"&loc=', { openExternal:true });\">Heavens-Above</a>";
+   var ifHtml = "铱星闪光:  <a onclick=\"navigator.app.loadUrl('http://www.heavens-above.com/IridiumFlares.aspx?lat"+ item.lat +"&lng="+ item.lng +"&loc=', { openExternal:true });\">Heavens-Above</a>";
+   $('#satellite').html(saHtml);
+   $('#iridiumFlares').html(ifHtml);
   });
   $('#newLoc').on(cot,function () {
     $("#sname").val("");
