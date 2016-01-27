@@ -274,6 +274,20 @@
           <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR1_COL_">圆盘图红外一增强</option>
           <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR2_COL_">圆盘图红外二增强</option>
         </select>
+        <label for="radartype">雷达拼图类型：</label>
+        <select name="radartype" id="radartype" data-native-menu="false" data-mini="true" >
+          <option value="ACHN">全国</option>
+          <option value="ANEC">东北</option>
+          <option value="ANCN">华北</option>
+          <option value="AECN">华东</option>
+          <option value="ACCN">华中</option>
+          <option value="ASCN">华南</option>
+          <option value="ASWC">西南</option>
+          <option value="ANWC">西北</option>
+          <option value="ABCJ">长江流域</option>
+          <option value="ABHH">黄淮流域</option>
+          <option value="ACES">东南沿海</option>
+        </select>
         <label for="switchtheme">切换主题：</label>
         <select name="switchtheme" id="switchtheme" data-native-menu="false" data-mini="true" >
           <option value="a">白色</option>
@@ -385,6 +399,13 @@
     $('#cloudtype').get(0).selectedIndex = 0;
   }else{
     $('#cloudtype').get(0).selectedIndex = storage.getItem("cloudtype");
+  }
+  //radartype
+  if(!storage.getItem("radartype")){
+    storage.setItem("radartype",0);
+    $('#radartype').get(0).selectedIndex = 0;
+  }else{
+    $('#radartype').get(0).selectedIndex = storage.getItem("radartype");
   }
   //theme
   if(!storage.getItem("theme")){
@@ -533,6 +554,7 @@
     storage.setItem("baseMaps",JSON.stringify(baseMapNames));
     storage.setItem("overlayMaps",JSON.stringify(overlayMapNames));
     storage.setItem("cloudtype",$('#cloudtype').get(0).selectedIndex);
+    storage.setItem("radartype",$('#radartype').get(0).selectedIndex);
     storage.setItem("theme",$('#switchtheme').val());
     storage.setItem("forcastcnt",$('#forcastcnt').html());
     storage.setItem("forcasttype",$('#dailyforcast').is(':checked')?"dailyforcast":"hourforcast");
@@ -705,21 +727,21 @@
     var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
     radartime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
     currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
-    var imgurl = 'http://www.cma.gov.cn/tqyb/images/forecast/products/radar/data/l/sevp_nmc_rdcp_sldas_ez9_achn_l88_pi_'+ currenttime.format('yyyyMMddhhmm') +'00000.gif';
+    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.GIF";
     $("#imgRadar").attr("src", imgurl);
     $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
   });
   $('#radarprev').on(cot,function(){
     radartime = new Date(radartime.getFullYear(),radartime.getMonth(),radartime.getDate(),radartime.getHours(),radartime.getMinutes()-10);
     var currenttime= new Date(radartime.getTime() + radartime.getTimezoneOffset() * 60 * 1000);
-    var imgurl = 'http://www.cma.gov.cn/tqyb/images/forecast/products/radar/data/l/sevp_nmc_rdcp_sldas_ez9_achn_l88_pi_'+ currenttime.format('yyyyMMddhhmm') +'00000.gif';
+    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.GIF";
     $("#imgRadar").attr("src", imgurl);
     $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
   });
   $('#radarnext').on(cot,function(){
     radartime = new Date(radartime.getFullYear(),radartime.getMonth(),radartime.getDate(),radartime.getHours(),radartime.getMinutes()+10);
     var currenttime= new Date(radartime.getTime() + radartime.getTimezoneOffset() * 60 * 1000);
-    var imgurl = 'http://www.cma.gov.cn/tqyb/images/forecast/products/radar/data/l/sevp_nmc_rdcp_sldas_ez9_achn_l88_pi_'+ currenttime.format('yyyyMMddhhmm') +'00000.gif';
+    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.GIF";
     $("#imgRadar").attr("src", imgurl);
     $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
   });
