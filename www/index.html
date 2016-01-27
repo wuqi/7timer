@@ -613,7 +613,7 @@
    $('#latitude').val(item.lat);
    $('#longitude').val(item.lng);
    var saHtml = "人造卫星过境:  <a onclick=\"navigator.app.loadUrl('http://www.heavens-above.com/allsats.aspx?lat="+ item.lat +"&lng="+ item.lng +"&loc=', { openExternal:true });\">Heavens-Above</a>";
-   var ifHtml = "铱星闪光:  <a onclick=\"navigator.app.loadUrl('http://www.heavens-above.com/IridiumFlares.aspx?lat"+ item.lat +"&lng="+ item.lng +"&loc=', { openExternal:true });\">Heavens-Above</a>";
+   var ifHtml = "铱星闪光:  <a onclick=\"navigator.app.loadUrl('http://www.heavens-above.com/IridiumFlares.aspx?lat="+ item.lat +"&lng="+ item.lng +"&loc=', { openExternal:true });\">Heavens-Above</a>";
    $('#satellite').html(saHtml);
    $('#iridiumFlares').html(ifHtml);
   });
