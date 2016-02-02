@@ -67,6 +67,11 @@
         <div class="ui-block-b"><a href="#" data-role="button" id="nircloud" data-transition="none" data-icon="cloud" data-mini="true" >红外云图</a></div>
         <div class="ui-block-c"><a href="#" data-role="button" id="radar" data-transition="none" data-icon="eye" data-mini="true" >雷达拼图</a></div>
       </div>
+      <div class="ui-grid-b btngroup"> 
+        <div class="ui-block-a"><a href="#" data-role="button" id="iridium" data-transition="none" data-icon="action" data-mini="true" >铱星闪光</a></div>
+        <div class="ui-block-b"><a href="#" data-role="button" id="sats" data-transition="none" data-icon="grid"  data-mini="true">卫星预报</a></div>
+        <div class="ui-block-c"><a href="#" data-role="button" id="planet" data-transition="none" data-icon="bars" data-mini="true" >行星简报</a></div>
+      </div>
     </div>
     <!--添加新地点-->
     <div data-role="popup" id="pagesearch" style="width:100%"  data-dismissible="false">
@@ -284,6 +289,10 @@
     <div  id="cloudcontent" height="100%">
       <img src="" alt="红外云图" id="imgCloud" width="100%"/>
     </div>
+    <div class="ui-grid-a"> 
+      <div class="ui-block-a"><a href="#" data-role="button" id="cloudprev"  data-mini="true" data-icon="minus">上一页</a></div>
+      <div class="ui-block-b"><a href="#" data-role="button" id="cloudnext"  data-mini="true" data-icon="plus">下一页</a></div>
+    </div>
   </div>
   <!--雷达拼图-->
   <div data-role="page" id="pageradar" class="page">
@@ -298,6 +307,39 @@
     <div class="ui-grid-a"> 
       <div class="ui-block-a"><a href="#" data-role="button" id="radarprev"  data-mini="true" data-icon="minus">上一页</a></div>
       <div class="ui-block-b"><a href="#" data-role="button" id="radarnext"  data-mini="true" data-icon="plus">下一页</a></div>
+    </div>
+  </div>
+  <!--铱星闪光-->
+  <div data-role="page" id="pageIridium" class="page">
+    <div data-role="header">
+       <h1>铱星闪光</h1>
+        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
+    </div>
+    <label for="img"  data-mini="true" id="iridiumLable"></label>
+    <div  id="iridiumcontent" height="100%">
+      <img src="" alt="铱星闪光" id="imgIridium" width="100%"/>
+    </div>
+  </div>
+  <!--卫星预报-->
+  <div data-role="page" id="pagesats" class="page">
+    <div data-role="header">
+       <h1>卫星预报</h1>
+        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
+    </div>
+    <label for="img"  data-mini="true" id="satsLable"></label>
+    <div  id="satscontent" height="100%">
+      <img src="" alt="卫星预报" id="imgSats" width="100%"/>
+    </div>
+  </div>
+  <!--行星简报-->
+  <div data-role="page" id="pageplanet" class="page">
+    <div data-role="header">
+       <h1>行星简报</h1>
+        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
+    </div>
+    <label for="img"  data-mini="true" id="planetLable"></label>
+    <div  id="planetcontent" height="100%">
+      <img src="" alt="行星简报" id="imgPlanet" width="100%"/>
     </div>
   </div>
   <!--pagesettings-->
@@ -776,6 +818,7 @@
     $('#clockcontent').panzoom();
     $.mobile.changePage("#pageclock",{transition:'none'});
   });
+  var cloudtime;
   //红外云图
   $('#nircloud').on(cot,function(){
     var now = new Date();
@@ -784,19 +827,23 @@
     $.mobile.changePage( "#pagecloud",{transition:'none'});
 
     var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
+    cloudtime = new Date(currenttime.getTime());
     currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
     var imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
 
     $("#imgCloud").attr("src", imgurl).error(function() {
       currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-2);
+      cloudtime = new Date(currenttime.getTime());
       currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
       imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
       $("#imgCloud").attr("src", imgurl).error(function() {
         currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-3);
+        cloudtime = new Date(currenttime.getTime());
         currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
         imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
         $("#imgCloud").attr("src", imgurl).error(function(){
           currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-4);
+          cloudtime = new Date(currenttime.getTime());
           currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
           imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
           $("#imgCloud").attr("src", imgurl).error(function(){
@@ -810,8 +857,61 @@
     });
     $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
   });
-  var radartime;
+  $('#cloudprev').on(cot,function(){
+    cloudtime = new Date(cloudtime.getFullYear(),cloudtime.getMonth(),cloudtime.getDate(),cloudtime.getHours() - 1);
+    var currenttime= new Date(cloudtime.getTime() + cloudtime.getTimezoneOffset() * 60 * 1000);
+    var imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
+    $("#imgCloud").attr("src", imgurl);
+    $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+  });
+  $('#cloudnext').on(cot,function(){
+    cloudtime = new Date(cloudtime.getFullYear(),cloudtime.getMonth(),cloudtime.getDate(),cloudtime.getHours() + 1);
+    var currenttime= new Date(cloudtime.getTime() + cloudtime.getTimezoneOffset() * 60 * 1000);
+    var imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
+    $("#imgCloud").attr("src", imgurl);
+    $('#cloudLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
+  });
+  //卫星
+  $("#sats").on(cot,function(){
+    $("#satscontent").panzoom();
+    $.mobile.changePage( "#pagesats",{transition:'none'});
+    var lat = $('#latitude').val();
+    var lng = $('#longitude').val();
+    var svgurl = "http://diphda.info/ha/allsats.php?callback=?&lat="+lat+"&lng="+lng;
+    $.mobile.loading("show");
+    $.getJSON(svgurl, null, function(svg) {
+      $("#imgSats").html(svg);
+      $.mobile.loading("hide");
+    });
+  });
+  //铱闪
+  $("#iridium").on(cot,function(){
+    $("#iridiumcontent").panzoom();
+    $.mobile.changePage( "#pageIridium",{transition:'none'});
+    var lat = $('#latitude').val();
+    var lng = $('#longitude').val();
+    var svgurl = "http://diphda.info/ha/IridiumFlares.php?callback=?&lat="+lat+"&lng="+lng;
+    $.mobile.loading("show");
+    $.getJSON(svgurl, null, function(svg) {
+      $("#imgIridium").html(svg);
+      $.mobile.loading("hide");
+    });
+  });
+  //行星
+  $("#planet").on(cot,function(){
+    $("#planetcontent").panzoom();
+    $.mobile.changePage( "#pageplanet",{transition:'none'});
+    var lat = $('#latitude').val();
+    var lng = $('#longitude').val();
+    var svgurl = "http://diphda.info/ha/PlanetSummary.php?callback=?&lat="+lat+"&lng="+lng;
+    $.mobile.loading("show");
+    $.getJSON(svgurl, null, function(svg) {
+      $("#imgPlanet").html(svg);
+      $.mobile.loading("hide");
+    });
+  });
   //雷达
+  var radartime;
   $('#radar').on(cot,function(){
     var now = new Date();
     now = new Date(now.getTime());
