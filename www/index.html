@@ -27,6 +27,9 @@
   #popupclock>input,#popupclock>select{padding:.5em .6em;display:inline-block;border:1px solid #CCC;box-shadow:0 1px 3px #DDD inset;border-radius:4px;transition:border .3s linear 0s;box-sizing:border-box;margin:.5em}
   #popupclock>button{font-size:100%;padding:.5em .6em;color:rgba(0,0,0,0.8);border:0 none transparent;background-color:#e6e6e6;text-decoration:none;border-radius:2px}
   #lctPos{width:14%}#addLblPos{width:23%}#gotoLblPos{width:14%}
+  .standardTable{color:#aaa;font-family: PingFang SC,Lantinghei SC,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans;border-collapse:collapse;border-spacing:0;font-size:12px}
+  .standardTable th,.standardTable td,.standardTable th,.standardTable td{border:1px solid #ddd;}
+  .standardTable tbody > :nth-child(2n-1) {background: #ddd;color:#666}
   </style>
 </head>
 <body>
@@ -315,9 +318,8 @@
        <h1>铱星闪光</h1>
         <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
     </div>
-    <label for="img"  data-mini="true" id="iridiumLable"></label>
     <div  id="iridiumcontent" height="100%">
-      <img src="" alt="铱星闪光" id="imgIridium" width="100%"/>
+      <div title="铱星闪光" id="imgIridium" width="100%"></div>
     </div>
   </div>
   <!--卫星预报-->
@@ -326,9 +328,8 @@
        <h1>卫星预报</h1>
         <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
     </div>
-    <label for="img"  data-mini="true" id="satsLable"></label>
     <div  id="satscontent" height="100%">
-      <img src="" alt="卫星预报" id="imgSats" width="100%"/>
+      <div title="卫星预报" id="imgSats" width="100%"></div>
     </div>
   </div>
   <!--行星简报-->
@@ -337,9 +338,8 @@
        <h1>行星简报</h1>
         <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
     </div>
-    <label for="img"  data-mini="true" id="planetLable"></label>
     <div  id="planetcontent" height="100%">
-      <img src="" alt="行星简报" id="imgPlanet" width="100%"/>
+      <div title="行星简报" id="imgPlanet" width="100%"></div>
     </div>
   </div>
   <!--pagesettings-->
