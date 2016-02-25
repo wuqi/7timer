@@ -205,6 +205,25 @@
       <td id="light" align="right"></td>
     </tr>
   </tbody>
+  <thead>
+    <tr>
+      <th align="left">银河中心升落</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">升起时间</td>
+      <td id="gaxrise" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">中天</td>
+      <td id="gaxmid" align="right"></td>
+    </tr>
+    <tr>
+      <td align="left">落下时间</td>
+      <td id="gaxset" align="right"></td>
+    </tr>
+  </tbody>
 </table>
     </div>
   </div>
@@ -959,6 +978,11 @@
     $('#nightEnd').html(sunTimes.nightEnd.format("yyyy/MM/dd hh:mm"));
     $('#nauticalDawn').html(sunTimes.nauticalDawn.format("yyyy/MM/dd hh:mm"));
     $('#dawn').html(sunTimes.dawn.format("yyyy/MM/dd hh:mm"));
+    var galaxyTimes =  SunCalc.getGalaxyTimes(cacldate, lat, lng);
+    if(galaxyTimes.alw)
+    $('#gaxrise').html(galaxyTimes.rise.format("yyyy/MM/dd hh:mm"));
+    $('#gaxset').html(galaxyTimes.set.format("yyyy/MM/dd hh:mm"));
+    $('#gaxmid').html(galaxyTimes.mid.format("yyyy/MM/dd hh:mm"));
 
     var moonTimes = SunCalc.getMoonTimes(cacldate, lat , lng);
     var moonPos = SunCalc.getMoonPosition(cacldate,lat,lng);
