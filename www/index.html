@@ -663,6 +663,7 @@
     $('#slocate').on(cot,function() {
         navigator.geolocation.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:true,maximumAge: 3000, timeout: 5000});
     });
+    Immersify.enable(null, null);
   }
   //initial
   var tempdate = new Date();
