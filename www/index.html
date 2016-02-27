@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="leaflet.css"/>
   <link rel="stylesheet" href="esri-leaflet-geocoder.css"/>
   <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
-  <link rel="stylesheet" href="flatpickr.css">
+  <link rel="stylesheet" href="flatpickr.css" id="dcss">
   <style type="text/css" >
   #pagemap>.ui-content {
       position: absolute;
@@ -513,7 +513,12 @@
       $( ".page" ).page( "option", "theme", theme );
     }else{
       $( ".page" ).page({"theme": theme});
-    } 
+    }
+    if(theme =="b"){
+      $('#dcss').attr("href","flatpickr.dark.css");
+    }else{
+      $('#dcss').attr("href","flatpickr.css");
+    }
   };
   //address
   if (!storage.getItem("addresses")) {
