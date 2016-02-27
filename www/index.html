@@ -1023,6 +1023,6 @@
     $('#moonPhase').html("<img style='height:21px;margin-bottom:-5px' src='moon/"+ imgphase +".png'/>"+smoonPhase);
   }
   $('#suncalc').on(cot,function(){sunmooncalc()});
-  $('#cacldate').on('change',function(){sunmooncalc()});
+  dtpicker.element.addEventListener('change',sunmooncalc);
   </script>
 </html>
