@@ -21,7 +21,6 @@
   <plugin name="cordova-plugin-whitelist"/>
   <plugin name="cordova-plugin-splashscreen" spec="2.1.0"/>
   <plugin name="cordova-plugin-geolocation"/>
-  <plugin name="com.toluhta.immersify" spec="0.1.0" source="pgb" />
   <icon src="icon.png"/>
   <splash src="splash.png"/>
   <feature name="http://api.phonegap.com/1.0/network" />
