@@ -1022,8 +1022,7 @@
     var imgphase = Math.round(moonPhase*28);
     $('#moonPhase').html("<img style='height:21px;margin-bottom:-5px' src='moon/"+ imgphase +".png'/>"+smoonPhase);
   }
-  $('#suncalc').on(cot,function(){sunmooncalc()})
-  dtpicker.element.addEventListener('change',sunmooncalc);
-  //$('#cacldate').on('change',function(){sunmooncalc()});
+  $('#suncalc').on(cot,function(){sunmooncalc()});
+  dtpicker.set("onChange", sunmooncalc);
   </script>
 </html>
