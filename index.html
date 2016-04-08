@@ -642,7 +642,22 @@
       marker.setLatLng( e.latlng).update();
   }
   var cot=(('ontouchend' in window))?'touchend':'click';
-  document.addEventListener('deviceready', onDeviceReady, false);
+  $(document).ready(function() {
+    // are we running in native app or in a browser?
+    window.isphone = false;
+    if(document.URL.indexOf("http://") === -1 
+        && document.URL.indexOf("https://") === -1) {
+        window.isphone = true;
+    }
+
+    if( window.isphone ) {
+        document.addEventListener("deviceready", onDeviceReady, false);
+    } else {
+        onDeviceReady();
+    }
+  });
+
+  //document.addEventListener('deviceready', onDeviceReady, false);
   var disp,errdisp,jmpdisp;
   function onDeviceReady() {
     document.addEventListener("backbutton",function(e){if($.mobile.activePage.is('#pagemain')){if(navigator.app){ navigator.app.exitApp();}else if(navigator.device){ navigator.device.exitApp();}}else{navigator.app.backHistory()}},false);
