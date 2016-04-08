@@ -641,7 +641,7 @@
   function onMapClick(e) {
       marker.setLatLng( e.latlng).update();
   }
-  var cot=(('ontouchend' in window))?'touchend':'click';
+  var cot='click';//(('ontouchend' in window))?'touchend':'click';
   $(document).ready(function() {
     // are we running in native app or in a browser?
     window.isphone = false;
@@ -661,24 +661,25 @@
   var disp,errdisp,jmpdisp;
   function onDeviceReady() {
     document.addEventListener("backbutton",function(e){if($.mobile.activePage.is('#pagemain')){if(navigator.app){ navigator.app.exitApp();}else if(navigator.device){ navigator.device.exitApp();}}else{navigator.app.backHistory()}},false);
-    disp = function (pos) {
-       if($("#sname").val() === ""){$("#sname").val("新地点");}
-       $('#slatitude').val(pos.coords.latitude);
-       $('#slongitude').val(pos.coords.longitude);
-    };
-    jmpdisp = function (pos) {
-      var p = marker.getLatLng().wrap();
-      p.lat = pos.coords.latitude;
-      p.lng = pos.coords.longitude;
-      marker.setLatLng(p).update();map.setView(p);
-    };
-    errdisp = function (e){
-      $.mobile.toast({ message: e.message,position:"center" });
-    }
-    $('#slocate').on(cot,function() {
-        navigator.geolocation.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:true,maximumAge: 3000, timeout: 5000});
-    });
+
   }
+  disp = function (pos) {
+     if($("#sname").val() === ""){$("#sname").val("新地点");}
+     $('#slatitude').val(pos.coords.latitude);
+     $('#slongitude').val(pos.coords.longitude);
+  };
+  jmpdisp = function (pos) {
+    var p = marker.getLatLng().wrap();
+    p.lat = pos.coords.latitude;
+    p.lng = pos.coords.longitude;
+    marker.setLatLng(p).update();map.setView(p);
+  };
+  errdisp = function (e){
+    $.mobile.toast({ message: e.message,position:"center" });
+  }
+  $('#slocate').on(cot,function() {
+      navigator.geolocation.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:true,maximumAge: 3000, timeout: 5000});
+  });
   //initial
   var tempdate = new Date();
   var dtpicker = flatpickr('#cacldate');
