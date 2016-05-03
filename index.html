@@ -707,8 +707,15 @@
   //initial
   var tempdate = new Date();
   var dtpicker = flatpickr('#cacldate');
-  flatpickr('#starttime');
-  flatpickr('#endtime');
+  var startdate = flatpickr('#starttime',{minDate:"2014-01-01",maxDate:"2020-12-31"});
+  var enddate = flatpickr('#endtime',{minDate:"2014-01-01",maxDate:"2020-12-31"});
+  startdate.set("onChange", function(d) { 
+      enddate.set("minDate", d);
+  });
+  enddate.set("onChange", function(d) { 
+      startdate.set("maxDate", d); 
+  });
+  
   $('#cacldate').val(tempdate.format('yyyy-MM-dd'));
   $('#starttime').val(tempdate.format('yyyy-MM-dd'));
   var tempprevday = new Date(tempdate.getTime() + 24*60*60*1000);
