@@ -75,6 +75,9 @@
         <div class="ui-block-b"><a href="#" data-role="button" id="sats" data-transition="none" data-icon="grid"  data-mini="true">卫星预报</a></div>
         <div class="ui-block-c"><a href="#" data-role="button" id="planet" data-transition="none" data-icon="bars" data-mini="true" >行星简报</a></div>
       </div>
+      <div class="ui-grid-solo btngroup">
+        <div class="ui-block-a"><a href="#" data-role="button" id="starcal" data-transition="none" data-icon="calendar" data-mini="true" >天象预报</a></div>
+      </div>
     </div>
     <!--添加新地点-->
     <div data-role="popup" id="pagesearch" style="width:100%"  data-dismissible="false">
@@ -359,6 +362,27 @@
     </div>
     <div  id="planetcontent" height="100%">
       <div title="行星简报" id="imgPlanet" width="100%"></div>
+    </div>
+  </div>
+  <!--天象预报-->
+  <div data-role="page" id="pagestarcal" class="page">
+    <div data-role="header">
+       <h1>天象预报</h1>
+        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
+    </div>
+    <div data-role="fieldcontain">
+      <label for="starttime"  data-mini="true" >开始时间：</label>
+      <input type="text" name="starttime" id="starttime"  data-mini="true" readonly="readonly"/>
+    </div>
+    <div data-role="fieldcontain">
+      <label for="endtime"  data-mini="true" >结束时间：</label>
+      <input type="text" name="endtime" id="endtime"  data-mini="true" readonly="readonly"/>
+    </div>
+    <div class="ui-grid-solo"> 
+      <div class="ui-block-a"><a href="#" data-role="button" id="starcalchk"  data-mini="true" data-icon="check">查询</a></div>
+    </div>
+    <div  id="starcalcontent" height="100%">
+      <div title="天象预报" id="imgStarcal" width="100%"></div>
     </div>
   </div>
   <!--pagesettings-->
@@ -683,7 +707,13 @@
   //initial
   var tempdate = new Date();
   var dtpicker = flatpickr('#cacldate');
+  flatpickr('#starttime');
+  flatpickr('#endtime');
   $('#cacldate').val(tempdate.format('yyyy-MM-dd'));
+  $('#starttime').val(tempdate.format('yyyy-MM-dd'));
+  var tempprevday = new Date(tempdate.getTime() + 24*60*60*1000);
+  $('#endtime').val(tempprevday.format('yyyy-MM-dd'));
+
   var index = $('#address').get(0).selectedIndex;
   var item = addresses.locations[index];
   $('#latitude').val(item.lat);
@@ -950,6 +980,23 @@
       $.mobile.loading("hide");
     });
   });
+  //天象
+  function getStarCal(){
+    var starttime = $('#starttime').val();
+    var endtime = $('#endtime').val();
+    var url = 'http://diphda.info/ha/StarCal.php?callback=?&starttime='+starttime +"&endtime="+endtime;
+    $.mobile.loading("show");
+    $.getJSON(url, null, function(svg) {
+      $("#imgStarcal").html(svg);
+      $.mobile.loading("hide");
+    });
+  }
+  $("#starcal").on(cot,function () {
+    $('#starcalcontent').panzoom();
+    $.mobile.changePage( "#pagestarcal",{transition:'none'});
+    getStarCal();
+  });
+  $("#starcalchk").on(cot,function () { getStarCal()});
   //雷达
   var radartime;
   $('#radar').on(cot,function(){
