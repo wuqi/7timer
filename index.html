@@ -707,8 +707,8 @@
   //initial
   var tempdate = new Date();
   var dtpicker = flatpickr('#cacldate');
-  var startdate = flatpickr('#starttime',{minDate:"2014-01-01",maxDate:"2020-12-31",defaultDate:today});
-  var enddate = flatpickr('#endtime',{minDate:"2014-01-01",maxDate:"2020-12-31",defaultDate:today});
+  var startdate = flatpickr('#starttime',{ disable: [ { 'from' : "1900-01-01", 'to' : "2013-12-31" }, { 'from' : "2021-01-01", 'to' : "2100-12-31" }]});
+  var enddate = flatpickr('#endtime',{disable: [ { 'from' : "1900-01-01", 'to' : "2013-12-31" }, { 'from' : "2021-01-01", 'to' : "2100-12-31" }]});
   startdate.set("onChange", function(d) { 
       enddate.set("minDate", d);
   });
