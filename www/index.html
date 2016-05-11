@@ -251,6 +251,7 @@
           <li>雷达数据来源:  <a onclick="navigator.app.loadUrl('http://www.cma.gov.cn/tqyb/radar/radar.php', { openExternal:true });">中国气象局</a></li>
           <li id="satellite">人造卫星过境:  <a onclick="navigator.app.loadUrl('http://www.heavens-above.com/allsats.aspx?lat=39.9&lng=116.4&loc=', { openExternal:true });">Heavens-Above</a></li>
           <li id="iridiumFlares">铱星闪光:  <a onclick="navigator.app.loadUrl('http://www.heavens-above.com/IridiumFlares.aspx?lat=39.9&lng=116.4&loc=', { openExternal:true });">Heavens-Above</a></li>
+          <li>天象数据来源:  <a onclick="navigator.app.loadUrl('http://interesting-sky.loveno.net/zonghe/2014-2025sky/', { openExternal:true });">有趣天文奇观</a></li>
           </ul>
           <h4>使用说明:</h4>
           <ul>
@@ -408,6 +409,7 @@
           <label><input type="checkbox" id="Esri.WorldImagery"/>Esri卫星图</label>
           <label><input type="checkbox" id="OpenStreetMap.Mapnik"/>OpenStreetMap</label>
           <label><input type="checkbox" id="MapBox"/>Mapbox</label>
+          <label><input type="checkbox" id="SkyMap"/>SkyMap</label>
           <label><input type="checkbox" id="HERE.normalDay"/>Here</label>
           <label><input type="checkbox" id="HERE.normalDayMobile"/>Here Mobile</label>
           <label><input type="checkbox" id="HERE.normalNight"/>Here Night</label>
@@ -556,7 +558,7 @@
   var baseMapNames=[],overlayMapNames=[];
   //baseMaps
   if(!storage.getItem("baseMaps")){
-    baseMapNames.push("Stamen.Toner");
+    baseMapNames.push("MapBox");
     storage.setItem("baseMaps",JSON.stringify(baseMapNames));
     $(jq('Stamen.Toner')).attr('checked',true);
   }else{
@@ -565,7 +567,7 @@
   }
   //overlayMaps
   if(!storage.getItem("overlayMaps")){
-    overlayMapNames.push("OpenWeatherMap.Clouds");
+    overlayMapNames.push("Lightpollutionmap2015");
     storage.setItem("overlayMaps",JSON.stringify(overlayMapNames));
     $(jq('OpenWeatherMap.Clouds')).attr('checked',true);
   }else{
@@ -660,6 +662,8 @@
     });
     map.on('dblclick', onMapClick);
     map.doubleClickZoom.disable();
+    $("#map").height($(window).height()-40).width($(window).width());
+    map.invalidateSize();
   }
 
   function onMapClick(e) {
