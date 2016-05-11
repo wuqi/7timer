@@ -632,11 +632,9 @@
     if(map !== null){
       return;
     }
-    $("#map").height($(window).height()).width($(window).width());
     var olat = $('#latitude').val();
     var olng = $('#longitude').val();
     map = L.map('map').setView([olat, olng], 10);
-    map.invalidateSize();
     var basemap={},overlaymap={};
     baseMapNames = JSON.parse(storage.getItem("baseMaps"));
     overlayMapNames = JSON.parse(storage.getItem("overlayMaps"));
@@ -664,6 +662,8 @@
     });
     map.on('dblclick', onMapClick);
     map.doubleClickZoom.disable();
+    $("#map").height($(window).height()-40).width($(window).width());
+    map.invalidateSize();
   }
 
   function onMapClick(e) {
