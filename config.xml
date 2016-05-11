@@ -1,4 +1,4 @@
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="info.diphda.seventimer" version="1.6.1">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="info.diphda.seventimer" version="1.6.1" versionCode="2086">
   <name>SevenTimer</name>
   <description>7Timer Mobile App</description>
   <author href="http://diphda.info" email="wuqi198772@gmail.com">Wu Qi</author>
