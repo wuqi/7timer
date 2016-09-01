@@ -75,8 +75,9 @@
         <div class="ui-block-b"><a href="#" data-role="button" id="sats" data-transition="none" data-icon="grid"  data-mini="true">卫星预报</a></div>
         <div class="ui-block-c"><a href="#" data-role="button" id="planet" data-transition="none" data-icon="bars" data-mini="true" >行星简报</a></div>
       </div>
-      <div class="ui-grid-solo btngroup">
+      <div class="ui-grid-a btngroup">
         <div class="ui-block-a"><a href="#" data-role="button" id="starcal" data-transition="none" data-icon="calendar" data-mini="true" >天象预报</a></div>
+        <div class="ui-block-b"><a href="#" data-role="button" id="skychart" data-transition="none" data-icon="star" data-mini="true" >实时星图</a></div>
       </div>
     </div>
     <!--添加新地点-->
@@ -384,6 +385,20 @@
     </div>
     <div  id="starcalcontent" height="100%">
       <div title="天象预报" id="imgStarcal" width="100%"></div>
+    </div>
+  </div>
+  <!--实时星图-->
+  <div data-role="page" id="pageskychart" class="page">
+    <div data-role="header">
+       <h1>实时星图</h1>
+        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
+    </div>
+    <div data-role="fieldcontain">
+        <label for="cacldate"  data-mini="true" >时间：</label>
+        <input type="text" name="caclsky" id="caclsky"  data-mini="true" readonly="readonly"/>
+      </div>
+    <div  id="skychartcontent" height="100%">
+      <img title="实时星图" id="imgSkychart" width="100%" />
     </div>
   </div>
   <!--pagesettings-->
@@ -699,6 +714,7 @@
   var dtpicker = flatpickr('#cacldate');
   var startdate = flatpickr('#starttime',{ disable: [ { 'from' : "1900-01-01", 'to' : "2013-12-31" }, { 'from' : "2021-01-01", 'to' : "2100-12-31" }]});
   var enddate = flatpickr('#endtime',{disable: [ { 'from' : "1900-01-01", 'to' : "2013-12-31" }, { 'from' : "2021-01-01", 'to' : "2100-12-31" }]});
+  var caclsky = flatpickr('#caclsky',{enableTime: true,timeFormat: "H:i",time_24hr:true});
   startdate.set("onChange", function(d) { 
       enddate.set("minDate", d);
   });
@@ -707,6 +723,7 @@
   });
   $('#cacldate').val(tempdate.format('yyyy-MM-dd'));
   $('#starttime').val(tempdate.format('yyyy-MM-dd'));
+  $('#caclsky').val(tempdate.format('yyyy-MM-dd hh:mm'));
   var tempprevday = new Date(tempdate.getTime() + 24*60*60*1000);
   $('#endtime').val(tempprevday.format('yyyy-MM-dd'));
   var index = $('#address').get(0).selectedIndex;
@@ -975,6 +992,23 @@
       $.mobile.loading("hide");
     });
   });
+  //星图
+  function getSkychart(){
+    var text = $("#caclsky").val();
+    text+=":00";
+    var skytime = new Date(text);
+    var ticktime = new Date("1858-11-17T00:00:00");
+    var delta=skytime.getTime()-ticktime.getTime();
+    var urltime = delta/(24.0*3600.0*1000.0);
+    var imgurl= "http://www.heavens-above.com/wholeskychart.ashx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&size=800&SL=1&SN=1&BW=0&time="+urltime.toString(10) +"&ecl=0&cb=0";
+    $("#imgSkychart").attr("src", imgurl);
+  }
+  $("#skychart").on(cot,function(){
+    $("#skychartcontent").panzoom();
+    $.mobile.changePage( "#pageskychart",{transition:'none'});
+    getSkychart();
+  });
+  caclsky.config.onChange = getSkychart;
   //天象
   function getStarCal(){
     var starttime = $('#starttime').val();
@@ -1002,21 +1036,21 @@
     var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
     radartime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
     currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
-    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.GIF";
+    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.PNG";
     $("#imgRadar").attr("src", imgurl);
     $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
   });
   $('#radarprev').on(cot,function(){
     radartime = new Date(radartime.getFullYear(),radartime.getMonth(),radartime.getDate(),radartime.getHours(),radartime.getMinutes()-10);
     var currenttime= new Date(radartime.getTime() + radartime.getTimezoneOffset() * 60 * 1000);
-    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.GIF";
+    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.PNG";
     $("#imgRadar").attr("src", imgurl);
     $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
   });
   $('#radarnext').on(cot,function(){
     radartime = new Date(radartime.getFullYear(),radartime.getMonth(),radartime.getDate(),radartime.getHours(),radartime.getMinutes()+10);
     var currenttime= new Date(radartime.getTime() + radartime.getTimezoneOffset() * 60 * 1000);
-    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.GIF";
+    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.PNG";
     $("#imgRadar").attr("src", imgurl);
     $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
   });
@@ -1081,6 +1115,6 @@
     $('#moonPhase').html("<img style='height:21px;margin-bottom:-5px' src='moon/"+ imgphase +".png'/>"+smoonPhase);
   }
   $('#suncalc').on(cot,function(){sunmooncalc()});
-  dtpicker.element.addEventListener('change',sunmooncalc);
+  dtpicker.config.onChange = sunmooncalc;
   </script>
 </html>
