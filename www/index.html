@@ -714,7 +714,7 @@
       $.mobile.toast({ message: e.message,position:"center" });
     }
     $('#slocate').on(cot,function() {
-        locationService.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:true,maximumAge: 3000, timeout: 20000});
+        locationService.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:false,maximumAge: 3000, timeout: 20000});
     });
   }
   //initial
