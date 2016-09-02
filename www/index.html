@@ -711,10 +711,11 @@
   }
   //initial
   var tempdate = new Date();
+  var tempdatetext = tempdate.format('yyyy-MM-dd hh:mm');
   var dtpicker = flatpickr('#cacldate');
   var startdate = flatpickr('#starttime',{ disable: [ { 'from' : "1900-01-01", 'to' : "2013-12-31" }, { 'from' : "2021-01-01", 'to' : "2100-12-31" }]});
   var enddate = flatpickr('#endtime',{disable: [ { 'from' : "1900-01-01", 'to' : "2013-12-31" }, { 'from' : "2021-01-01", 'to' : "2100-12-31" }]});
-  var caclsky = flatpickr('#caclsky',{enableTime: true,timeFormat: "H:i",time_24hr:true});
+  var caclsky = flatpickr('#caclsky',{enableTime: true,timeFormat: "H:i",time_24hr:true,defaultDate:tempdatetext});
   startdate.set("onChange", function(d) { 
       enddate.set("minDate", d);
   });
@@ -723,7 +724,7 @@
   });
   $('#cacldate').val(tempdate.format('yyyy-MM-dd'));
   $('#starttime').val(tempdate.format('yyyy-MM-dd'));
-  $('#caclsky').val(tempdate.format('yyyy-MM-dd hh:mm'));
+  $('#caclsky').val(tempdatetext);
   var tempprevday = new Date(tempdate.getTime() + 24*60*60*1000);
   $('#endtime').val(tempprevday.format('yyyy-MM-dd'));
   var index = $('#address').get(0).selectedIndex;
@@ -1008,7 +1009,7 @@
     $.mobile.changePage( "#pageskychart",{transition:'none'});
     getSkychart();
   });
-  caclsky.config.onChange = getSkychart;
+  caclsky.config.onClose = getSkychart;
   //天象
   function getStarCal(){
     var starttime = $('#starttime').val();
