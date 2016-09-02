@@ -1,4 +1,4 @@
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="info.diphda.seventimer" version="1.6.2" versionCode="2087">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="info.diphda.seventimer" version="1.6.3" versionCode="2088">
   <name>SevenTimer</name>
   <description>7Timer Mobile App</description>
   <author href="http://diphda.info" email="wuqi198772@gmail.com">Wu Qi</author>
@@ -21,6 +21,7 @@
   <plugin name="cordova-plugin-whitelist"/>
   <plugin name="cordova-plugin-splashscreen" spec="2.1.0"/>
   <plugin name="cordova-plugin-network-information" spec="1.0.1" source="pgb" />
+  <plugin name="cordova-plugin-geolocation" />
   <icon src="icon.png"/>
   <splash src="splash.png"/>
   <access origin="*" />
