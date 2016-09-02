@@ -687,19 +687,16 @@
       marker.setLatLng( e.latlng).update();
   }
   var cot=(('ontouchend' in window))?'touchend':'click';
-  app.geolocation = false;
+  var locationService = false;
   if(navigator.geolocation) {
-    app.geolocation = navigator.geolocation;
+    locationService = navigator.geolocation;
   }
-  var locationService;
+  
   document.addEventListener('deviceready', onDeviceReady, false);
   var disp,errdisp,jmpdisp;
   function onDeviceReady() {
     document.addEventListener("backbutton",function(e){if($.mobile.activePage.is('#pagemain')){if(navigator.app){ navigator.app.exitApp();}else if(navigator.device){ navigator.device.exitApp();}}else{navigator.app.backHistory()}},false);
-    if(app.geolocation) {
-      locationService = app.geolocation; // native HTML5 geolocation
-    }
-    else {
+    if(!locationService) {
       locationService = navigator.geolocation; // cordova geolocation plugin
     }
     disp = function (pos) {
