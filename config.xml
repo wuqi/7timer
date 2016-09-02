@@ -20,9 +20,8 @@
   <preference name="android-installLocation"    value="auto" />
   <plugin name="cordova-plugin-whitelist"/>
   <plugin name="cordova-plugin-splashscreen" spec="2.1.0"/>
-  <plugin name="cordova-plugin-geolocation"/>
+  <plugin name="cordova-plugin-network-information" spec="1.0.1" source="pgb" />
   <icon src="icon.png"/>
   <splash src="splash.png"/>
-  <feature name="http://api.phonegap.com/1.0/network" />
   <access origin="*" />
 </widget>
