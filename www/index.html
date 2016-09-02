@@ -687,10 +687,21 @@
       marker.setLatLng( e.latlng).update();
   }
   var cot=(('ontouchend' in window))?'touchend':'click';
+  app.geolocation = false;
+  if(navigator.geolocation) {
+    app.geolocation = navigator.geolocation;
+  }
+  var locationService;
   document.addEventListener('deviceready', onDeviceReady, false);
   var disp,errdisp,jmpdisp;
   function onDeviceReady() {
     document.addEventListener("backbutton",function(e){if($.mobile.activePage.is('#pagemain')){if(navigator.app){ navigator.app.exitApp();}else if(navigator.device){ navigator.device.exitApp();}}else{navigator.app.backHistory()}},false);
+    if(app.geolocation) {
+      locationService = app.geolocation; // native HTML5 geolocation
+    }
+    else {
+      locationService = navigator.geolocation; // cordova geolocation plugin
+    }
     disp = function (pos) {
        if($("#sname").val() === ""){$("#sname").val("新地点");}
        $('#slatitude').val(pos.coords.latitude);
@@ -706,7 +717,7 @@
       $.mobile.toast({ message: e.message,position:"center" });
     }
     $('#slocate').on(cot,function() {
-        navigator.geolocation.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:false,maximumAge: 3000, timeout: 20000});
+        locationService.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:true,maximumAge: 3000, timeout: 20000});
     });
   }
   //initial
@@ -867,7 +878,7 @@
     marker.bindPopup(content,{maxWidth:mw}).openPopup();
   });
   function lctPos(){
-    navigator.geolocation.getCurrentPosition(jmpdisp,errdisp,{ enableHighAccuracy:true,maximumAge: 3000, timeout: 5000});
+    locationService.getCurrentPosition(jmpdisp,errdisp,{ enableHighAccuracy:true,maximumAge: 3000, timeout: 5000});
   }
   //跳转地点
   function gotoLblPos() {
