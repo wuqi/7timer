@@ -21,7 +21,7 @@
   <plugin name="cordova-plugin-whitelist"/>
   <plugin name="cordova-plugin-splashscreen" spec="2.1.0"/>
   <plugin name="cordova-plugin-network-information" spec="1.0.1" source="pgb" />
-  <plugin name="org.apache.cordova.geolocation" spec="0.3.12" source="pgb" />
+  <plugin name="cordova-plugin-geolocation" spec="0.3.6" source="pgb" />
   <icon src="icon.png"/>
   <splash src="splash.png"/>
   <access origin="*" />
