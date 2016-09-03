@@ -1009,7 +1009,7 @@
     var ticktime = new Date("1858-11-17T00:00:00");
     var delta=skytime.getTime()-ticktime.getTime();
     var urltime = delta/(24.0*3600.0*1000.0);
-    var imgurl= "http://www.heavens-above.com/wholeskychart.ashx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&size=800&SL=1&SN=1&BW=0&time="+urltime.toString(10) +"&ecl=0&cb=0";
+    var imgurl= "http://www.heavens-above.com/wholeskychart.ashx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&size=1200&SL=1&SN=1&BW=0&time="+urltime.toString(10) +"&ecl=0&cb=0";
     $("#imgSkychart").attr("src", imgurl);
   }
   $("#skychart").on(cot,function(){
