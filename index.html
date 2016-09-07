@@ -75,9 +75,8 @@
         <div class="ui-block-b"><a href="#" data-role="button" id="sats" data-transition="none" data-icon="grid"  data-mini="true">卫星预报</a></div>
         <div class="ui-block-c"><a href="#" data-role="button" id="planet" data-transition="none" data-icon="bars" data-mini="true" >行星简报</a></div>
       </div>
-      <div class="ui-grid-a btngroup">
+      <div class="ui-grid-solo btngroup">
         <div class="ui-block-a"><a href="#" data-role="button" id="starcal" data-transition="none" data-icon="calendar" data-mini="true" >天象预报</a></div>
-        <div class="ui-block-b"><a href="#" data-role="button" id="skychart" data-transition="none" data-icon="star" data-mini="true" >实时星图</a></div>
       </div>
     </div>
     <!--添加新地点-->
@@ -387,20 +386,6 @@
       <div title="天象预报" id="imgStarcal" width="100%"></div>
     </div>
   </div>
-  <!--实时星图-->
-  <div data-role="page" id="pageskychart" class="page">
-    <div data-role="header">
-       <h1>实时星图</h1>
-        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
-    </div>
-    <div data-role="fieldcontain">
-        <label for="cacldate"  data-mini="true" >时间：</label>
-        <input type="text" name="caclsky" id="caclsky"  data-mini="true" readonly="readonly"/>
-      </div>
-    <div  id="skychartcontent" height="100%">
-      <img title="实时星图" id="imgSkychart" width="100%" />
-    </div>
-  </div>
   <!--pagesettings-->
   <div data-role="page" id="pagesettings" class="page">
     <div data-role="header">
@@ -449,7 +434,6 @@
           <label><input type="checkbox" id="OpenWeatherMap.Snow">Snow</label>
           <label><input type="checkbox" id="OpenWeatherMap.Temperature">Temperature</label>
           <label><input type="checkbox" id="NASAGIBS.ViirsEarthAtNight2012">Earth At Night2012</label>
-          <label><input type="checkbox" id="Lightpollutionmap2016">Light Pollution 2016</label>
           <label><input type="checkbox" id="Lightpollutionmap2015">Light Pollution 2015</label>
           <label><input type="checkbox" id="Lightpollutionmap2014">Light Pollution 2014</label>
           <label><input type="checkbox" id="NASAGIBS.ModisTerraLSTDay">Modis Terra LST Day</label>
@@ -583,7 +567,7 @@
   }
   //overlayMaps
   if(!storage.getItem("overlayMaps")){
-    overlayMapNames.push("Lightpollutionmap2016");
+    overlayMapNames.push("Lightpollutionmap2015");
     storage.setItem("overlayMaps",JSON.stringify(overlayMapNames));
     $(jq('OpenWeatherMap.Clouds')).attr('checked',true);
   }else{
@@ -662,7 +646,6 @@
     $.each(overlayMapNames,function(k,v){
       if(v==="Lightpollutionmap2014"){overlaymap["Light Pollution 2014"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2014',format:'image/png',transparent:true,opacity: 0.6,attribution:"Map tiles by:Jurij Stare, www.lightpollutionmap.info --Map data &copy; Earth Observation Group, NOAA National Geophysical Data Center"});return;}
       if(v==="Lightpollutionmap2015"){overlaymap["Light Pollution 2015"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2015',format:'image/png',transparent:true,opacity: 0.6,attribution:"Map tiles by:Jurij Stare, www.lightpollutionmap.info --Map data &copy; Earth Observation Group, NOAA National Geophysical Data Center"});return;}
-      if(v==="Lightpollutionmap2016"){overlaymap["Light Pollution 2016"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2016',format:'image/png',transparent:true,opacity: 0.6,attribution:"Map tiles by:Jurij Stare, www.lightpollutionmap.info --Map data &copy; Earth Observation Group, NOAA National Geophysical Data Center"});return;}
       var attrname = $(jq(v)).parent().text();
       overlaymap[attrname]=L.tileLayer.provider(v);
     });
@@ -686,47 +669,62 @@
   function onMapClick(e) {
       marker.setLatLng( e.latlng).update();
   }
-  var cot=(('ontouchend' in window))?'touchend':'click';
-  document.addEventListener('deviceready', onDeviceReady, false);
+  var cot='click';//(('ontouchend' in window))?'touchend':'click';
+  $(document).ready(function() {
+    // are we running in native app or in a browser?
+    window.isphone = false;
+    if(document.URL.indexOf("http://") === -1 
+        && document.URL.indexOf("https://") === -1) {
+        window.isphone = true;
+    }
+
+    if( window.isphone ) {
+        document.addEventListener("deviceready", onDeviceReady, false);
+    } else {
+        onDeviceReady();
+    }
+  });
+
+  //document.addEventListener('deviceready', onDeviceReady, false);
   var disp,errdisp,jmpdisp;
   function onDeviceReady() {
     document.addEventListener("backbutton",function(e){if($.mobile.activePage.is('#pagemain')){if(navigator.app){ navigator.app.exitApp();}else if(navigator.device){ navigator.device.exitApp();}}else{navigator.app.backHistory()}},false);
-    disp = function (pos) {
-       if($("#sname").val() === ""){$("#sname").val("新地点");}
-       $('#slatitude').val(pos.coords.latitude);
-       $('#slongitude').val(pos.coords.longitude);
-    };
-    jmpdisp = function (pos) {
-      var p = marker.getLatLng().wrap();
-      p.lat = pos.coords.latitude;
-      p.lng = pos.coords.longitude;
-      marker.setLatLng(p).update();map.setView(p);
-    };
-    errdisp = function (e){
-      $.mobile.toast({ message: e.message,position:"center" });
-    }
-    $('#slocate').on(cot,function() {
-        navigator.geolocation.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:true,maximumAge: 3000, timeout: 20000});
-    });
+
   }
+  disp = function (pos) {
+     if($("#sname").val() === ""){$("#sname").val("新地点");}
+     $('#slatitude').val(pos.coords.latitude);
+     $('#slongitude').val(pos.coords.longitude);
+  };
+  jmpdisp = function (pos) {
+    var p = marker.getLatLng().wrap();
+    p.lat = pos.coords.latitude;
+    p.lng = pos.coords.longitude;
+    marker.setLatLng(p).update();map.setView(p);
+  };
+  errdisp = function (e){
+    $.mobile.toast({ message: e.message,position:"center" });
+  }
+  $('#slocate').on(cot,function() {
+      navigator.geolocation.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:true,maximumAge: 3000, timeout: 5000});
+  });
   //initial
   var tempdate = new Date();
-  var tempdatetext = tempdate.format('yyyy-MM-dd hh:mm');
   var dtpicker = flatpickr('#cacldate');
   var startdate = flatpickr('#starttime',{ disable: [ { 'from' : "1900-01-01", 'to' : "2013-12-31" }, { 'from' : "2021-01-01", 'to' : "2100-12-31" }]});
   var enddate = flatpickr('#endtime',{disable: [ { 'from' : "1900-01-01", 'to' : "2013-12-31" }, { 'from' : "2021-01-01", 'to' : "2100-12-31" }]});
-  var caclsky = flatpickr('#caclsky',{enableTime: true,timeFormat: "H:i",time_24hr:true,defaultDate:tempdatetext});
   startdate.set("onChange", function(d) { 
       enddate.set("minDate", d);
   });
   enddate.set("onChange", function(d) { 
       startdate.set("maxDate", d); 
   });
+  
   $('#cacldate').val(tempdate.format('yyyy-MM-dd'));
   $('#starttime').val(tempdate.format('yyyy-MM-dd'));
-  $('#caclsky').val(tempdatetext);
   var tempprevday = new Date(tempdate.getTime() + 24*60*60*1000);
   $('#endtime').val(tempprevday.format('yyyy-MM-dd'));
+
   var index = $('#address').get(0).selectedIndex;
   var item = addresses.locations[index];
   $('#latitude').val(item.lat);
@@ -993,23 +991,6 @@
       $.mobile.loading("hide");
     });
   });
-  //星图
-  function getSkychart(){
-    var text = $("#caclsky").val();
-    text+=":00";
-    var skytime = new Date(text);
-    var ticktime = new Date("1858-11-17T00:00:00");
-    var delta=skytime.getTime()-ticktime.getTime();
-    var urltime = delta/(24.0*3600.0*1000.0);
-    var imgurl= "http://www.heavens-above.com/wholeskychart.ashx?lat=0&lng=0&loc=Unspecified&alt=0&tz=UCT&size=800&SL=1&SN=1&BW=0&time="+urltime.toString(10) +"&ecl=0&cb=0";
-    $("#imgSkychart").attr("src", imgurl);
-  }
-  $("#skychart").on(cot,function(){
-    $("#skychartcontent").panzoom();
-    $.mobile.changePage( "#pageskychart",{transition:'none'});
-    getSkychart();
-  });
-  caclsky.config.onClose = getSkychart;
   //天象
   function getStarCal(){
     var starttime = $('#starttime').val();
@@ -1037,21 +1018,21 @@
     var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
     radartime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
     currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
-    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.PNG";
+    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.GIF";
     $("#imgRadar").attr("src", imgurl);
     $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
   });
   $('#radarprev').on(cot,function(){
     radartime = new Date(radartime.getFullYear(),radartime.getMonth(),radartime.getDate(),radartime.getHours(),radartime.getMinutes()-10);
     var currenttime= new Date(radartime.getTime() + radartime.getTimezoneOffset() * 60 * 1000);
-    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.PNG";
+    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.GIF";
     $("#imgRadar").attr("src", imgurl);
     $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
   });
   $('#radarnext').on(cot,function(){
     radartime = new Date(radartime.getFullYear(),radartime.getMonth(),radartime.getDate(),radartime.getHours(),radartime.getMinutes()+10);
     var currenttime= new Date(radartime.getTime() + radartime.getTimezoneOffset() * 60 * 1000);
-    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.PNG";
+    var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.GIF";
     $("#imgRadar").attr("src", imgurl);
     $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
   });
@@ -1116,6 +1097,6 @@
     $('#moonPhase').html("<img style='height:21px;margin-bottom:-5px' src='moon/"+ imgphase +".png'/>"+smoonPhase);
   }
   $('#suncalc').on(cot,function(){sunmooncalc()});
-  dtpicker.config.onChange = sunmooncalc;
+  dtpicker.element.addEventListener('change',sunmooncalc);
   </script>
 </html>
