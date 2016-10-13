@@ -1050,14 +1050,14 @@
     $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
   });
   $('#radarprev').on(cot,function(){
-    radartime = new Date(radartime.getFullYear(),radartime.getMonth(),radartime.getDate(),radartime.getHours(),radartime.getMinutes()-10);
+    radartime = new Date(radartime.getFullYear(),radartime.getMonth(),radartime.getDate(),radartime.getHours(),radartime.getMinutes()-6);
     var currenttime= new Date(radartime.getTime() + radartime.getTimezoneOffset() * 60 * 1000);
     var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.PNG";
     $("#imgRadar").attr("src", imgurl);
     $('#radarLable').html(currenttime.format('yyyyMMdd_hhmm')+"UTC±00:00");
   });
   $('#radarnext').on(cot,function(){
-    radartime = new Date(radartime.getFullYear(),radartime.getMonth(),radartime.getDate(),radartime.getHours(),radartime.getMinutes()+10);
+    radartime = new Date(radartime.getFullYear(),radartime.getMonth(),radartime.getDate(),radartime.getHours(),radartime.getMinutes()+6);
     var currenttime= new Date(radartime.getTime() + radartime.getTimezoneOffset() * 60 * 1000);
     var imgurl = "http://www.moc.cma.gov.cn/mocimg/radar/mosaic/" + $('#radartype').val() + "/QREF/" +  currenttime.format('yyyy/MM/dd/') +  $('#radartype').val() + ".QREF000." + currenttime.format('yyyyMMdd.hhmm') + "00.PNG";
     $("#imgRadar").attr("src", imgurl);
