@@ -1125,7 +1125,7 @@
   }
   $('#suncalc').on(cot,function(){sunmooncalc()});
   dtpicker.config.onChange = sunmooncalc;
-  $("img").on("taphold",function(){
+  $("img").on("dblclick",function(){
     window.plugins.socialsharing.share(null, null, $(this).attr('src'), null);
   });
   </script>
