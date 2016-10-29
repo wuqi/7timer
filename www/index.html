@@ -1132,7 +1132,7 @@
   $(".share").on("click",function(){
     var str = $(this).parent().parent().find("img:first").attr('src');//.children('img');
     //alert(str);
-    window.plugins.socialsharing.share(null, null, $(this).attr('src'), null);
+    window.plugins.socialsharing.share(null, null,str, null);
   });
   </script>
 </html>
