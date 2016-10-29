@@ -289,6 +289,7 @@
     <div data-role="header">
        <h1>晴天钟</h1>
        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
+       <a href="#" class="share" data-role="button" data-icon="star" data-transition="none">分享</a>
     </div>
     <div  id="clockcontent" height="100%">
       <img src=""  alt="晴天钟" id="imgClock" width="100%"/>
@@ -310,7 +311,8 @@
   <div data-role="page" id="pagecloud" class="page">
     <div data-role="header">
        <h1>红外云图</h1>
-        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
+       <a href="#" class="share" data-role="button" data-icon="star" data-transition="none">分享</a>
     </div>
     <label for="img"  data-mini="true" id="cloudLable"></label>
     <div  id="cloudcontent" height="100%">
@@ -325,7 +327,8 @@
   <div data-role="page" id="pageradar" class="page">
     <div data-role="header">
        <h1>雷达拼图</h1>
-        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
+       <a href="#" class="share" data-role="button" data-icon="star" data-transition="none">分享</a>
     </div>
     <label for="img"  data-mini="true" id="radarLable"></label>
     <div  id="radarcontent" height="100%">
@@ -391,7 +394,8 @@
   <div data-role="page" id="pageskychart" class="page">
     <div data-role="header">
        <h1>实时星图</h1>
-        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
+       <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
+       <a href="#" class="share" data-role="button" data-icon="star" data-transition="none">分享</a>
     </div>
     <div data-role="fieldcontain">
         <label for="cacldate"  data-mini="true" >时间：</label>
@@ -1125,7 +1129,9 @@
   }
   $('#suncalc').on(cot,function(){sunmooncalc()});
   dtpicker.config.onChange = sunmooncalc;
-  $("img").on("dblclick",function(){
+  $(".share").on("click",function(){
+    var str = $(this).parent().parent().find("img:first").attr('src');//.children('img');
+    //alert(str);
     window.plugins.socialsharing.share(null, null, $(this).attr('src'), null);
   });
   </script>
