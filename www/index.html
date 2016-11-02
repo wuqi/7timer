@@ -1129,10 +1129,22 @@
   }
   $('#suncalc').on(cot,function(){sunmooncalc()});
   dtpicker.config.onChange = sunmooncalc;
+  function getBase64Image(img) {
+    img.setAttribute('crossOrigin', 'anonymous');
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    var dataURL = canvas.toDataURL("image/png");
+    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+  }
+
+  //var base64 = getBase64Image(document.getElementById("imageid"));
   $(".share").on("click",function(){
-    var str = $(this).parent().parent().find("img:first").attr('src');//.children('img');
-    //alert(str);
-    window.plugins.socialsharing.share(null, null,str, null);
+    var base64 = getBase64Image($(this).parent().parent().find("img:first")[0]);
+    //alert(base64);
+    window.plugins.socialsharing.share(null, null,base64, null);
   });
   </script>
 </html>
