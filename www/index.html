@@ -1139,12 +1139,30 @@
     var dataURL = canvas.toDataURL("image/png");
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
   }
-
-  //var base64 = getBase64Image(document.getElementById("imageid"));
+  function convertImgToBase64(url, callback, outputFormat) {
+    var canvas = document.createElement('CANVAS');
+    var ctx = canvas.getContext('2d');
+    var img = new Image;
+    img.crossOrigin = 'Anonymous';
+    img.onload = function() {
+      canvas.height = img.height;
+      canvas.width = img.width;
+      ctx.drawImage(img, 0, 0);
+      var dataURL = canvas.toDataURL(outputFormat || 'image/png');
+      callback.call(this, dataURL);
+      // Clean up 
+      canvas = null;
+    };
+    img.src = url;
+  }
+ 
   $(".share").on("click",function(){
-    var base64 = getBase64Image($(this).parent().parent().find("img:first")[0]);
-    //alert(base64);
-    window.plugins.socialsharing.share(null, null,base64, null);
+    var str = $(this).parent().parent().find("img:first").attr('src');
+    //alert(str);
+    convertImgToBase64(str, function(base64Img){ 
+      alert(base64Img);
+      window.plugins.socialsharing.share(null, null,base64Img, null); 
+    }); 
   });
   </script>
 </html>
