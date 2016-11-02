@@ -1129,16 +1129,7 @@
   }
   $('#suncalc').on(cot,function(){sunmooncalc()});
   dtpicker.config.onChange = sunmooncalc;
-  function getBase64Image(img) {
-    img.setAttribute('crossOrigin', 'anonymous');
-    var canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0);
-    var dataURL = canvas.toDataURL("image/png");
-    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-  }
+
   function convertImgToBase64(url, callback, outputFormat) {
     var canvas = document.createElement('CANVAS');
     var ctx = canvas.getContext('2d');
