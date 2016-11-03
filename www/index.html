@@ -374,6 +374,7 @@
     <div data-role="header">
        <h1>天象预报</h1>
         <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
+        <a href="#" class="sharestarcal" data-role="button" data-icon="star" data-transition="none">分享</a>
     </div>
     <div data-role="fieldcontain">
       <label for="starttime"  data-mini="true" >开始时间：</label>
@@ -1141,5 +1142,18 @@
     window.plugins.socialsharing.share(null, null,dataURL, null); 
     canvas = null;
   });
+
+  $(".sharestarcal").on("click",function(){
+    var elem = $('#starcalcontent').get( 0 );
+    var canvas = document.createElement('CANVAS');
+    var ctx = canvas.getContext('2d');
+    canvas.height = $('#starcalcontent').innerHeight();
+    canvas.width =  $('#starcalcontent').innerWidth();
+    ctx.drawImage(elem, 0, 0);
+    var dataURL = canvas.toDataURL(outputFormat || 'image/png');
+    window.plugins.socialsharing.share(null, null,dataURL, null); 
+    canvas = null;
+  });
+
   </script>
 </html>
