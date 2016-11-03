@@ -374,7 +374,7 @@
     <div data-role="header">
        <h1>天象预报</h1>
         <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
-        <a href="#" class="sharestarcal" data-role="button" data-icon="star" data-transition="none">分享</a>
+        <a href="#" class="sharestar" data-role="button" data-icon="star" data-transition="none">分享</a>
     </div>
     <div data-role="fieldcontain">
       <label for="starttime"  data-mini="true" >开始时间：</label>
@@ -1131,29 +1131,29 @@
   $('#suncalc').on(cot,function(){sunmooncalc()});
   dtpicker.config.onChange = sunmooncalc;
 
+  function convertImgToBase64(elem, callback, outputFormat) {
+    var canvas = document.createElement('CANVAS');
+    var ctx = canvas.getContext('2d');
+    canvas.height = elem.naturalHeight || elem.offsetHeight;
+    canvas.width = elem.naturalWidth || elem.offsetWidth;
+    ctx.drawImage(elem, 0, 0);
+    var dataURL = canvas.toDataURL(outputFormat || 'image/png');
+    callback.call(this, dataURL);
+    canvas = null;
+  }
+ 
   $(".share").on("click",function(){
     var elem = $(this).parent().parent().find("img:first").get( 0 );
-    var canvas = document.createElement('CANVAS');
-    var ctx = canvas.getContext('2d');
-    canvas.height = elem.naturalHeight;
-    canvas.width = elem.naturalWidth;
-    ctx.drawImage(elem, 0, 0);
-    var dataURL = canvas.toDataURL(outputFormat || 'image/png');
-    window.plugins.socialsharing.share(null, null,dataURL, null); 
-    canvas = null;
+    convertImgToBase64(elem, function(base64Img){
+      window.plugins.socialsharing.share(null, null,base64Img, null); 
+    }); 
   });
 
-  $(".sharestarcal").on("click",function(){
-    var elem = $('#starcalcontent').get( 0 );
-    var canvas = document.createElement('CANVAS');
-    var ctx = canvas.getContext('2d');
-    canvas.height = $('#starcalcontent').innerHeight();
-    canvas.width =  $('#starcalcontent').innerWidth();
-    ctx.drawImage(elem, 0, 0);
-    var dataURL = canvas.toDataURL(outputFormat || 'image/png');
-    window.plugins.socialsharing.share(null, null,dataURL, null); 
-    canvas = null;
+  $(".sharestar").on("click",function(){
+    var elem = $(this).parent().parent().find("svg:first").get( 0 );
+    convertImgToBase64(elem, function(base64Img){
+      window.plugins.socialsharing.share(null, null,base64Img, null); 
+    }); 
   });
-
   </script>
 </html>
