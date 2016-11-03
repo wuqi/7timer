@@ -1130,22 +1130,16 @@
   $('#suncalc').on(cot,function(){sunmooncalc()});
   dtpicker.config.onChange = sunmooncalc;
 
-  function convertImgToBase64(elem, callback, outputFormat) {
+  $(".share").on("click",function(){
+    var elem = $(this).parent().parent().find("img:first").get( 0 );
     var canvas = document.createElement('CANVAS');
     var ctx = canvas.getContext('2d');
     canvas.height = elem.naturalHeight;
     canvas.width = elem.naturalWidth;
     ctx.drawImage(elem, 0, 0);
     var dataURL = canvas.toDataURL(outputFormat || 'image/png');
-    callback.call(this, dataURL);
+    window.plugins.socialsharing.share(null, null,dataURL, null); 
     canvas = null;
-  }
- 
-  $(".share").on("click",function(){
-    var elem = $(this).parent().parent().find("img:first").get( 0 );
-    convertImgToBase64(elem, function(base64Img){
-      window.plugins.socialsharing.share(null, null,base64Img, null); 
-    }); 
   });
   </script>
 </html>
