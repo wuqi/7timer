@@ -30,6 +30,7 @@
   .standardTable{color:#aaa;font-family: PingFang SC,Lantinghei SC,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans;border-collapse:collapse;border-spacing:0;font-size:12px}
   .standardTable th,.standardTable td,.standardTable th,.standardTable td{word-break:keep-all;white-space:nowrap;border:1px solid #ddd;}
   .standardTable tbody > :nth-child(2n-1) {background: #ddd;color:#666}
+  .ui-btn{font-size: 0.8em;}
   </style>
 </head>
 <body>
@@ -39,45 +40,44 @@
        <h1>晴天钟</h1>
       <div data-role="navbar" data-iconpos="left">
         <ul>
-          <li><a href="#pagemap" data-icon="eye" data-transition="none">地图</a></li>
-          <li><a href="#pagesettings" data-icon="gear" data-transition="none">设置</a></li>
+          <li><a href="#pagemap" data-icon="map" data-transition="none">地图</a></li>
+          <li><a href="#pagesettings" data-icon="setting" data-transition="none">设置</a></li>
           <li><a href="#pageinfo" data-icon="info"  data-transition="none">说明</a></li>
         </ul>
       </div>
     </div>
     <div data-role="content" style="padding: 10px">
       <div data-role="fieldcontain">
-        <label for="address">地名：</label>
         <select name="address" id="address" data-native-menu="false"  data-mini="true" >
         </select>
       </div>
-      <div data-role="fieldcontain">
-        <label for="longitude"  data-mini="true" >经度：</label>
-        <input type="text" name="longitude" id="longitude" value=""  data-mini="true" >
-      </div>
-      <div data-role="fieldcontain">
-        <label for="latitude"  data-mini="true" >纬度：</label>
-        <input type="text" name="latitude" id="latitude" value=""  data-mini="true" >
-      </div>
+      <!--<div data-role="fieldcontain">-->
+        <!--<label for="longitude"  data-mini="true" >经度：</label>-->
+        <input type="hidden" name="longitude" id="longitude" value=""  data-mini="true" >
+      <!--</div>-->
+      <!--<div data-role="fieldcontain">-->
+        <!--<label for="latitude"  data-mini="true" >纬度：</label>-->
+        <input type="hidden" name="latitude" id="latitude" value=""  data-mini="true" >
+      <!--</div>-->
       <div class="ui-grid-b btngroup"> 
-        <div class="ui-block-a"><a href="#" data-role="button" id="clock" data-transition="none" data-icon="clock"  data-mini="true" >晴天钟</a></div>
-        <div class="ui-block-b"><a href="#pageresult" data-role="button" id="suncalc" data-transition="none" data-icon="star" data-mini="true" >晨昏蒙影</a></div>
+        <div class="ui-block-a"><a class="ui-btn ui-btn-corner-all ui-icon-clock ui-btn-icon-top" href="#" id="clock" data-transition="none" data-mini="true" ><br>晴天钟</a></div>
+        <div class="ui-block-b"><a class="ui-btn ui-btn-corner-all ui-icon-twilight ui-btn-icon-top" href="#pageresult" id="suncalc" data-transition="none" data-mini="true" ><br>晨昏蒙影</a></div>
         <div class="ui-block-c">
-          <a href="#pagesearch" data-role="button" id="newLoc" data-transition="none" data-icon="plus" data-rel="popup" data-mini="true" >添加地点</a></div>
+          <a href="#pagesearch" class="ui-btn ui-btn-corner-all ui-icon-plus ui-btn-icon-top" id="newLoc" data-transition="none" data-rel="popup" data-mini="true" ><br>添加地点</a></div>
       </div>
       <div class="ui-grid-b btngroup"> 
-        <div class="ui-block-a"><a href="#" data-role="button" id="weather" data-transition="none" data-icon="calendar"  data-mini="true">天气预报</a></div>
-        <div class="ui-block-b"><a href="#" data-role="button" id="nircloud" data-transition="none" data-icon="cloud" data-mini="true" >红外云图</a></div>
-        <div class="ui-block-c"><a href="#" data-role="button" id="radar" data-transition="none" data-icon="eye" data-mini="true" >雷达拼图</a></div>
+        <div class="ui-block-a"><a class="ui-btn ui-btn-corner-all ui-icon-forcast ui-btn-icon-top" href="#" id="weather" data-transition="none" data-mini="true"><br>天气预报</a></div>
+        <div class="ui-block-b"><a class="ui-btn ui-btn-corner-all ui-icon-cloud ui-btn-icon-top" href="#" id="nircloud" data-transition="none" data-mini="true" ><br>红外云图</a></div>
+        <div class="ui-block-c"><a class="ui-btn ui-btn-corner-all ui-icon-radar ui-btn-icon-top" href="#" id="radar" data-transition="none" data-mini="true" ><br>雷达拼图</a></div>
       </div>
       <div class="ui-grid-b btngroup"> 
-        <div class="ui-block-a"><a href="#" data-role="button" id="iridium" data-transition="none" data-icon="action" data-mini="true" >铱星闪光</a></div>
-        <div class="ui-block-b"><a href="#" data-role="button" id="sats" data-transition="none" data-icon="grid"  data-mini="true">卫星预报</a></div>
-        <div class="ui-block-c"><a href="#" data-role="button" id="planet" data-transition="none" data-icon="bars" data-mini="true" >行星简报</a></div>
+        <div class="ui-block-a"><a class="ui-btn ui-btn-corner-all ui-icon-lighting ui-btn-icon-top" href="#" id="iridium" data-transition="none" data-mini="true" ><br>铱星闪光</a></div>
+        <div class="ui-block-b"><a class="ui-btn ui-btn-corner-all ui-icon-satellite ui-btn-icon-top" href="#" id="sats" data-transition="none"  data-mini="true"><br>卫星预报</a></div>
+        <div class="ui-block-c"><a class="ui-btn ui-btn-corner-all ui-icon-planet ui-btn-icon-top" href="#" id="planet" data-transition="none" data-mini="true" ><br>行星简报</a></div>
       </div>
       <div class="ui-grid-a btngroup">
-        <div class="ui-block-a"><a href="#" data-role="button" id="starcal" data-transition="none" data-icon="calendar" data-mini="true" >天象预报</a></div>
-        <div class="ui-block-b"><a href="#" data-role="button" id="skychart" data-transition="none" data-icon="star" data-mini="true" >实时星图</a></div>
+        <div class="ui-block-a"><a class="ui-btn ui-btn-corner-all ui-icon-moon-stars ui-btn-icon-top" href="#" id="starcal" data-transition="none" data-mini="true" ><br>天象预报</a></div>
+        <div class="ui-block-b"><a class="ui-btn ui-btn-corner-all ui-icon-stars ui-btn-icon-top" href="#" id="skychart" data-transition="none" data-mini="true" ><br>实时星图</a></div>
       </div>
     </div>
     <!--添加新地点-->
@@ -289,7 +289,7 @@
     <div data-role="header">
        <h1>晴天钟</h1>
        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
-       <a href="#" class="share" data-role="button" data-icon="star" data-transition="none">分享</a>
+       <a href="#" class="share" data-role="button" data-icon="share" data-transition="none">分享</a>
     </div>
     <div  id="clockcontent" height="100%">
       <img src=""  alt="晴天钟" id="imgClock" width="100%"/>
@@ -312,7 +312,7 @@
     <div data-role="header">
        <h1>红外云图</h1>
        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
-       <a href="#" class="share" data-role="button" data-icon="star" data-transition="none">分享</a>
+       <a href="#" class="share" data-role="button" data-icon="share" data-transition="none">分享</a>
     </div>
     <label for="img"  data-mini="true" id="cloudLable"></label>
     <div  id="cloudcontent" height="100%">
@@ -395,14 +395,15 @@
     <div data-role="header">
        <h1>实时星图</h1>
        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
-       <a href="#" class="share" data-role="button" data-icon="star" data-transition="none">分享</a>
+       <a href="#" class="share" data-role="button" data-icon="share" data-transition="none">分享</a>
     </div>
     <div data-role="fieldcontain">
         <label for="cacldate"  data-mini="true" >时间：</label>
         <input type="text" name="caclsky" id="caclsky"  data-mini="true" readonly="readonly"/>
-      </div>
+    </div>
     <div  id="skychartcontent" height="100%">
       <img title="实时星图" id="imgSkychart" width="100%" />
+      <a href="#" id="compass" data-role="button" data-mini="true" data-icon="compass" data-transition="none">方向</a>
     </div>
   </div>
   <!--pagesettings-->
@@ -697,7 +698,7 @@
   }
   
   document.addEventListener('deviceready', onDeviceReady, false);
-  var disp,errdisp,jmpdisp;
+  var disp,errdisp,jmpdisp,heading,errheading;
   function onDeviceReady() {
     document.addEventListener("backbutton",function(e){if($.mobile.activePage.is('#pagemain')){if(navigator.app){ navigator.app.exitApp();}else if(navigator.device){ navigator.device.exitApp();}}else{navigator.app.backHistory()}},false);
     if(!locationService) {
@@ -717,8 +718,27 @@
     errdisp = function (e){
       $.mobile.toast({ message: e.message,position:"center" });
     }
+    heading = function (heading){
+      var o = heading.magneticHeading;
+      var t = "";
+      if(o>22.5 &&o<67.5 ){t="东北 ";}
+      else if(o>67.5&&o<112.5){t ="东 ";}
+      else if(o>112.5&&o<157.5){t ="东南 ";}
+      else if(o>157.5&&o<202.5){t ="南 ";}
+      else if(o>202.5&&o<247.5){t ="西南 ";}
+      else if(o>247.5&&o<292.5){t ="西 ";}
+      else if(o>292.5&&o<337.5){t ="西北 ";}
+      else{t="北 ";}
+      $('#compass').text(t+o);
+    }
+    errheading = function (e){
+      $.mobile.toast({ message: e.message,position:"center" });
+    }
     $('#slocate').on(cot,function() {
         locationService.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:false,maximumAge: 3000, timeout: 100000});
+    });
+    $('#compass').on(cot,function () {
+      navigator.compass.getCurrentHeading(heading);
     });
   }
   //initial
