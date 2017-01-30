@@ -694,16 +694,20 @@
   var cot=(('ontouchend' in window))?'touchend':'click';
   var locationService = false;
   if(navigator.geolocation) {
-    //locationService = navigator.geolocation;
+    locationService = navigator.geolocation;
+  }
+  var compassService = false;
+  if(navigator.compass) {
+    compassService = navigator.compass;
   }
   
   document.addEventListener('deviceready', onDeviceReady, false);
   var disp,errdisp,jmpdisp,heading,errheading;
   function onDeviceReady() {
     document.addEventListener("backbutton",function(e){if($.mobile.activePage.is('#pagemain')){if(navigator.app){ navigator.app.exitApp();}else if(navigator.device){ navigator.device.exitApp();}}else{navigator.app.backHistory()}},false);
-    if(!locationService) {
-      locationService = navigator.geolocation; // cordova geolocation plugin
-    }
+    //if(!locationService) {
+    //  locationService = navigator.geolocation; // cordova geolocation plugin
+    //}
     disp = function (pos) {
        if($("#sname").val() === ""){$("#sname").val("新地点");}
        $('#slatitude').val(pos.coords.latitude);
@@ -719,26 +723,27 @@
       $.mobile.toast({ message: e.message,position:"center" });
     }
     heading = function (heading){
-      var o = heading.magneticHeading;
+      var o = heading.magneticHeading.toFixed(2);
       var t = "";
-      if(o>22.5 &&o<67.5 ){t="东北 ";}
-      else if(o>67.5&&o<112.5){t ="东 ";}
-      else if(o>112.5&&o<157.5){t ="东南 ";}
-      else if(o>157.5&&o<202.5){t ="南 ";}
-      else if(o>202.5&&o<247.5){t ="西南 ";}
-      else if(o>247.5&&o<292.5){t ="西 ";}
-      else if(o>292.5&&o<337.5){t ="西北 ";}
-      else{t="北 ";}
+      if(o>22.5 &&o<67.5 ){t="东北  ";}
+      else if(o>67.5&&o<112.5){t ="东  ";}
+      else if(o>112.5&&o<157.5){t ="东南  ";}
+      else if(o>157.5&&o<202.5){t ="南  ";}
+      else if(o>202.5&&o<247.5){t ="西南  ";}
+      else if(o>247.5&&o<292.5){t ="西  ";}
+      else if(o>292.5&&o<337.5){t ="西北  ";}
+      else{t="北  ";}
       $('#compass').text(t+o);
     }
     errheading = function (e){
       $.mobile.toast({ message: e.message,position:"center" });
     }
     $('#slocate').on(cot,function() {
-        locationService.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:false,maximumAge: 3000, timeout: 100000});
+      locationService.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:false,maximumAge: 3000, timeout: 100000});
     });
     $('#compass').on(cot,function () {
-      navigator.compass.getCurrentHeading(heading);
+      if(!compassService){$.mobile.toast({ message: "不支持罗盘",position:"center" });}
+      compassService.getCurrentHeading(heading,errheading);
     });
   }
   //initial
