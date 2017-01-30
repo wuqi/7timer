@@ -19,7 +19,6 @@
   <preference name="android-minSdkVersion"      value="14" />
   <preference name="android-installLocation"    value="auto" />
   <plugin name="cordova-plugin-whitelist" source="npm"/>
-  <plugin name="cordova-plugin-device-orientation" source="npm"/>
   <plugin name="cordova-plugin-splashscreen" spec="2.1.0" source="npm"/>
   <plugin name="cordova-plugin-network-information" spec="1.0.1" source="npm" />
   <plugin name="cordova-plugin-geolocation" spec="1.0.1" source="npm" />
