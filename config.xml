@@ -22,7 +22,7 @@
   <plugin name="cordova-plugin-splashscreen" spec="2.1.0" source="npm"/>
   <plugin name="cordova-plugin-network-information" spec="1.0.1" source="npm" />
   <plugin name="cordova-plugin-geolocation" spec="1.0.1" source="npm" />
-  <plugin name="cordova-plugin-x-socialsharing" source="npm" />
+  <plugin name="cordova-plugin-x-socialsharing" spec="5.1.2"  source="npm" />
   <icon src="icon.png"/>
   <splash src="splash.png"/>
   <access origin="*" />
