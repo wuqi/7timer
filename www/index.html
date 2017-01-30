@@ -739,7 +739,6 @@
     });
     $('#compass').on(cot,function () {
       navigator.compass.getCurrentHeading(heading,errheading);
-      while($('#compass').text == "北  0.00"){navigator.compass.getCurrentHeading(heading,errheading);}
     });
   }
   //initial
