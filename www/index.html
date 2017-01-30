@@ -328,7 +328,7 @@
     <div data-role="header">
        <h1>雷达拼图</h1>
        <a href="#pagemain" data-role="button" data-icon="home" data-transition="none">首页</a>
-       <a href="#" class="share" data-role="button" data-icon="star" data-transition="none">分享</a>
+       <a href="#" class="share" data-role="button" data-icon="share" data-transition="none">分享</a>
     </div>
     <label for="img"  data-mini="true" id="radarLable"></label>
     <div  id="radarcontent" height="100%">
@@ -734,6 +734,8 @@
     errheading = function (e){
       $.mobile.toast({ message: e.message,position:"center" });
     }
+    navigator.compass.getCurrentHeading(heading,errheading);
+    navigator.compass.getCurrentHeading(heading,errheading);
     $('#slocate').on(cot,function() {
       locationService.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:false,maximumAge: 3000, timeout: 100000});
     });
