@@ -4,7 +4,6 @@
   <author href="http://diphda.info" email="wuqi198772@gmail.com">Wu Qi</author>
   <content src="index.html"/>
   <preference name="permissions"                value="none"/>
-  <preference name="phonegap-version" value="cli-6.3.0" />
   <preference name="orientation"                value="default" />
   <preference name="target-device"              value="universal" />
   <preference name="fullscreen"                 value="false" />
