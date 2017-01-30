@@ -734,12 +734,11 @@
     errheading = function (e){
       $.mobile.toast({ message: e.message,position:"center" });
     }
-    navigator.compass.getCurrentHeading(heading,errheading);
-    navigator.compass.getCurrentHeading(heading,errheading);
     $('#slocate').on(cot,function() {
       locationService.getCurrentPosition(disp,errdisp,{ enableHighAccuracy:false,maximumAge: 3000, timeout: 100000});
     });
     $('#compass').on(cot,function () {
+      navigator.compass.getCurrentHeading(heading,errheading);
       navigator.compass.getCurrentHeading(heading,errheading);
     });
   }
