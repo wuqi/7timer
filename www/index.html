@@ -463,13 +463,13 @@
         </fieldset>
         <label for="cloudtype">红外云图类型：</label>
         <select name="cloudtype" id="cloudtype" data-native-menu="false" data-mini="true" >
-          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_CLC_GRA_">中国区域红外一彩色</option>
-          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_IR1_COL_">中国区域红外一增强</option>
-          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_IR2_COL_">中国区域红外二增强</option>
-          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2/F2DE/FY2X_ANI_CLC_ECN_">双星红外一彩色</option>
-          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_CLC_GRA_">圆盘图红外一彩色</option>
-          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR1_COL_">圆盘图红外一增强</option>
-          <option value="http://img.nsmc.cma.gov.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR2_COL_">圆盘图红外二增强</option>
+          <option value="http://img.nsmc.org.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_CLC_GRA_">中国区域红外一彩色</option>
+          <option value="http://img.nsmc.org.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_IR1_COL_">中国区域红外一增强</option>
+          <option value="http://img.nsmc.org.cn/CLOUDIMAGE/FY2G/lan/FY2G_LAN_IR2_COL_">中国区域红外二增强</option>
+          <option value="http://img.nsmc.org.cn/CLOUDIMAGE/FY2/F2DE/FY2X_ANI_CLC_ECN_">双星红外一彩色</option>
+          <option value="http://img.nsmc.org.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_CLC_GRA_">圆盘图红外一彩色</option>
+          <option value="http://img.nsmc.org.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR1_COL_">圆盘图红外一增强</option>
+          <option value="http://img.nsmc.org.cn/CLOUDIMAGE/FY2G/glb/FY2G_GLB_IR2_COL_">圆盘图红外二增强</option>
         </select>
         <label for="radartype">雷达拼图类型：</label>
         <select name="radartype" id="radartype" data-native-menu="false" data-mini="true" >
@@ -942,7 +942,6 @@
     $.mobile.changePage( "#pagecloud",{transition:'none'});
 
     var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
-    currenttime = new Date(currenttime.getFullYear(),currenttime.getMonth(),currenttime.getDate(),currenttime.getHours()-1,currenttime.getMinutes()+25);
     cloudtime = new Date(currenttime.getTime());
     currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
     var imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
