@@ -942,6 +942,7 @@
     $.mobile.changePage( "#pagecloud",{transition:'none'});
 
     var currenttime = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours()-1);
+    currenttime = new Date(currenttime.getFullYear(),currenttime.getMonth(),currenttime.getDate(),currenttime.getHours()-1,currenttime.getMinutes()+25);
     cloudtime = new Date(currenttime.getTime());
     currenttime = new Date(currenttime.getTime() + currenttime.getTimezoneOffset() * 60 * 1000);
     var imgurl= $('#cloudtype').val() + currenttime.format('yyyyMMdd_hhmm') +'.jpg';
