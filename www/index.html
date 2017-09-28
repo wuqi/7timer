@@ -454,6 +454,7 @@
           <label><input type="checkbox" id="OpenWeatherMap.Snow">Snow</label>
           <label><input type="checkbox" id="OpenWeatherMap.Temperature">Temperature</label>
           <label><input type="checkbox" id="NASAGIBS.ViirsEarthAtNight2012">Earth At Night2012</label>
+          <label><input type="checkbox" id="Lightpollutionmap2017">Light Pollution 2017</label>
           <label><input type="checkbox" id="Lightpollutionmap2016">Light Pollution 2016</label>
           <label><input type="checkbox" id="Lightpollutionmap2015">Light Pollution 2015</label>
           <label><input type="checkbox" id="Lightpollutionmap2014">Light Pollution 2014</label>
@@ -668,6 +669,7 @@
       if(v==="Lightpollutionmap2014"){overlaymap["Light Pollution 2014"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2014',format:'image/png',transparent:true,opacity: 0.6,attribution:"Map tiles by:Jurij Stare, www.lightpollutionmap.info --Map data &copy; Earth Observation Group, NOAA National Geophysical Data Center"});return;}
       if(v==="Lightpollutionmap2015"){overlaymap["Light Pollution 2015"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2015',format:'image/png',transparent:true,opacity: 0.6,attribution:"Map tiles by:Jurij Stare, www.lightpollutionmap.info --Map data &copy; Earth Observation Group, NOAA National Geophysical Data Center"});return;}
       if(v==="Lightpollutionmap2016"){overlaymap["Light Pollution 2016"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2016',format:'image/png',transparent:true,opacity: 0.6,attribution:"Map tiles by:Jurij Stare, www.lightpollutionmap.info --Map data &copy; Earth Observation Group, NOAA National Geophysical Data Center"});return;}
+      if(v==="Lightpollutionmap2017"){overlaymap["Light Pollution 2017"]=L.tileLayer.wms("http://www2.lightpollutionmap.info/geoserver/gwc/service/wms",{layers:'PostGIS:VIIRS_2017',format:'image/png',transparent:true,opacity: 0.6,attribution:"Map tiles by:Jurij Stare, www.lightpollutionmap.info --Map data &copy; Earth Observation Group, NOAA National Geophysical Data Center"});return;}
       var attrname = $(jq(v)).parent().text();
       overlaymap[attrname]=L.tileLayer.provider(v);
     });
