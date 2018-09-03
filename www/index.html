@@ -244,7 +244,7 @@
           <li>本软件使用 <a onclick="navigator.app.loadUrl('http://phonegap.com', { openExternal:true });">PhoneGap</a> 开发</li>
           <li>软件最新版本可在 <a onclick="navigator.app.loadUrl('https://build.phonegap.com/apps/1575380/builds', { openExternal:true });">PhoneGap App</a> 上下载</li>
           <li>软件源码在 <a onclick="navigator.app.loadUrl('https://github.com/wuqi/7timer', { openExternal:true });">Github</a> 上托管</li>
-          <li>晴天钟数据来源: <a onclick="navigator.app.loadUrl('http://202.127.24.18', { openExternal:true });">7Timer</a></li>
+          <li>晴天钟数据来源: <a onclick="navigator.app.loadUrl('http://www.7timer.info', { openExternal:true });">7Timer</a></li>
           <li>地图显示使用 <a onclick="navigator.app.loadUrl('http://leafletjs.com/', { openExternal:true });">Leafletjs</a> 库</li>
           <li>晨昏蒙影计算:   <a onclick="navigator.app.loadUrl('https://github.com/mourner/suncalc', { openExternal:true });">Suncalc</a></li>
           <li>天气预报来源: <a onclick="navigator.app.loadUrl('http://openweathermap.org/forecast16', { openExternal:true });">OpenWeatherMap</a></li>
@@ -896,7 +896,7 @@
     }
     var mw = $(document).width();
     mw = mw>500?500:mw<300?300:mw-38;
-    var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
+    var imgpath = "http://www.7timer.info/bin/astro.php?lon="+ pos.lng +"&lat="+ pos.lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
     var content = "<div  style=\"width:"+mw+"px\"><span id=\"popupclock\"><button id=\"lctPos\" onclick=\"lctPos()\">定位</button><input id=\"lblName\" type=\"text\" placeholder=\"新地名\" value=\"新地名\"><button id=\"addLblPos\" onclick=\"addLblPos()\">添加地点</button><select id=\"selLbl\" placeholder=\"选择地名\">"+opts+"</select><button id=\"gotoLblPos\" onclick=\"gotoLblPos()\">跳转</button></span><div><img src=\""+ imgpath +"\"  alt=\"晴天钟\" id=\"imgClock\" style=\"width:"+ mw+"px\"/></div></div>";
     marker.bindPopup(content,{maxWidth:mw}).openPopup();
   });
@@ -930,7 +930,7 @@
   $('#clock').on(cot,function () {
     var lat = $('#latitude').val();
     var lng = $('#longitude').val();
-    var imgpath = "http://202.127.24.18/v4/bin/astro.php?lon="+ lng +"&lat="+ lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
+    var imgpath = "http://www.7timer.info/bin/astro.php?lon="+ lng +"&lat="+ lat +"&lang=zh-CN&ac=0&unit=metric&tzshift=0";
     $('#imgClock').attr("src", imgpath);
     $('#clockcontent').panzoom();
     $.mobile.changePage("#pageclock",{transition:'none'});
