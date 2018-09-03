@@ -4,8 +4,8 @@
 
 * 本软件使用 PhoneGap 开发
 * 代码为Html+ CSS
-* 软件最新版本可在 [https://build.phonegap.com/apps/1575380/builds](https://build.phonegap.com/apps/1575380/builds) 下载
-* 晴天钟由 [http://202.127.24.18](7TImer) 提供
+* 软件最新版本可在 [https://build.phonegap.com/apps/2457822/builds](https://build.phonegap.com/apps/2457822/builds) 下载
+* 晴天钟由 [http://www.7timer.info](7TImer) 提供
 * 默认地图数据使用Mapbox制作
 * 地图显示使用leaflet库
 * 天气预报由天气网提供
